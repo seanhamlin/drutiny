@@ -40,6 +40,7 @@ class MultisiteAudit extends SiteAudit {
    * @inheritdoc
    */
   protected function execute(InputInterface $input, OutputInterface $output) {
+    $time_start = microtime(true);
     $drush_alias = $input->getArgument('drush-alias');
 
     $reports_dir = $input->getOption('report-dir');
@@ -146,6 +147,10 @@ class MultisiteAudit extends SiteAudit {
       });
       $this->writeReport($reports_dir, $output, $profile, $unique_sites);
     }
+
+    $time_end = microtime(true);
+    $execution_time = ($time_end - $time_start)/60;
+    $output->writeln('<info>Execution time: ' . $execution_time . '</info>');
   }
 
   protected function runChecks($context) {
