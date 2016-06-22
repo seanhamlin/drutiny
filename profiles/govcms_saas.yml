@@ -25,11 +25,23 @@ checks :
       - update
   \SiteAudit\Check\D7\BlacklistPermissions:
     permissions:
+      - 'administer features'
+      - 'administer govcms_dlm'
+      - 'administer honeypot'
+      - 'administer module permissions'
+      - 'administer modules'
+      - 'administer password policies'
+      - 'administer permissions'
       - 'administer seckit'
+      - 'administer site configuration'
+      - 'administer software updates'
+      - 'assign all roles'
+      - 'generate features'
+      - 'manage features'
+      - 'rename features'
   \SiteAudit\Check\Drush\PreprocessCSS : {}
   \SiteAudit\Check\Drush\PreprocessJS : {}
   \SiteAudit\Check\Drush\UserRegister : {}
-  \SiteAudit\Check\Drush\ModulePermissions : {}
   \SiteAudit\Check\Drush\NoAdministrators : {}
   \SiteAudit\Check\Drush\PageCacheMaximumAge :
     cache : 300
