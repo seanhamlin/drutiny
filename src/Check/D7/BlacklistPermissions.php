@@ -11,6 +11,7 @@ class BlacklistPermissions extends Check {
   }
 
   public function check() {
+    global $argv;
     $perms = $this->getOption('permissions');
     if (empty($perms)) {
       return TRUE;
@@ -18,12 +19,19 @@ class BlacklistPermissions extends Check {
 
     $where = [];
     foreach ($perms as $perm) {
-      $where[] = '(rp.permission LIKE "' . $perm . '")';
+      $where[] = 'rp.permission = \'' . $perm . '\'';
     }
 
     // We don't care about the 'administrator' role having access.
     $admin_role = $this->context->drush->getVariable('user_admin_role', 0);
-    $sql = 'SELECT r.rid, r.name, rp.permission FROM role r INNER JOIN role_permission rp ON rp.rid = r.rid WHERE r.rid != ' . $admin_role . ' AND  ' . implode(' OR ', $where) . ';';
+    // Not sure if this should be a check for audit:site or audit:acsf?? what about the multisite etc??? 
+    // Can easily switch these around, e.g. which one runs it via ssh and which don't?
+    $acsf = ($argv[1] == 'audit:acsf') ? TRUE : FALSE;
+    if($acsf) {
+      $sql = '\"SELECT r.rid, r.name, rp.permission FROM role r INNER JOIN role_permission rp ON rp.rid = r.rid WHERE r.rid != ' . $admin_role . ' AND (' . implode(' OR ', $where) . ');\"';
+    } else {
+      $sql = '"SELECT r.rid, r.name, rp.permission FROM role r INNER JOIN role_permission rp ON rp.rid = r.rid WHERE r.rid != ' . $admin_role . ' AND (' . implode(' OR ', $where) . ');"';
+    }
 
     try {
       $result = $this->context->drush->sqlq($sql);

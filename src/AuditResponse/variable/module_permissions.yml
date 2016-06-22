@@ -1,8 +1,0 @@
-title: 'Module Permissions'
-description: "Module Permission must only let the admin account control which modules to whitelist."
-remediation: "Check that 'Administer list of modules...' persmission is only available to administrator."
-messages:
-  success: 'Module whitelist controlled by admin only.'
-  failure: 'Module whitelist controlled by non admin accounts.'
-  exception: 'Could not determine account with Administer the list of modules permission.'
-  na: 'Module whitelist is not enabled'

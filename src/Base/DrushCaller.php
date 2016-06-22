@@ -46,9 +46,9 @@ class DrushCaller {
       if (strpos($arg, '--') === 0) {
         $arg = addcslashes($arg, '"');
       }
-      else {
+      /*else {
         $arg = "'" . addcslashes($arg, '"') . "'";
-      }
+      }*/
     }
 
     $command[] = $method;
@@ -114,7 +114,7 @@ class DrushCaller {
   }
 
   public function getAllUserRoles() {
-    $result = $this->sqlq('SELECT * FROM users_roles WHERE uid > 1;');
+    $result = $this->sqlq('"SELECT * FROM users_roles WHERE uid > 1;"');
     return $result->getOutput();
   }
 
