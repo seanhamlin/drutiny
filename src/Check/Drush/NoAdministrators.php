@@ -8,11 +8,11 @@ use SiteAudit\Annotation\CheckInfo;
 
 /**
  * @CheckInfo(
- * title = "No Administrators",
- * description = "There should be no administrators other than user 1.",
- * remediation = "Check that only no users have the 'administrator' role, other than user 1.",
- * success = "No administrators other than user 1",
- * failure = "Currently there are <code>:value</code> administrators.",
+ * title = "No administrators",
+ * description = "There should be no administrators other than user ID #1.",
+ * remediation = "Check that only no users have the 'administrator' role, other than user ID #1.",
+ * success = "No administrators other than user ID #1",
+ * failure = "Currently there are <code>:number_of_administrators</code> administrators.",
  * not_available = "Could not determine administrator role.",
  * )
  */
@@ -29,7 +29,7 @@ class NoAdministrators extends Check {
         }
       }
       if ($admin_count > 0) {
-        $this->setToken('value', $admin_count);
+        $this->setToken('number_of_administrators', $admin_count);
         return AuditResponse::AUDIT_FAILURE;
       }
     }

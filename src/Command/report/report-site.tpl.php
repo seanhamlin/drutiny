@@ -51,7 +51,9 @@
 <div class="jumbotron">
   <div class="container">
     <h1><?php print $profile->getTitle(); ?></h1>
-    <p>Report run across <?php print $site['domain']; ?></p>
+    <p>Report run across <?php print $site['domain']; ?><br/>
+      <?php print date('Y-m-d h:i a (T)', time()); ?>
+    </p>
   </div>
 </div>
 
@@ -107,7 +109,7 @@
   <hr>
 
   <footer>
-    <p>&copy; Site Audit 2016</p>
+    <p>&copy; Site Audit <?php print date("Y"); ?></p>
   </footer>
 </div> <!-- /container -->
 

@@ -1,6 +1,6 @@
 metadata :
-  machine_name: 'default'
-  title : 'Site audit'
+  machine_name: 'canvas'
+  title : 'CANVAS'
 checks :
   \SiteAudit\Check\Drush\ModuleEnabled:
     modules:
@@ -23,18 +23,18 @@ checks :
       - update
   \SiteAudit\Check\Drush\PreprocessCSS : {}
   \SiteAudit\Check\Drush\PreprocessJS : {}
+  \SiteAudit\Check\Drush\ErrorLevel : {}
   \SiteAudit\Check\Drush\UserRegister : {}
+  \SiteAudit\Check\Drush\CacheLifetime : {}
   \SiteAudit\Check\Drush\PageCacheMaximumAge :
     cache : 300
-  \SiteAudit\Check\HtaccessRedirects :
-    max_redirects : 10
   \SiteAudit\Check\Drush\UpdateDBStatus: {}
   \SiteAudit\Check\Drush\Search404: {}
-  \SiteAudit\Check\Drush\SearchDB: {}
+  \SiteAudit\Check\Drush\SearchDB:
+     max_size : 50
   \SiteAudit\Check\Drush\SessionsAnon: {}
   \SiteAudit\Check\Drush\CronHasRun: {}
   \SiteAudit\Check\Drush\CronPoorMans: {}
   \SiteAudit\Check\Drush\PageCompression: {}
-  \SiteAudit\Check\Drush\ZenRebuildRegistry: {}
   \SiteAudit\Check\Drush\XMLSiteMapBaseUrl:
-    pattern : '^https?://[-a-z]{1,63}\.[-a-z]{1,63}\.com\.au$'
+    pattern : '^https://www\.[-a-z]{1,63}\.[a-z]{2,3}(\.[a-z]{2,3})?$'

@@ -57,8 +57,11 @@ class MultisiteAudit extends SiteAudit {
     $response = $drush->siteAlias('@' . $drush_alias, '--format=json')->parseJson(TRUE);
     $alias = $response[$drush_alias];
 
-    // Some checks don't use drush and connect to the server
-    // directly so we need a remote executor available as well.
+    $profile = new Profile();
+    $profile->load($input->getOption('profile'));
+
+    // Some checks don't use drush and connect to the server directly so we need
+    // a remote executor available as well.
     if (isset($alias['remote-host'], $alias['remote-user'])) {
       $executor = new ExecutorRemote($output);
       $executor->setRemoteUser($alias['remote-user'])
@@ -70,7 +73,17 @@ class MultisiteAudit extends SiteAudit {
         $executor->setArgument($input->getOption('ssh_options'));
       }
       catch (InvalidArgumentException $e) {}
+      $this->isRemote = TRUE;
     }
+
+    $context = new Context();
+    $context->set('input', $input)
+            ->set('output', $output)
+            ->set('reportsDir', $reports_dir)
+            ->set('executor', $executor)
+            ->set('profile', $profile)
+            ->set('remoteExecutor', $executor)
+            ->set('drush', $drush);
 
     $yaml = file_get_contents($input->getOption('domain-file'));
     $domains = Yaml::parse($yaml);
@@ -81,13 +94,6 @@ class MultisiteAudit extends SiteAudit {
       $unique_sites[$domain] = ['domain' => $domain];
     }
 
-    $profile = new Profile();
-    $profile->load($input->getOption('profile'));
-
-    //var_dump($unique_sites);
-    //$unique_sites = array_slice($unique_sites, 0 , 5, TRUE);
-    //$unique_sites = array_slice($unique_sites, 185 , 8, TRUE);
-
     $output->writeln('<comment>Found ' . count($unique_sites) . ' unique sites</comment>');
 
     $i = 0;
@@ -96,16 +102,11 @@ class MultisiteAudit extends SiteAudit {
       $domain = $values['domain'];
       $drush = new DrushCaller($executor);
       $drush->setArgument('--uri=' . $domain)
-            ->setArgument('--root=' . $alias['root']);
+            ->setArgument('--root=' . $alias['root'])
+            ->setIsRemote($this->isRemote)
+            ->setSingleSite(FALSE);
 
-      $context = new Context();
-      $context->set('input', $input)
-              ->set('output', $output)
-              ->set('reportsDir', $reports_dir)
-              ->set('executor', $executor)
-              ->set('profile', $profile)
-              ->set('remoteExecutor', $executor)
-              ->set('drush', $drush);
+      $context->set('drush', $drush);
 
       $output->writeln("<comment>[$i] Running audit over: {$domain}</comment>");
       $results = $this->runChecks($context);
@@ -148,6 +149,7 @@ class MultisiteAudit extends SiteAudit {
         }
         return ($a['pass'] < $b['pass']) ? -1 : 1;
       });
+      $this->ensureTimezoneSet();
       $this->writeReport($reports_dir, $output, $profile, $unique_sites);
     }
 

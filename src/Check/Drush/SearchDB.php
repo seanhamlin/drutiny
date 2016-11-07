@@ -29,7 +29,7 @@ class SearchDB extends Check {
     if ($this->context->drush->moduleEnabled('search_api_db')) {
 
       // Find out if there are active indexes using the db service class.
-      $output = $this->context->drush->sqlQuery("SELECT COUNT(i.machine_name) as count FROM search_api_index i LEFT JOIN search_api_server s ON i.server = s.machine_name WHERE i.status > 0 AND s.class = 'search_api_db_service';");
+      $output = $this->context->drush->sqlQuery("SELECT COUNT(i.machine_name) as count FROM {search_api_index} i LEFT JOIN {search_api_server} s ON i.server = s.machine_name WHERE i.status > 0 AND s.class = 'search_api_db_service';");
       if (empty($output)) {
         $number_of_db_indexes = 0;
       }
@@ -48,7 +48,7 @@ class SearchDB extends Check {
       }
 
       // If the database is in use, find out how many nodes are in it.
-      $output = $this->context->drush->sqlQuery('SELECT COUNT(item_id) FROM search_api_db_default_node_index;');
+      $output = $this->context->drush->sqlQuery('SELECT COUNT(item_id) FROM {search_api_db_default_node_index};');
       // There are some differences in running the command on site factory then
       // locally.
       if (count($output) == 1) {

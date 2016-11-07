@@ -18,7 +18,6 @@ use SiteAudit\Annotation\CheckInfo;
 class PreprocessJS extends Check {
   public function check()
   {
-    $json = (int) $this->context->drush->getVariable('preprocess_js', 0);
-    return (bool) $json;
+    return (bool) (int) $this->context->drush->getVariable('preprocess_js', 0);
   }
 }

@@ -1,6 +1,7 @@
 .idea
 vendor
 composer.lock
+*.iml
 
 # Allow users to create custom domains files that are not tracked here.
 domains.yml

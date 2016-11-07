@@ -8,10 +8,10 @@ use SiteAudit\Annotation\CheckInfo;
 /**
  * @CheckInfo(
  *  title = "Cron last run",
- *  description = "Checks that cron has run recently.",
+ *  description = "Cron should be run regularly to ensure that scheduled events are processed in a timely manner.",
  *  remediation = "Ensure a cron job has been configured for the site. If so, file a support ticket to investigate why cron has stopped working.",
- *  success = "Cron was last run on <code>:cron_last</code>.",
- *  failure = "Cron was last run on <code>:cron_last</code>",
+ *  success = "Cron was last run on <code>:cron_last</code> (:date_default_timezone).",
+ *  failure = "Cron was last run on <code>:cron_last</code> (:date_default_timezone).",
  *  exception = "Could not determine status of cron: :exception."
  * )
  */
@@ -31,6 +31,7 @@ class CronHasRun extends Check {
     // Check that cron was run in the last day.
     $since = time() - $cron_last;
     $this->setToken('cron_last', date('Y-m-d H:i:s', $cron_last));
+    $this->setToken('date_default_timezone', $date_default_timezone);
     if ($since > (86400)) {
       return FALSE;
     }

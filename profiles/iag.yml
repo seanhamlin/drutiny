@@ -9,12 +9,17 @@ checks :
       - acquia_agent
   \SiteAudit\Check\Drush\ModuleDisabled:
     modules:
+      - backup_migrate
       - dblog
+      - devel
+      - linkchecker
       - overlay
       - php
       - radioactivity
       - smart_ip
       - statistics
+      - simpletest
+      - textsize
       - update
   \SiteAudit\Check\Drush\PreprocessCSS : {}
   \SiteAudit\Check\Drush\PreprocessJS : {}

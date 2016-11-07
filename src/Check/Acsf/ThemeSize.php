@@ -23,10 +23,10 @@ class ThemeSize extends Check {
 
   public function check()
   {
-    $context = $this->context;
-    $status = $context->drush->coreStatus('--format=json')->parseJson();
-    $command = "du -ms {$status->root}/{$status->site}/themes/site/ || echo 'nope'";
-    $output = (string) $context->remoteExecutor->execute($command);
+    $root = $this->context->drush->getCoreStatus('root');
+    $site = $this->context->drush->getCoreStatus('site');
+    $command = "du -ms {$root}/{$site}/themes/site/ || echo 'nope'";
+    $output = (string) $this->context->remoteExecutor->execute($command);
 
     // The ACSF site can have no custom theme repo linked, in which case we
     // will see a "du: cannot access ... No such file or directory" error

@@ -1,13 +1,25 @@
 {
     "name": "seanhamlin/site-audit",
-    "autoload": {
-        "psr-4": {"SiteAudit\\": "src/"}
+    "type": "library",
+    "description": "Generic Drupal 7 site auditing tool",
+    "keywords": ["drupal", "audit", "drush", "ssh", "report"],
+    "license": "GPL-2.0",
+    "authors": [
+        {"name": "Sean Hamlin", "email": "iwiifm@gmail.com"},
+        {"name": "Josh Waihi", "email": "joshwaihi@gmail.com"}
+    ],
+    "support": {
+        "issues": "https://github.com/seanhamlin/site-audit/issues",
+        "source": "https://github.com/seanhamlin/site-audit"
     },
     "require": {
         "symfony/console": "^3.1",
         "symfony/yaml": "^3.1",
         "symfony/class-loader": "^3.1",
         "doctrine/annotations": "^1.2"
+    },
+    "autoload": {
+        "psr-4": {"SiteAudit\\": "src/"}
     },
     "bin": ["bin/site-audit"]
 }

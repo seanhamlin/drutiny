@@ -10,7 +10,11 @@ class DrushCaller {
   protected $alias;
   protected $modulesList = NULL;
   protected $variablesList = NULL;
+  protected $drushStatus = NULL;
+  protected $db_prefix = NULL;
   protected $args = [];
+  protected $isRemote = FALSE;
+  protected $singleSite = TRUE;
 
   public function __construct(ExecutorInterface $executor) {
     $this->executor = $executor;
@@ -23,6 +27,16 @@ class DrushCaller {
 
   public function setArgument($arg) {
     $this->args[] = $arg;
+    return $this;
+  }
+
+  public function setIsRemote($isRemote) {
+    $this->isRemote = $isRemote;
+    return $this;
+  }
+
+  public function setSingleSite($singleSite) {
+    $this->singleSite = $singleSite;
     return $this;
   }
 
@@ -57,14 +71,52 @@ class DrushCaller {
   }
 
   /**
+   * Execute a PHP script in the context of the Drupal site. This uses a rather
+   * tricky amount of base64 encoding to ensure no characters are lost.
+   *
+   * @param [String] $filename
+   *   The filename of the script in the './src/Scripts/' folder. The .php
+   *   extens is not required. The script in question should return JSON for
+   *   all of it's results.
+   * @return [String]
+   *   The result of the Drush command.
+   */
+  public function runScript($filename) {
+    $location = './src/Scripts/' . $filename . '.php';
+    if (!file_exists($location)) {
+      throw new \Exception("No script found at $location.");
+    }
+    $base64 = base64_encode(file_get_contents($location));
+
+    // Remote execution on multiple sites requires more escaping.
+    if ($this->isRemote && !$this->singleSite) {
+      $output = $this->phpEval('\"' . "eval(base64_decode('" . $base64 . "'));" . '\"')->parseJson();
+    }
+    else {
+      $output = $this->phpEval('"' . "eval(base64_decode('" . $base64 . "'));" . '"')->parseJson();
+    }
+
+    return $output;
+  }
+
+  /**
    * Wrapper function to hide the quoting madness.
    */
   public function sqlQuery($sql) {
     global $argv;
 
-    // @TODO do this better.
-    $acsf_or_multi = ($argv[1] == 'audit:site') ? FALSE : TRUE;
-    if ($acsf_or_multi) {
+    // Database prefixes need to be added else the query will fail when this is
+    // in use.
+    if (is_null($this->db_prefix)) {
+      $sql_conf = $this->sqlConf('--format=json')->parseJson();
+      $this->db_prefix = $sql_conf->prefix;
+    }
+
+    // Replace the curly braces.
+    $sql = str_replace(array('{', '}'), array($this->db_prefix, ''), $sql);
+
+    // Remote execution on multiple sites requires more escaping.
+    if ($this->isRemote && !$this->singleSite) {
       $result = $this->sqlq('\"' . $sql . '\"');
     }
     else {
@@ -72,6 +124,32 @@ class DrushCaller {
     }
 
     return $result->getOutput();
+  }
+
+
+  /**
+   * Get a drush core status from the site.
+   *
+   * @param $key [string]
+   * @return a drush core status object.
+   */
+  public function getCoreStatus($key = NULL) {
+    try {
+      // First time this is run, refresh the drush core statuss list.
+      if (is_null($this->drushStatus)) {
+        $this->drushStatus = $this->coreStatus('--format=json')->parseJson();
+      }
+
+      // Shortcut if you provide a key.
+      if ($key && isset($this->drushStatus->{$key})) {
+        return $this->drushStatus->{$key};
+      }
+
+      return $this->drushStatus;
+    }
+    catch (\Exception $e) {
+      return FALSE;
+    }
   }
 
   /**
@@ -131,15 +209,45 @@ class DrushCaller {
     }
   }
 
-  public function getAllUserRoles() {
-    global $argv;
-    $acsf = ($argv[1] == 'audit:acsf') ? TRUE : FALSE;
-    if($acsf) {
-      $result = $this->sqlq('\"SELECT rid FROM users_roles WHERE uid > 1;\"');
-    } else {
-      $result = $this->sqlq('"SELECT rid FROM users_roles WHERE uid > 1;"');
+  /**
+   * Try to return a variable value, bypass the $conf overrides. Useful for when
+   * drush gets in your way.
+   *
+   * @param $name
+   *   The name of the variable (exact).
+   * @param int $default
+   *   The value to return if the variable is not set.
+   * @return mixed
+   */
+  public function getVariableFromDB($name, $default = 0) {
+    try {
+      $output = $this->sqlQuery("SELECT value FROM {variable} WHERE name = '$name';");
+      if (empty($output)) {
+        $value = $default;
+      }
+      else if (count($output) == 1) {
+        if (empty($output[0])) {
+          $value = $default;
+        }
+        else {
+          $value = $output[0];
+        }
+      }
+      else {
+        $value = $output[1];
+      }
+
+      return $value;
     }
-    return $result->getOutput();
+    // The response from Drush can be "No matching variable found.", even with
+    // JSON being requested, which is weird.
+    catch (\Exception $e) {
+      return $default;
+    }
+  }
+
+  public function getAllUserRoles() {
+    return $this->sqlQuery('SELECT rid FROM {users_roles} WHERE uid > 1;');
   }
 
   public function getAllRoles() {

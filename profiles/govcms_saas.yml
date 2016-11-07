@@ -4,24 +4,26 @@ metadata :
 checks :
   \SiteAudit\Check\Drush\ModuleEnabled:
     modules:
-      - syslog
-      - govcms_tweaks
+      - acquia_spi
+      - acquia_agent
       - acsf
       - acsf_duplication
       - acsf_openid
       - acsf_pingdom
       - acsf_theme
       - acsf_variables
-      - acquia_spi
-      - acquia_agent
-      - robotstxt
+      - googleanalytics
       - govcms_account_security
+      - govcms_tweaks
+      - robotstxt
+      - syslog
   \SiteAudit\Check\Drush\ModuleDisabled:
     modules:
       - services
       - dblog
       - overlay
       - php
+      - simpletest
       - statistics
       - update
   \SiteAudit\Check\D7\BlacklistPermissions:
@@ -42,16 +44,29 @@ checks :
       - 'rename features'
   \SiteAudit\Check\Drush\PreprocessCSS : {}
   \SiteAudit\Check\Drush\PreprocessJS : {}
+  \SiteAudit\Check\Drush\ErrorLevel : {}
   \SiteAudit\Check\Drush\UserRegister : {}
+  \SiteAudit\Check\Drush\GA :
+    account : '^UA-\d{7,8}-\d{1,2}$'
+    cache : '0'
+    codesnippet_after : "ga('create', 'UA-54970022-1', 'auto', {'name': 'govcms'}); ga('govcms.send', 'pageview', {'anonymizeIp': true});"
   \SiteAudit\Check\Drush\NoAdministrators : {}
+  \SiteAudit\Check\Drush\WebformUpload : {}
   \SiteAudit\Check\Drush\PageCacheMaximumAge :
     cache : 300
   \SiteAudit\Check\Drush\UpdateDBStatus: {}
   \SiteAudit\Check\Drush\Search404: {}
+  \SiteAudit\Check\Drush\SessionsAnon: {}
+  \SiteAudit\Check\Drush\CronHasRun: {}
+  \SiteAudit\Check\Drush\CronPoorMans: {}
+  \SiteAudit\Check\Drush\PageCompression: {}
+  \SiteAudit\Check\Drush\ZenRebuildRegistry: {}
   \SiteAudit\Check\Drush\SearchDB:
      max_size : 50
   \SiteAudit\Check\Drush\XMLSiteMapBaseUrl:
-    pattern : '^https://(www|ministerial|agency|blog|docs|annualreport)\.[-a-z]{1,63}\.gov\.au$'
+    pattern : '^https://(www|ministerial|agency|blog|docs|annualreport)\.[-a-z]{1,63}(\.[-a-z]{1,63})?\.gov\.au$'
   \SiteAudit\Check\Acsf\ThemeSize :
     max_size : 50
     warning_size : 20
+  \SiteAudit\Check\Acsf\ThemePhpLint : {}
+  \SiteAudit\Check\Acsf\ThemeSecurity : {}

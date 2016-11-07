@@ -21,6 +21,9 @@ class SiteAudit extends Command {
   protected $start = NULL;
   protected $end = NULL;
 
+  // Keeps track on whether this is a local or remote site audit.
+  protected $isRemote = FALSE;
+
   /**
    * @inheritdoc
    */
@@ -76,6 +79,12 @@ class SiteAudit extends Command {
     $executor = new Executor($output);
     $drush = new DrushCaller($executor);
     $response = $drush->siteAlias('@' . $drush_alias, '--format=json')->parseJson(TRUE);
+
+    // Check for made up aliases.
+    if (!array_key_exists($drush_alias, $response)) {
+      throw new \Exception('Missing site alias for ' . $drush_alias . '. Please check `drush sa` for a list of aliases.');
+    }
+
     $alias = $response[$drush_alias];
     $drush->setAlias($drush_alias);
 
@@ -93,8 +102,8 @@ class SiteAudit extends Command {
             ->set('alias', $drush_alias)
             ->set('config', $alias);
 
-    // Some checks don't use drush and connect to the server
-    // directly so we need a remote executor available as well.
+    // Some checks don't use drush and connect to the server directly so we need
+    // a remote executor available as well.
     if (isset($alias['remote-host'], $alias['remote-user'])) {
       $executor = new ExecutorRemote($output);
       $executor->setRemoteUser($alias['remote-user'])
@@ -107,6 +116,9 @@ class SiteAudit extends Command {
       }
       catch (InvalidArgumentException $e) {}
       $context->set('remoteExecutor', $executor);
+      $this->isRemote = TRUE;
+      $drush->setIsRemote($this->isRemote);
+      $context->set('drush', $drush);
     }
 
     $results = $this->runChecks($context);
@@ -132,6 +144,7 @@ class SiteAudit extends Command {
 
     // Optional report.
     if ($input->getOption('report-dir')) {
+      $this->ensureTimezoneSet();
       $this->writeReport($reports_dir, $output, $profile, $site);
     }
 
@@ -157,6 +170,17 @@ class SiteAudit extends Command {
       $context->output->writeln(strip_tags((string) $result, '<info><comment><error>'));
     }
     return $results;
+  }
+
+  /**
+   * Ensure there is a timezone set, if there is not already one. Note that one
+   * of the checks `CronHasRun` will set the timezone to be the site's timezone.
+   * UTC is a fallback in this case.
+   */
+  protected function ensureTimezoneSet() {
+    if (@date_default_timezone_get() === 'UTC') {
+      date_default_timezone_set('UTC');
+    }
   }
 
   protected function writeReport($reports_dir, OutputInterface $output, $profile, Array $site) {

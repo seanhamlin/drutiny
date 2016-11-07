@@ -113,7 +113,8 @@ class Profile
     $this->checks = $data['checks'];
   }
 
-  public function find($machine_name) {
+  public function find($machine_name)
+  {
     $filename = $machine_name . '.yml';
     foreach (array_filter($this->filepaths, 'is_dir') as $filepath) {
       $location = $filepath . '/' . $filename;
@@ -128,7 +129,4 @@ class Profile
   {
     return $this->filepath;
   }
-
 }
-
- ?>

@@ -11,7 +11,11 @@ class Result {
     $output = [];
     $return_val = 0;
     // Suppress StdErr output.
-    $command .= ' 2> /dev/null';
+    $dev_null = ' 2> /dev/null';
+    if (stripos(PHP_OS, 'win') !== FALSE) {
+      $dev_null = ' 2> nul';
+    }
+    $command .= $dev_null;
     exec($command, $output, $return_val);
 
     // Datetime weirdness. Apparently this is caused by theming issues on the
