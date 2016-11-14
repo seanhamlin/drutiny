@@ -16,6 +16,7 @@ checks :
       - govcms_account_security
       - govcms_tweaks
       - robotstxt
+      - shield
       - syslog
   \SiteAudit\Check\Drush\ModuleDisabled:
     modules:
