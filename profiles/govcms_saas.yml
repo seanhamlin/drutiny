@@ -67,8 +67,16 @@ checks :
      max_size : 50
   \SiteAudit\Check\Drush\XMLSiteMapBaseUrl:
     pattern : '^https://(www|ministerial|agency|blog|docs|annualreport)\.[-a-z]{1,63}(\.[-a-z]{1,63})?\.gov\.au$'
+
+  # ACSF specific checks.
   \SiteAudit\Check\Acsf\ThemeSize :
     max_size : 50
     warning_size : 20
   \SiteAudit\Check\Acsf\ThemePhpLint : {}
   \SiteAudit\Check\Acsf\ThemeSecurity : {}
+
+  # Browser specific checks.
+  \SiteAudit\Check\Phantomas\PageWeight :
+    max_size : 5
+    warning_size : 2
+  \SiteAudit\Check\Phantomas\InPage404s : {}

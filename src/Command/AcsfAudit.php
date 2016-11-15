@@ -3,6 +3,7 @@
 namespace SiteAudit\Command;
 
 use SiteAudit\Base\DrushCaller;
+use SiteAudit\Base\PhantomasCaller;
 use SiteAudit\Context;
 use SiteAudit\Profile\Profile;
 use SiteAudit\Executor\Executor;
@@ -52,6 +53,7 @@ class AcsfAudit extends SiteAudit {
     // Load the Drush alias which will contain more information we'll need.
     $executor = new Executor($output);
     $drush = new DrushCaller($executor);
+    $phantomas = new PhantomasCaller($executor);
     $response = $drush->siteAlias('@' . $drush_alias, '--format=json')->parseJson(TRUE);
     $alias = $response[$drush_alias];
 
@@ -65,7 +67,8 @@ class AcsfAudit extends SiteAudit {
             ->set('executor', $executor)
             ->set('profile', $profile)
             ->set('remoteExecutor', $executor)
-            ->set('drush', $drush);
+            ->set('drush', $drush)
+            ->set('phantomas', $phantomas);
 
     // Some checks don't use drush and connect to the server
     // directly so we need a remote executor available as well.
@@ -139,6 +142,10 @@ class AcsfAudit extends SiteAudit {
             ->setSingleSite(FALSE);
 
       $context->set('drush', $drush);
+
+      $phantomas->setDomain($domain)
+                ->clearMetrics();
+      $context->set('phantomas', $phantomas);
 
       $output->writeln("<comment>[$i] Running audit over: {$domain}</comment>");
       $results = $this->runChecks($context);

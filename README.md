@@ -41,6 +41,22 @@ Needed to install Symfony Console and related libraries.
 composer install
 ```
 
+**Phantomas**
+
+If you wish to run browser based checks (e.g. page weight check), then you will require [Phantomas](https://github.com/macbre/phantomas) to be installed on your local system. Note that these checks are optional.
+
+First install Node:
+
+```
+brew install node
+```
+
+And then use NPM to install phantomas:
+
+```
+npm install --global --no-optional phantomas phantomjs-prebuilt@^2.1.5
+```
+
 ## How to run against a single site
 
 Run using the `default` profile (replace [alias] with your drush alias):

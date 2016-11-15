@@ -4,6 +4,7 @@ namespace SiteAudit\Command;
 
 use SiteAudit\AuditResponse\AuditResponse;
 use SiteAudit\Base\DrushCaller;
+use SiteAudit\Base\PhantomasCaller;
 use SiteAudit\Context;
 use SiteAudit\Executor\Executor;
 use SiteAudit\Executor\ExecutorRemote;
@@ -78,6 +79,7 @@ class SiteAudit extends Command {
     // Load the Drush alias which will contain more information we'll need.
     $executor = new Executor($output);
     $drush = new DrushCaller($executor);
+    $phantomas = new PhantomasCaller($executor);
     $response = $drush->siteAlias('@' . $drush_alias, '--format=json')->parseJson(TRUE);
 
     // Check for made up aliases.
@@ -87,6 +89,8 @@ class SiteAudit extends Command {
 
     $alias = $response[$drush_alias];
     $drush->setAlias($drush_alias);
+
+    $phantomas->setDomain($alias['uri']);
 
     $profile = new Profile();
     $profile->load($input->getOption('profile'));
@@ -99,6 +103,7 @@ class SiteAudit extends Command {
             ->set('executor', $executor)
             ->set('remoteExecutor', $executor)
             ->set('drush', $drush)
+            ->set('phantomas', $phantomas)
             ->set('alias', $drush_alias)
             ->set('config', $alias);
 
