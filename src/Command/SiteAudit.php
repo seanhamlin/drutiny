@@ -54,6 +54,12 @@ class SiteAudit extends Command {
         'Set the location where the reports should be written to.',
         sys_get_temp_dir()
       )
+      ->addOption(
+        'auto-remediate',
+        'r',
+        InputOption::VALUE_NONE,
+        'If set, certain checks will auto-remediate and issue write commands back to the Drupal sites.'
+      )
       ->addArgument(
         'drush-alias',
         InputArgument::REQUIRED,
@@ -108,7 +114,8 @@ class SiteAudit extends Command {
             ->set('phantomas', $phantomas)
             ->set('randomLib', $random_lib)
             ->set('alias', $drush_alias)
-            ->set('config', $alias);
+            ->set('config', $alias)
+            ->set('autoRemediate', $input->getOption('auto-remediate'));
 
     // Some checks don't use drush and connect to the server directly so we need
     // a remote executor available as well.

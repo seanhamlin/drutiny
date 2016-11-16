@@ -71,7 +71,8 @@ class AcsfAudit extends SiteAudit {
             ->set('remoteExecutor', $executor)
             ->set('drush', $drush)
             ->set('phantomas', $phantomas)
-            ->set('randomLib', $random_lib);
+            ->set('randomLib', $random_lib)
+            ->set('autoRemediate', $input->getOption('auto-remediate'));
 
     // Some checks don't use drush and connect to the server
     // directly so we need a remote executor available as well.

@@ -68,7 +68,7 @@ checks :
   \SiteAudit\Check\Drush\XMLSiteMapBaseUrl:
     pattern : '^https://(www|ministerial|agency|blog|docs|annualreport)\.[-a-z]{1,63}(\.[-a-z]{1,63})?\.gov\.au$'
   \SiteAudit\Check\Drush\User1 :
-    name_blacklist : '(admin|root|drupal|god|govcms|paul)'
+    name_blacklist : '(admin|root|drupal|god|govcms|paul|sean|ruwan)'
     mail : 'no_reply@govcms.gov.au'
     status: 1
 

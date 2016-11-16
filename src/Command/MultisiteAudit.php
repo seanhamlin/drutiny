@@ -89,7 +89,8 @@ class MultisiteAudit extends SiteAudit {
             ->set('remoteExecutor', $executor)
             ->set('drush', $drush)
             ->set('phantomas', $phantomas)
-            ->set('randomLib', $random_lib);
+            ->set('randomLib', $random_lib)
+            ->set('autoRemediate', $input->getOption('auto-remediate'));
 
     $yaml = file_get_contents($input->getOption('domain-file'));
     $domains = Yaml::parse($yaml);
