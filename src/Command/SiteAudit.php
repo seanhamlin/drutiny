@@ -5,6 +5,7 @@ namespace SiteAudit\Command;
 use SiteAudit\AuditResponse\AuditResponse;
 use SiteAudit\Base\DrushCaller;
 use SiteAudit\Base\PhantomasCaller;
+use SiteAudit\Base\RandomLib;
 use SiteAudit\Context;
 use SiteAudit\Executor\Executor;
 use SiteAudit\Executor\ExecutorRemote;
@@ -80,6 +81,7 @@ class SiteAudit extends Command {
     $executor = new Executor($output);
     $drush = new DrushCaller($executor);
     $phantomas = new PhantomasCaller($executor);
+    $random_lib = new RandomLib();
     $response = $drush->siteAlias('@' . $drush_alias, '--format=json')->parseJson(TRUE);
 
     // Check for made up aliases.
@@ -104,6 +106,7 @@ class SiteAudit extends Command {
             ->set('remoteExecutor', $executor)
             ->set('drush', $drush)
             ->set('phantomas', $phantomas)
+            ->set('randomLib', $random_lib)
             ->set('alias', $drush_alias)
             ->set('config', $alias);
 

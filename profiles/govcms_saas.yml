@@ -64,9 +64,13 @@ checks :
   \SiteAudit\Check\Drush\PageCompression: {}
   \SiteAudit\Check\Drush\ZenRebuildRegistry: {}
   \SiteAudit\Check\Drush\SearchDB:
-     max_size : 50
+    max_size : 50
   \SiteAudit\Check\Drush\XMLSiteMapBaseUrl:
     pattern : '^https://(www|ministerial|agency|blog|docs|annualreport)\.[-a-z]{1,63}(\.[-a-z]{1,63})?\.gov\.au$'
+  \SiteAudit\Check\Drush\User1 :
+    name_blacklist : '(admin|root|drupal|god|govcms|paul)'
+    mail : 'no_reply@govcms.gov.au'
+    status: 1
 
   # ACSF specific checks.
   \SiteAudit\Check\Acsf\ThemeSize :

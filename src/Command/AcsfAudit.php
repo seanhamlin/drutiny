@@ -4,6 +4,7 @@ namespace SiteAudit\Command;
 
 use SiteAudit\Base\DrushCaller;
 use SiteAudit\Base\PhantomasCaller;
+use SiteAudit\Base\RandomLib;
 use SiteAudit\Context;
 use SiteAudit\Profile\Profile;
 use SiteAudit\Executor\Executor;
@@ -54,6 +55,7 @@ class AcsfAudit extends SiteAudit {
     $executor = new Executor($output);
     $drush = new DrushCaller($executor);
     $phantomas = new PhantomasCaller($executor);
+    $random_lib = new RandomLib();
     $response = $drush->siteAlias('@' . $drush_alias, '--format=json')->parseJson(TRUE);
     $alias = $response[$drush_alias];
 
@@ -68,7 +70,8 @@ class AcsfAudit extends SiteAudit {
             ->set('profile', $profile)
             ->set('remoteExecutor', $executor)
             ->set('drush', $drush)
-            ->set('phantomas', $phantomas);
+            ->set('phantomas', $phantomas)
+            ->set('randomLib', $random_lib);
 
     // Some checks don't use drush and connect to the server
     // directly so we need a remote executor available as well.

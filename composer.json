@@ -16,7 +16,8 @@
         "symfony/console": "^3.1",
         "symfony/yaml": "^3.1",
         "symfony/class-loader": "^3.1",
-        "doctrine/annotations": "^1.2"
+        "doctrine/annotations": "^1.2",
+        "ircmaxell/random-lib": "^1.2"
     },
     "autoload": {
         "psr-4": {"SiteAudit\\": "src/"}
