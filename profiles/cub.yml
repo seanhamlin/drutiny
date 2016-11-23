@@ -4,16 +4,16 @@ metadata :
 checks :
   \SiteAudit\Check\Drush\ModuleEnabled:
     modules:
-      - syslog
+      - acquia_spi
+      - acquia_agent
       - acsf
       - acsf_duplication
       - acsf_openid
       - acsf_pingdom
       - acsf_theme
       - acsf_variables
-      - acquia_spi
-      - acquia_agent
       - securepages
+      - syslog
   \SiteAudit\Check\Drush\ModuleDisabled:
     modules:
       - dblog
@@ -41,8 +41,14 @@ checks :
   \SiteAudit\Check\Drush\ZenRebuildRegistry: {}
   \SiteAudit\Check\Drush\XMLSiteMapBaseUrl:
     pattern : '^https?://[-a-z]{1,63}\.[-a-z]{1,63}\.com\.au$'
+  \SiteAudit\Check\Drush\User1 :
+    name_blacklist : '(admin|root|drupal|god|govcms|paul|sean|ruwan)'
+    mail : 'admin@example.com'
+    status: 1
+
+  # ACSF specific checks.
   \SiteAudit\Check\Acsf\ThemeSize :
     max_size : 50
-    warning_size: 20
+    warning_size : 20
   \SiteAudit\Check\Acsf\ThemePhpLint : {}
   \SiteAudit\Check\Acsf\ThemeSecurity : {}
