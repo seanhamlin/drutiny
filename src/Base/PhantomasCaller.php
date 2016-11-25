@@ -34,6 +34,7 @@ class PhantomasCaller {
     $command[] = '"' . $this->domain . $url . '"';
     $command[] = '--ignore-ssl-errors';
     $command[] = '--reporter=json';
+    $command[] = '--timeout=30';
     return $this->executor->execute(implode(' ', $command));
   }
 
