@@ -38,3 +38,13 @@ checks :
   \SiteAudit\Check\Drush\PageCompression: {}
   \SiteAudit\Check\Drush\XMLSiteMapBaseUrl:
     pattern : '^https://www\.[-a-z]{1,63}\.[a-z]{2,3}(\.[a-z]{2,3})?$'
+  \SiteAudit\Check\Drush\User1 :
+    name_blacklist : '(admin|root|drupal|god|govcms|paul|sean|ruwan)'
+    mail : 'no_reply@govcms.gov.au'
+    status: 1
+
+  # Browser specific checks.
+  \SiteAudit\Check\Phantomas\PageWeight :
+    max_size : 5
+    warning_size : 2
+  \SiteAudit\Check\Phantomas\InPage404s : {}
