@@ -16,6 +16,7 @@ class PhantomasCaller {
   }
 
   public function setDomain($domain) {
+    // @todo make the URL protocol configurable.
     if (strpos($domain, 'http') !== 0) {
       $domain = 'https://' . $domain;
     }
@@ -67,5 +68,31 @@ class PhantomasCaller {
       return $default;
     }
   }
+
+  /**
+   * Try to get a metric from Phantomas.
+   *
+   * @see https://github.com/macbre/phantomas for available metrics you can use.
+   */
+  public function getOffender($name = 'biggestResponse', $default = NULL) {
+    try {
+      // First time this is run, refresh the metrics list.
+      if (is_null($this->metrics)) {
+        $metrics = $this->getMetrics()->parseJson();
+        $this->metrics = $metrics;
+      }
+
+      if (isset($this->metrics->offenders->{$name})) {
+        return $this->metrics->offenders->{$name};
+      }
+
+      return $default;
+    }
+    catch (\Exception $e) {
+      return $default;
+    }
+  }
+
+
 
 }

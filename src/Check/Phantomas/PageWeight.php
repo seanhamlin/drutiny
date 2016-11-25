@@ -12,9 +12,9 @@ use SiteAudit\Annotation\CheckInfo;
  *  title = "Page weight",
  *  description = "You should aim to keep your page weight as low as possible to ensure speedy download and rendering times for your site. This impacts not only your site's user experience but also it's SEO.",
  *  remediation = "Look to optimise the largest and slowest files.",
- *  success = "Page weight is smaller than <code>:max_size</code> MB. Actual size is <code>:value</code> MB.",
- *  warning = "Page weight is smaller than <code>:max_size</code> MB but larger than <code>:warning_size</code> MB. Actual size is <code>:value</code> MB.",
- *  failure = "Page weight is currently larger than <code>:max_size</code> MB. Actual size is <code>:value</code> MB.",
+ *  success = "Page weight is smaller than <code>:max_size</code> MB. Actual size is <code>:value</code> MB. :biggest_response",
+ *  warning = "Page weight is smaller than <code>:max_size</code> MB but larger than <code>:warning_size</code> MB. Actual size is <code>:value</code> MB. :biggest_response",
+ *  failure = "Page weight is currently larger than <code>:max_size</code> MB. Actual size is <code>:value</code> MB. :biggest_response",
  *  exception = "Could not determine page weight.",
  * )
  */
@@ -31,6 +31,10 @@ class PageWeight extends Check {
     $this->setToken('max_size', $max_size);
     $this->setToken('warning_size', $warning_size);
     $this->setToken('value', $pageWeightFriendly);
+
+    // Find the largest asset if we are above the warning size.
+    $biggestResponse = $this->context->phantomas->getOffender('biggestResponse');
+    $this->setToken('biggest_response', 'The biggest response was <code>' . $biggestResponse[0] . '</code>.');
 
     if ($pageWeightInMB >= $max_size) {
       return AuditResponse::AUDIT_FAILURE;
