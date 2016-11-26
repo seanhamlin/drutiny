@@ -20,7 +20,7 @@ class SessionsAnon extends Check {
 
     // Exclude openid sessions, as these are for people that are trying to login
     // but perhaps have not made it the whole way yet.
-    $output = $this->context->drush->sqlQuery("SELECT COUNT(*) FROM {sessions} WHERE uid = 0 AND session NOT LIKE 'openid%';");
+    $output = $this->context->drush->sqlQuery("SELECT COUNT(*) FROM {sessions} WHERE uid = 0 AND session NOT LIKE 'openid%' AND session NOT LIKE '%Access denied%';");
     if (empty($output)) {
       $number_of_anon_sessions = 0;
     }
