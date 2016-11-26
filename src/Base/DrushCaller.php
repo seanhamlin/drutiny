@@ -210,6 +210,28 @@ class DrushCaller {
   }
 
   /**
+   * Determine if shield module is active, and is also enabled.
+   *
+   * @return boolean
+   */
+  public function isShieldEnabled() {
+    // If the module is disabled, then no shield.
+    if ($this->moduleEnabled('shield')) {
+      // Shield must be enabled, defaults to on.
+      $shield_enabled = (bool) (int) $this->getVariable('shield_enabled', 1);
+      if ($shield_enabled) {
+        // Shield user must be set.
+        $shield_user = $this->getVariable('shield_user', '');
+        if (!empty($shield_user)) {
+          return TRUE;
+        }
+      }
+    }
+
+    return FALSE;
+  }
+
+  /**
    * Try to return a variable value, bypass the $conf overrides. Useful for when
    * drush gets in your way.
    *

@@ -56,7 +56,7 @@ class MultisiteAudit extends SiteAudit {
     // Load the Drush alias which will contain more information we'll need.
     $executor = new Executor($output);
     $drush = new DrushCaller($executor);
-    $phantomas = new PhantomasCaller($executor);
+    $phantomas = new PhantomasCaller($executor, $drush);
     $random_lib = new RandomLib();
     $response = $drush->siteAlias('@' . $drush_alias, '--format=json')->parseJson(TRUE);
     $alias = $response[$drush_alias];
@@ -116,6 +116,7 @@ class MultisiteAudit extends SiteAudit {
       $context->set('drush', $drush);
 
       $phantomas->setDomain($domain)
+                ->setDrush($drush)
                 ->clearMetrics();
       $context->set('phantomas', $phantomas);
 

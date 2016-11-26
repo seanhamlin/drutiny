@@ -63,7 +63,7 @@ class SiteAudit extends Command {
       ->addArgument(
         'drush-alias',
         InputArgument::REQUIRED,
-        'The drush alias for the site'
+        'The drush alias for the site you wish to audit.'
       )
     ;
   }
@@ -86,7 +86,7 @@ class SiteAudit extends Command {
     // Load the Drush alias which will contain more information we'll need.
     $executor = new Executor($output);
     $drush = new DrushCaller($executor);
-    $phantomas = new PhantomasCaller($executor);
+    $phantomas = new PhantomasCaller($executor, $drush);
     $random_lib = new RandomLib();
     $response = $drush->siteAlias('@' . $drush_alias, '--format=json')->parseJson(TRUE);
 

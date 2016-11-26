@@ -2,17 +2,20 @@
 
 namespace SiteAudit\Base;
 
+use SiteAudit\Base\DrushCaller;
 use SiteAudit\Executor\ExecutorInterface;
 
 class PhantomasCaller {
   protected $executor;
+  protected $drush;
 
   protected $domain = NULL;
   protected $metrics = NULL;
   protected $urls = [];
 
-  public function __construct(ExecutorInterface $executor) {
+  public function __construct(ExecutorInterface $executor, DrushCaller $drush) {
     $this->executor = $executor;
+    $this->drush = $drush;
   }
 
   public function setDomain($domain) {
@@ -29,12 +32,27 @@ class PhantomasCaller {
     return $this;
   }
 
+  public function setDrush(DrushCaller $drush) {
+    $this->drush = $drush;
+    return $this;
+  }
+
   public function getMetrics($url = '/') {
     $command = ['phantomas'];
     $command[] = '"' . $this->domain . $url . '"';
     $command[] = '--ignore-ssl-errors';
     $command[] = '--reporter=json';
     $command[] = '--timeout=30';
+
+    // Check for the presence of shield as this will potentially block
+    // phantomas.
+    if ($this->drush->isShieldEnabled()) {
+      $username = $this->drush->getVariable('shield_user', '');
+      $password = $this->drush->getVariable('shield_pass', '');
+      $command[] = "--auth-user='$username'";
+      $command[] = "--auth-pass='$password'";
+    }
+
     return $this->executor->execute(implode(' ', $command));
   }
 
