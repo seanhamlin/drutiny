@@ -11,7 +11,7 @@ use SiteAudit\Annotation\CheckInfo;
  * title = "No administrators",
  * description = "There should be no administrators other than user ID #1.",
  * remediation = "Check that only no users have the 'administrator' role, other than user ID #1.",
- * success = "No administrators other than user ID #1",
+ * success = "No administrators other than user ID #1.",
  * failure = "Currently there are <code>:number_of_administrators</code> administrators.",
  * not_available = "Could not determine administrator role.",
  * )
