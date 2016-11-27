@@ -1,12 +1,20 @@
 # Site audit
 
-This is a generic Drupal 7 site auditing tool.
+This is a generic Drupal 7 site auditing and optional remediation tool.
 
 ## Why another site audit tool?
 
-This tool is different, in the sense that a site audit is comprised of a profile, and a profile can contain 1 or more checks, and those checks can have optional arguments supplied. This means that you can create a profile that is specific to your own internal guidelines, and not some generic report that may or may not be of any use to you.
+Traditional site audits (e.g. the [checklist API](https://www.drupal.org/project/checklistapi)) in Drupal rely on having certain modules or code present on the server in order to gather the required metrics. The main issue is that if you fail to even have these modules enabled at all, then no auditing will take place in the first instance. This can be a real issue.
 
-Checks are simple classes, that at the moment can either be Drush based checks, or SSH based checks. This allows for easy extension to cover any needs.
+This tool is different, all checks are from the outside looking in, and require no special code or modules to be enabled on the remote site. This means you can audit all environments from development to production and not leave any lasting performance degradation.
+
+## What is a site audit comprised of?
+
+A site audit is comprised of a profile, and a profile can contain 1 or more checks, and those checks can have optional arguments supplied. This means that you can create a profile that is specific to your own internal guidelines, and not some generic report that may or may not be of any use to you.
+
+Checks are simple self contained classes, that at the moment can either be Drush based, SSH based or [phantomas](https://github.com/macbre/phantomas) based. This allows for easy extension to cover any needs.
+
+Site audit can be extended very easily to check for your own unique requirements. Pull requests are welcome as well.
 
 ## Requirements
 
@@ -35,7 +43,7 @@ $aliases['www.example.com'] = array(
 
 **Composer**
 
-Needed to install Symfony Console and related libraries.
+Needed to install Symfony Console and other PHP libraries.
 
 ```
 composer install
@@ -129,3 +137,7 @@ alias as='php /path/to/site-audit audit:site'
 alias aa='php /path/to/site-audit audit:acsf'
 alias am='php /path/to/site-audit audit:multisite'
 ```
+
+## Auto remediation
+
+Certain checks have an autoremediation feature, in order to use this you will need to pass in `--auto-remediate` as a parameter on the command line.

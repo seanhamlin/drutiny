@@ -16,6 +16,5 @@ class CheckInfo
   public $not_available;
   public $warning;
   public $notice;
+  public $supports_remediation = FALSE;
 }
-
- ?>

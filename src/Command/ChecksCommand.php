@@ -32,16 +32,17 @@ class ChecksCommand extends Command {
     $rows = array();
     foreach ($map as $class => $info) {
       $rows[] = array(
-        'title' => $info->title,
+        'title' => wordwrap($info->title, 14),
         'class' => $class,
-        'description' => wordwrap($info->description),
+        'description' => wordwrap(strip_tags($info->description), 50),
+        'supports_remediation' => $info->supports_remediation ? 'Yes' : 'No',
       );
       $rows[] = new TableSeparator();
     }
     array_pop($rows);
     $table = new Table($output);
     $table
-        ->setHeaders(array('Title', 'Class', 'Description'))
+        ->setHeaders(array('Title', 'Class', 'Description', 'Supports remediation'))
         ->setRows($rows);
 
     $table->render();

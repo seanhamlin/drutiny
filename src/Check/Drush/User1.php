@@ -13,6 +13,7 @@ use SiteAudit\Annotation\CheckInfo;
  * success = "User #1 is locked down. :fixups",
  * failure = "User #1 is not secure. :errors.",
  * exception = "Could not determine user #1 settings.",
+ * supports_remediation = TRUE,
  * )
  */
 class User1 extends Check {
