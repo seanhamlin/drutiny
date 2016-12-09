@@ -28,7 +28,7 @@ class PreprocessJS extends Check {
       $preprocess_js = TRUE;
     }
 
-    $this->setToken('fixups', ' ' . implode(', ', $fixups) . '.');
+    $this->setToken('fixups', ' ' . implode(', ', $fixups));
     return $preprocess_js;
   }
 }

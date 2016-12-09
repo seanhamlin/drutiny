@@ -28,7 +28,7 @@ class PreprocessCss extends Check {
       $preprocess_css = TRUE;
     }
 
-    $this->setToken('fixups', ' ' . implode(', ', $fixups) . '.');
+    $this->setToken('fixups', ' ' . implode(', ', $fixups));
     return $preprocess_css;
   }
 }
