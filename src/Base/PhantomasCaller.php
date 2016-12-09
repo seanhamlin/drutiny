@@ -44,6 +44,9 @@ class PhantomasCaller {
     $command[] = '--reporter=json';
     $command[] = '--timeout=30';
 
+    // Remove a lot of output that we don't need at the moment.
+    $command[] = '--skip-modules=domMutations,domQueries,domHiddenContent,domComplexity,jQuery';
+
     // Check for the presence of shield as this will potentially block
     // phantomas.
     if ($this->drush->isShieldEnabled()) {
