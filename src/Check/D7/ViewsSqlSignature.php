@@ -1,6 +1,6 @@
 <?php
 
-namespace SiteAudit\Check\Drush;
+namespace SiteAudit\Check\D7;
 
 use SiteAudit\Check\Check;
 use SiteAudit\Executor\DoesNotApplyException;
@@ -22,7 +22,7 @@ class ViewsSqlSignature extends Check {
     if (!$this->context->drush->moduleEnabled('views')) {
       throw new DoesNotApplyException("Views is not enabled on this site.");
     }
-    $json = (int) $this->context->drush->getVariable('views_sql_signature', 0);
-    return (bool) $json;
+    $views_sql_signature = (bool) (int) $this->context->drush->getVariable('views_sql_signature', 0);
+    return $views_sql_signature;
   }
 }

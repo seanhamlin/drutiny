@@ -53,7 +53,7 @@ class AcsfAudit extends SiteAudit {
 
     // Load the Drush alias which will contain more information we'll need.
     $executor = new Executor($output);
-    $drush = new DrushCaller($executor);
+    $drush = new DrushCaller($executor, $input->getOption('drush-bin'));
     $phantomas = new PhantomasCaller($executor, $drush);
     $random_lib = new RandomLib();
     $response = $drush->siteAlias('@' . $drush_alias, '--format=json')->parseJson(TRUE);
@@ -139,7 +139,7 @@ class AcsfAudit extends SiteAudit {
     foreach ($unique_sites as $id => $values) {
       $i++;
       $domain = $values['domain'];
-      $drush = new DrushCaller($executor);
+      $drush = new DrushCaller($executor, $input->getOption('drush-bin'));
       $drush->setArgument('--uri=' . $domain)
             ->setArgument('--root=' . $alias['root'])
             ->setIsRemote($this->isRemote)

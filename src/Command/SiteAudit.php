@@ -55,6 +55,13 @@ class SiteAudit extends Command {
         sys_get_temp_dir()
       )
       ->addOption(
+        'drush-bin',
+        'b',
+        InputOption::VALUE_REQUIRED,
+        'Set the alias to use for drush.',
+        'drush'
+      )
+      ->addOption(
         'auto-remediate',
         'r',
         InputOption::VALUE_NONE,
@@ -85,7 +92,7 @@ class SiteAudit extends Command {
 
     // Load the Drush alias which will contain more information we'll need.
     $executor = new Executor($output);
-    $drush = new DrushCaller($executor);
+    $drush = new DrushCaller($executor, $input->getOption('drush-bin'));
     $phantomas = new PhantomasCaller($executor, $drush);
     $random_lib = new RandomLib();
     $response = $drush->siteAlias('@' . $drush_alias, '--format=json')->parseJson(TRUE);

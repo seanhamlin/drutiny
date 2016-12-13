@@ -1,6 +1,7 @@
 <?php
 
-namespace SiteAudit\Check;
+namespace SiteAudit\Check\Codebase;
+
 use SiteAudit\Annotation\CheckInfo;
 
 /**

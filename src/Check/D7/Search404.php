@@ -1,6 +1,6 @@
 <?php
 
-namespace SiteAudit\Check\Drush;
+namespace SiteAudit\Check\D7;
 
 use SiteAudit\Check\Check;
 use SiteAudit\Executor\DoesNotApplyException;

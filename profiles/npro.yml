@@ -2,4 +2,4 @@ metadata :
   machine_name: 'npro'
   title : 'NPro'
 checks :
-  \SiteAudit\Check\Drush\ShieldDisabled : {}
+  \SiteAudit\Check\D7\ShieldDisabled : {}

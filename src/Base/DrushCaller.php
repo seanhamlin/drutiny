@@ -6,6 +6,7 @@ use SiteAudit\Executor\ExecutorInterface;
 
 class DrushCaller {
   protected $executor;
+  protected $drushAlias;
 
   protected $alias;
   protected $modulesList = NULL;
@@ -16,8 +17,11 @@ class DrushCaller {
   protected $isRemote = FALSE;
   protected $singleSite = TRUE;
 
-  public function __construct(ExecutorInterface $executor) {
+  public function __construct(ExecutorInterface $executor, $drushAlias = 'drush') {
     $this->executor = $executor;
+
+    // @todo validate this alias.
+    $this->drushAlias = $drushAlias;
   }
 
   public function setAlias($alias) {
@@ -46,7 +50,7 @@ class DrushCaller {
     preg_match_all('/((?:^|[A-Z])[a-z]+)/',$method,$matches);
     $method = implode('-', array_map('strtolower', $matches[0]));
 
-    $command = ['drush'];
+    $command = [$this->drushAlias];
     if (!empty($this->alias)) {
       $command[] = '@' . $this->alias;
     }
@@ -109,7 +113,14 @@ class DrushCaller {
     // in use.
     if (is_null($this->db_prefix)) {
       $sql_conf = $this->sqlConf('--format=json')->parseJson();
-      $this->db_prefix = $sql_conf->prefix;
+
+      // You can have multiple different prefixes.
+      if (is_object($sql_conf->prefix)) {
+        $this->db_prefix = $sql_conf->prefix->default;
+      }
+      else {
+        $this->db_prefix = $sql_conf->prefix;
+      }
     }
 
     // Replace the curly braces.

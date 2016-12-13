@@ -27,6 +27,12 @@ checks :
       - simpletest
       - statistics
       - update
+  \SiteAudit\Check\Drush\UpdateDBStatus: {}
+  \SiteAudit\Check\Drush\SessionsAnon: {}
+  \SiteAudit\Check\Drush\User1 :
+    name_blacklist : '(admin|root|drupal|god|govcms|paul|sean|ruwan)'
+    mail : 'no_reply@govcms.gov.au'
+    status: 1
   \SiteAudit\Check\D7\BlacklistPermissions:
     permissions:
       - 'add JS snippets for google analytics'
@@ -43,34 +49,28 @@ checks :
       - 'generate features'
       - 'manage features'
       - 'rename features'
-  \SiteAudit\Check\Drush\PreprocessCSS : {}
-  \SiteAudit\Check\Drush\PreprocessJS : {}
-  \SiteAudit\Check\Drush\ErrorLevel : {}
-  \SiteAudit\Check\Drush\UserRegister : {}
-  \SiteAudit\Check\Drush\GA :
+  \SiteAudit\Check\D7\PreprocessCSS : {}
+  \SiteAudit\Check\D7\PreprocessJS : {}
+  \SiteAudit\Check\D7\ErrorLevel : {}
+  \SiteAudit\Check\D7\UserRegister : {}
+  \SiteAudit\Check\D7\GA :
     account : '^UA-\d{7,8}-\d{1,2}$'
     cache : '0'
     codesnippet_after : "ga('create', 'UA-54970022-1', 'auto', {'name': 'govcms'}); ga('govcms.send', 'pageview', {'anonymizeIp': true});"
-  \SiteAudit\Check\Drush\NoAdministrators : {}
-  \SiteAudit\Check\Drush\WebformUpload : {}
-  \SiteAudit\Check\Drush\CacheLifetime : {}
-  \SiteAudit\Check\Drush\PageCacheMaximumAge :
+  \SiteAudit\Check\D7\NoAdministrators : {}
+  \SiteAudit\Check\D7\WebformUpload : {}
+  \SiteAudit\Check\D7\CacheLifetime : {}
+  \SiteAudit\Check\D7\PageCacheMaximumAge :
     cache : 300
-  \SiteAudit\Check\Drush\UpdateDBStatus: {}
-  \SiteAudit\Check\Drush\Search404: {}
-  \SiteAudit\Check\Drush\SessionsAnon: {}
-  \SiteAudit\Check\Drush\CronHasRun: {}
-  \SiteAudit\Check\Drush\CronPoorMans: {}
-  \SiteAudit\Check\Drush\PageCompression: {}
-  \SiteAudit\Check\Drush\ZenRebuildRegistry: {}
-  \SiteAudit\Check\Drush\SearchDB:
+  \SiteAudit\Check\D7\Search404: {}
+  \SiteAudit\Check\D7\CronHasRun: {}
+  \SiteAudit\Check\D7\CronPoorMans: {}
+  \SiteAudit\Check\D7\PageCompression: {}
+  \SiteAudit\Check\D7\ZenRebuildRegistry: {}
+  \SiteAudit\Check\D7\SearchDB:
     max_size : 50
-  \SiteAudit\Check\Drush\XMLSiteMapBaseUrl:
+  \SiteAudit\Check\D7\XMLSiteMapBaseUrl:
     pattern : '^https://(www|ministerial|agency|blog|docs|annualreport|innovation)\.[-a-z]{1,63}(\.[-a-z]{1,63})?\.gov\.au$'
-  \SiteAudit\Check\Drush\User1 :
-    name_blacklist : '(admin|root|drupal|god|govcms|paul|sean|ruwan)'
-    mail : 'no_reply@govcms.gov.au'
-    status: 1
 
   # ACSF specific checks.
   \SiteAudit\Check\Acsf\ThemeSize :

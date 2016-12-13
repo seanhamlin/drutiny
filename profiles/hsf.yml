@@ -14,8 +14,8 @@ checks :
       - overlay
       - php
       - statistics
-  \SiteAudit\Check\Drush\PreprocessCSS : {}
-  \SiteAudit\Check\Drush\PreprocessJS : {}
-  \SiteAudit\Check\Drush\PageCacheMaximumAge :
+  \SiteAudit\Check\D7\PreprocessCSS : {}
+  \SiteAudit\Check\D7\PreprocessJS : {}
+  \SiteAudit\Check\D7\PageCacheMaximumAge :
     cache : 300
-  \SiteAudit\Check\Drush\CronHasRun: {}
+  \SiteAudit\Check\D7\CronHasRun: {}

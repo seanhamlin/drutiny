@@ -4,26 +4,39 @@ metadata :
 checks :
   \SiteAudit\Check\Drush\ModuleEnabled:
     modules:
-      - syslog
+      - acquia_spi
+      - acquia_agent
       - acsf
       - acsf_duplication
       - acsf_openid
       - acsf_pingdom
       - acsf_theme
       - acsf_variables
-      - acquia_spi
-      - acquia_agent
+      - syslog
   \SiteAudit\Check\Drush\ModuleDisabled:
     modules:
+      - services
       - dblog
       - overlay
       - php
+      - simpletest
       - statistics
-  \SiteAudit\Check\Drush\PreprocessCSS : {}
-  \SiteAudit\Check\Drush\PreprocessJS : {}
-  \SiteAudit\Check\Drush\PageCacheMaximumAge :
-    cache : 300
+      - update
   \SiteAudit\Check\Drush\UpdateDBStatus: {}
+  \SiteAudit\Check\D7\PreprocessCSS : {}
+  \SiteAudit\Check\D7\PreprocessJS : {}
+  \SiteAudit\Check\D7\PageCacheMaximumAge :
+    cache : 300
+
+  # ACSF specific checks.
   \SiteAudit\Check\Acsf\ThemeSize :
     max_size : 50
-    warning_size: 20
+    warning_size : 20
+  \SiteAudit\Check\Acsf\ThemePhpLint : {}
+  \SiteAudit\Check\Acsf\ThemeSecurity : {}
+
+  # Browser specific checks.
+  \SiteAudit\Check\Phantomas\PageWeight :
+    max_size : 5
+    warning_size : 2
+  \SiteAudit\Check\Phantomas\InPage404s : {}

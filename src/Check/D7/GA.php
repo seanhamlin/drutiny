@@ -1,6 +1,6 @@
 <?php
 
-namespace SiteAudit\Check\Drush;
+namespace SiteAudit\Check\D7;
 
 use SiteAudit\AuditResponse\AuditResponse;
 use SiteAudit\Check\Check;

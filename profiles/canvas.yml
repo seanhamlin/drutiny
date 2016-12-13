@@ -21,22 +21,22 @@ checks :
       - simpletest
       - textsize
       - update
-  \SiteAudit\Check\Drush\PreprocessCSS : {}
-  \SiteAudit\Check\Drush\PreprocessJS : {}
-  \SiteAudit\Check\Drush\ErrorLevel : {}
-  \SiteAudit\Check\Drush\UserRegister : {}
-  \SiteAudit\Check\Drush\CacheLifetime : {}
-  \SiteAudit\Check\Drush\PageCacheMaximumAge :
+  \SiteAudit\Check\D7\PreprocessCSS : {}
+  \SiteAudit\Check\D7\PreprocessJS : {}
+  \SiteAudit\Check\D7\ErrorLevel : {}
+  \SiteAudit\Check\D7\UserRegister : {}
+  \SiteAudit\Check\D7\CacheLifetime : {}
+  \SiteAudit\Check\D7\PageCacheMaximumAge :
     cache : 300
   \SiteAudit\Check\Drush\UpdateDBStatus: {}
-  \SiteAudit\Check\Drush\Search404: {}
-  \SiteAudit\Check\Drush\SearchDB:
+  \SiteAudit\Check\D7\Search404: {}
+  \SiteAudit\Check\D7\SearchDB:
      max_size : 50
   \SiteAudit\Check\Drush\SessionsAnon: {}
-  \SiteAudit\Check\Drush\CronHasRun: {}
-  \SiteAudit\Check\Drush\CronPoorMans: {}
-  \SiteAudit\Check\Drush\PageCompression: {}
-  \SiteAudit\Check\Drush\XMLSiteMapBaseUrl:
+  \SiteAudit\Check\D7\CronHasRun: {}
+  \SiteAudit\Check\D7\CronPoorMans: {}
+  \SiteAudit\Check\D7\PageCompression: {}
+  \SiteAudit\Check\D7\XMLSiteMapBaseUrl:
     pattern : '^https://www\.[-a-z]{1,63}\.[a-z]{2,3}(\.[a-z]{2,3})?$'
   \SiteAudit\Check\Drush\User1 :
     name_blacklist : '(admin|root|drupal|god|govcms|paul|sean|ruwan)'
