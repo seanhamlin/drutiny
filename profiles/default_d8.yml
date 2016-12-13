@@ -25,3 +25,4 @@ checks :
   \SiteAudit\Check\Drush\SessionsAnon: {}
   \SiteAudit\Check\D8\PreprocessCSS : {}
   \SiteAudit\Check\D8\PreprocessJS : {}
+  \SiteAudit\Check\D8\UserRegister : {}
