@@ -11,6 +11,7 @@ class DrushCaller {
   protected $alias;
   protected $modulesList = NULL;
   protected $variablesList = NULL;
+  protected $configurationList = NULL;
   protected $drushStatus = NULL;
   protected $db_prefix = NULL;
   protected $args = [];
@@ -22,6 +23,7 @@ class DrushCaller {
 
     // @todo validate this alias.
     $this->drushAlias = $drushAlias;
+    $this->configurationList = new \stdClass();
   }
 
   public function setAlias($alias) {
@@ -212,6 +214,43 @@ class DrushCaller {
       }
 
       return $default;
+    }
+    // The response from Drush can be "No matching variable found.", even with
+    // JSON being requested, which is weird.
+    catch (\Exception $e) {
+      return $default;
+    }
+  }
+
+  /**
+   * Try to return a configuration value.
+   *
+   * @param $configName
+   *   The config object name, for example "system.site".
+   * @param $key
+   *   The config key, for example "page.front".
+   * @param int $default
+   *   The value to return if the configuration key is not set.
+   * @return mixed
+   */
+  public function getConfig($configName, $key, $default = 0) {
+    try {
+      // First time this is run, refresh the variable list.
+      if (!isset($this->configurationList->{$configName})) {
+        $this->configurationList->{$configName} = $this->configGet($configName, '--format=json')->parseJson();
+      }
+
+      $base_config = $this->configurationList->{$configName};
+
+      // Explode the key, the JSON can be nested, we need to extract the right
+      // part of the JSON.
+      $key_parts = explode('.', $key);
+      foreach ($key_parts as $key_part) {
+        $base_config = $base_config->{$key_part};
+      }
+
+      // @todo return default value when the $key is missing.
+      return $base_config;
     }
     // The response from Drush can be "No matching variable found.", even with
     // JSON being requested, which is weird.

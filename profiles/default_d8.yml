@@ -23,3 +23,5 @@ checks :
       - update
   \SiteAudit\Check\Drush\UpdateDBStatus: {}
   \SiteAudit\Check\Drush\SessionsAnon: {}
+  \SiteAudit\Check\D8\PreprocessCSS : {}
+  \SiteAudit\Check\D8\PreprocessJS : {}
