@@ -1,6 +1,6 @@
 # Site audit
 
-This is a generic Drupal 7 site auditing and optional remediation tool.
+This is a generic Drupal 7 and Drupal 8 site auditing and optional remediation tool.
 
 ## Why another site audit tool?
 
@@ -12,7 +12,7 @@ This tool is different, all checks are from the outside looking in, and require 
 
 A site audit is comprised of a profile, and a profile can contain 1 or more checks, and those checks can have optional arguments supplied. This means that you can create a profile that is specific to your own internal guidelines, and not some generic report that may or may not be of any use to you.
 
-Checks are simple self contained classes, that at the moment can either be Drush based, SSH based or [phantomas](https://github.com/macbre/phantomas) based. This allows for easy extension to cover any needs.
+Checks are simple self contained classes, that at the moment can either be Drush based, SSH based or [phantomas](https://github.com/macbre/phantomas) based. This allows for easy extension to cover any needs. If a particular check pertains to just Drupal 7 or Drupal 8 then it will be namespaced as such.
 
 Site audit can be extended very easily to check for your own unique requirements. Pull requests are welcome as well.
 
