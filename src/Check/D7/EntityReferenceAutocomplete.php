@@ -133,7 +133,7 @@ class EntityReferenceAutocomplete extends Check {
     list($count) = explode("\t", reset($output));
 
     if ($count > $this->getOption('threshold', 100)) {
-      $this->errors[$field_info['id']] = "{$field_instance_info['label']} ($count)";
+      $this->errors[$field_info['id']] = "{$field_instance_info['label']} ({$field_info['id']})";
       return FALSE;
     }
 
@@ -168,7 +168,7 @@ class EntityReferenceAutocomplete extends Check {
     list($count) = explode("\t", reset($output));
 
     if ($count > $this->getOption('threshold', 100)) {
-      $this->errors[$field_info['id']] = "{$field_instance_info['label']} ($count)";
+      $this->errors[$field_info['id']] = "{$field_instance_info['label']} ({$field_info['id']})";
       return FALSE;
     }
 

@@ -79,7 +79,8 @@ class AuditResponse {
   }
 
   public function getRemediation() {
-    return $this->check->getInfo()->remediation;
+    $tokens = $this->check->getTokens();
+    return strtr($this->check->getInfo()->remediation, $tokens);
   }
 
   public function setStatus($status) {
