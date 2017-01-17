@@ -84,3 +84,7 @@ checks :
     max_size : 5
     warning_size : 2
   \SiteAudit\Check\Phantomas\InPage404s : {}
+
+  # Field specific checks.
+  \SiteAudit\Check\D7\EntityReferenceAutocomplete:
+    threshold: 100
