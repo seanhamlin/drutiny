@@ -65,7 +65,6 @@ class EntityReferenceAutocomplete extends Check {
       }
     }
 
-
     $this->setToken('num_fields', $valid);
     $this->setToken('num_plural', $valid > 1 ? 's' : '');
     $this->setToken('error_replace', implode(', ',  $this->errors));
