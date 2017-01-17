@@ -9,6 +9,7 @@ namespace SiteAudit\Check\D7;
 use SiteAudit\Check\Check;
 use SiteAudit\AuditResponse\AuditResponse;
 use SiteAudit\Annotation\CheckInfo;
+use SiteAudit\Executor\DoesNotApplyException;
 
 /**
  * @CheckInfo(
@@ -39,9 +40,9 @@ class EntityReferenceAutocomplete extends Check {
     $valid = 0;
 
     try {
-      $output = $this->context->drush->sqlQuery('SELECT fc.field_name, fc.data, fci.data FROM {field_config} fc JOIN {field_config_instance} fci ON fc.id = fci.field_id WHERE fc.type = \'entityreference\'');
+      $output = $this->context->drush->sqlQuery("SELECT fc.field_name, fc.data, fci.data FROM {field_config} fc JOIN {field_config_instance} fci ON fc.id = fci.field_id WHERE fc.type = 'entityreference'");
     } catch (\Exception $e) {
-      return AuditResponse::AUDIT_FAILURE;
+      throw new DoesNotApplyException;
     }
 
     foreach ($output as $line) {
@@ -124,7 +125,7 @@ class EntityReferenceAutocomplete extends Check {
     }
 
     try {
-      $output = $this->context->drush->sqlQuery('SELECT count(ttd.tid) as count FROM {taxonomy_term_data} ttd');
+      $output = $this->context->drush->sqlQuery("SELECT count(ttd.tid) as count FROM {taxonomy_term_data} ttd");
     } catch(\Exception $e) {
       return $this->getOption('implicit', TRUE);
     }
@@ -159,7 +160,7 @@ class EntityReferenceAutocomplete extends Check {
     $node_types = "'" . implode("','", $node_types) . "'";
 
     try {
-      $output = $this->context->drush->sqlQuery('SELECT count(node.nid) as count FROM {node} node WHERE node.type in (' . $node_types . ')');
+      $output = $this->context->drush->sqlQuery("SELECT count(node.nid) as count FROM {node} node WHERE node.type in (" . $node_types . ")");
     } catch (\Exception $e) {
       return $this->getOption('implicit', TRUE);
     }
