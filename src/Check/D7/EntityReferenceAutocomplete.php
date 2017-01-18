@@ -39,6 +39,12 @@ class EntityReferenceAutocomplete extends Check {
   protected function check() {
     $valid = 0;
 
+    // We don't need to perform these checks if the entity reference module is
+    // not enabled.
+    if (!$this->context->drush->moduleEnabled('entityreference')) {
+      return AuditResponse::AUDIT_NA;
+    }
+
     try {
       $output = $this->context->drush->sqlQuery("SELECT fc.field_name, fc.data, fci.data FROM {field_config} fc JOIN {field_config_instance} fci ON fc.id = fci.field_id WHERE fc.type = 'entityreference'");
     } catch (\Exception $e) {
@@ -57,6 +63,8 @@ class EntityReferenceAutocomplete extends Check {
         continue;
       }
 
+      // Additional checks can be added here; we've defined taxonomy_term and
+      // node checks as these are the typical entity reference providers.
       $check = "check_{$field_info['settings']['target_type']}";
 
       if (method_exists($this, $check)) {
