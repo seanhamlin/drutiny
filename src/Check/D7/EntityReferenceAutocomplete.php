@@ -68,7 +68,7 @@ class EntityReferenceAutocomplete extends Check {
       $check = "check_{$field_info['settings']['target_type']}";
 
       if (method_exists($this, $check)) {
-        if (call_user_func([$this, $check], $field_info, $field_instance_info)) {
+        if (call_user_func([$this, $check], $field_name, $field_info, $field_instance_info)) {
           $valid++;
         }
       }
@@ -125,7 +125,8 @@ class EntityReferenceAutocomplete extends Check {
    *
    * @return bool|null
    */
-  private function check_taxonomy_term($field_info, $field_instance_info) {
+  private function check_taxonomy_term($field_name, array $field_info, array $field_instance_info) {
+    $field_id = isset($field_info['label']) ? $field_info['label'] : $field_name;
     $bundles = $this->getFieldArgs($field_info);
 
     if (empty($bundles)) {
@@ -141,7 +142,7 @@ class EntityReferenceAutocomplete extends Check {
     list($count) = explode("\t", reset($output));
 
     if ($count > $this->getOption('threshold', 100)) {
-      $this->errors[$field_info['id']] = "{$field_instance_info['label']} ({$field_info['id']})";
+      $this->errors[$field_id] = "{$field_instance_info['label']} ({$field_id})";
       return FALSE;
     }
 
@@ -158,7 +159,8 @@ class EntityReferenceAutocomplete extends Check {
    *
    * @return bool|null
    */
-  private function check_node(array $field_info, array $field_instance_info) {
+  private function check_node($field_name, array $field_info, array $field_instance_info) {
+    $field_id = isset($field_info['label']) ? $field_info['label'] : $field_name;
     $node_types = $this->getFieldArgs($field_info);
 
     if (empty($node_types)) {
@@ -176,7 +178,7 @@ class EntityReferenceAutocomplete extends Check {
     list($count) = explode("\t", reset($output));
 
     if ($count > $this->getOption('threshold', 100)) {
-      $this->errors[$field_info['id']] = "{$field_instance_info['label']} ({$field_info['id']})";
+      $this->errors[$field_id] = "{$field_instance_info['label']} ({$field_id})";
       return FALSE;
     }
 
