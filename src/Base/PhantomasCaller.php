@@ -55,8 +55,13 @@ class PhantomasCaller {
       $command[] = "--auth-user='$username'";
       $command[] = "--auth-pass='$password'";
     }
+
     // Allow users to set environment variables as well if the HTTP
-    // authentication is hard coded in settings.php for example.
+    // authentication is hard coded in settings.php for example. You can set
+    // these by:
+    //
+    // export SITE_AUDIT_HTTP_AUTH_USER=[USERNAME]
+    // export SITE_AUDIT_HTTP_AUTH_PASS=[PASSWORD]
     else if (!empty(getenv('SITE_AUDIT_HTTP_AUTH_USER'))) {
       $username = getenv('SITE_AUDIT_HTTP_AUTH_USER');
       $password = getenv('SITE_AUDIT_HTTP_AUTH_PASS');
