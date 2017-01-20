@@ -115,7 +115,7 @@ class DrushCaller {
     // in use.
     if (is_null($this->db_prefix)) {
       $sql_conf = $this->sqlConf('--format=json')->parseJson();
-      $this->db_prefix = isset($sql_conf->prefix) ? $sql_conf->prefix : NULL;
+      $this->db_prefix = isset($sql_conf->prefix) ? $sql_conf->prefix : '';
       // You can have multiple different prefixes.
       if (is_object($this->db_prefix)) {
         $this->db_prefix = $this->db_prefix->default;
