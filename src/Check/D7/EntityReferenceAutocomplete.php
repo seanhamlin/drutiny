@@ -6,6 +6,7 @@
 
 namespace SiteAudit\Check\D7;
 
+use SiteAudit\Base\Serializer;
 use SiteAudit\Check\Check;
 use SiteAudit\AuditResponse\AuditResponse;
 use SiteAudit\Annotation\CheckInfo;
@@ -53,8 +54,18 @@ class EntityReferenceAutocomplete extends Check {
 
     foreach ($output as $line) {
       list($field_name, $field_info, $field_instance_info) = explode("\t", $line);
-      $field_info = unserialize($field_info);
-      $field_instance_info = unserialize($field_instance_info);
+
+      $field_info = Serializer::unserialize($field_info);
+      $field_instance_info = Serializer::unserialize($field_instance_info);
+
+      // It is possible for the unserialize to fail- this is usually due to
+      // ", ', :, or ; characters appearing in the serialized string and not
+      // being escaped correctly when retrieved from MySQL.
+      if (!$field_info || !$field_instance_info) {
+        // Skip this field - possibly want to add the field to the error results
+        // with a message about unable to determine configuration.
+        continue;
+      }
 
       if (strpos($field_instance_info['widget']['type'], 'autocomplete') > -1) {
         // Correct configuration is to use an autocomplete as this will limit
@@ -120,22 +131,28 @@ class EntityReferenceAutocomplete extends Check {
   /**
    * Process the result of a query to determine the entity reference imapact.
    *
-   * This is called after a specific check_[type] method has been called. This
-   * will abstract out how
+   * This is called after a specific get_result_[type] method has been called
+   * it will take the output of the query and compare it with the threshold
+   * and add a message to errors if required.
    *
    * @param array $output
+   *   An output from a query against the configured entity bundle.
    * @param string $field_name
+   *   Field machine name.
    * @param array $field_info
+   *   Field info array as extracted from the DB.
    * @param array $field_instance_info
+   *   Field instance info array as extracted from the DB.
    * @return bool
    */
   private function processResult(array $result = [], $field_name = '', array $field_info = [], array $field_instance_info = []) {
     $field_id = isset($field_info['label']) ? $field_info['label'] : $field_name;
+    $field_instance_label = isset($field_instance_info['label']) ? $field_instance_info['label'] : 'Undefined';
 
     list($count) = explode("\t", reset($result));
 
     if ($count > $this->getOption('threshold', 100)) {
-      $this->errors[$field_id] = "{$field_instance_info['label']} <code>{$field_id}</code>, found <em>{$count}</em> referenced entities";
+      $this->errors[$field_id] = "{$field_instance_label} <code>{$field_id}</code>, found <em>{$count}</em> referenced entities";
       return FALSE;
     }
 
