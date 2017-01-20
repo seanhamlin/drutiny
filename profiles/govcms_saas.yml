@@ -72,6 +72,10 @@ checks :
   \SiteAudit\Check\D7\XMLSiteMapBaseUrl:
     pattern : '^https://(www|ministerial|agency|blog|docs|annualreport|innovation)\.[-a-z]{1,63}(\.[-a-z]{1,63})?\.gov\.au$'
 
+  # Field specific checks.
+  \SiteAudit\Check\D7\EntityReferenceAutocomplete:
+    threshold: 100
+
   # ACSF specific checks.
   \SiteAudit\Check\Acsf\ThemeSize :
     max_size : 50
@@ -84,7 +88,3 @@ checks :
     max_size : 5
     warning_size : 2
   \SiteAudit\Check\Phantomas\InPage404s : {}
-
-  # Field specific checks.
-  \SiteAudit\Check\D7\EntityReferenceAutocomplete:
-    threshold: 100

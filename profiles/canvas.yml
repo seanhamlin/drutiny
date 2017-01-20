@@ -43,6 +43,10 @@ checks :
     mail : 'admin@example.com'
     status: 1
 
+  # Field specific checks.
+  \SiteAudit\Check\D7\EntityReferenceAutocomplete:
+    threshold: 100
+
   # Browser specific checks.
   \SiteAudit\Check\Phantomas\PageWeight :
     max_size : 5
