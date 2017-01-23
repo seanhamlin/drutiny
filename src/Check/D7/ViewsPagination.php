@@ -6,6 +6,7 @@
 
 namespace SiteAudit\Check\D7;
 
+use SiteAudit\AuditResponse\AuditResponse;
 use SiteAudit\Check\Check;
 use SiteAudit\Annotation\CheckInfo;
 
@@ -23,8 +24,7 @@ use SiteAudit\Annotation\CheckInfo;
  */
 class ViewsPagination extends Check {
   public function check() {
-    // We don't need to perform these checks if the entity reference module is
-    // not enabled.
+
     if (!$this->context->drush->moduleEnabled('views')) {
       return AuditResponse::AUDIT_NA;
     }
@@ -33,14 +33,18 @@ class ViewsPagination extends Check {
     $errors = [];
 
     // View settings are set per display so we need to query the views display table.
-    $views = $this->context->drush->sqlQuery("SELECT vd.id, vd.display_title, vd.display_options, vv.name, vv.human_name FROM {views_data} JOIN {views_view} ON vv.vid = vd.vid");
+    $views = $this->context->drush->sqlQuery("SELECT vd.vid, vd.display_title, vd.display_options, vv.name, vv.human_name FROM {views_display} vd JOIN {views_view} vv ON vv.vid = vd.vid");
 
     foreach ($views as $view) {
       list($display_id, $display_name, $display_options, $view_machine_name, $view_name) = explode("\t", $view);
       $display_options = unserialize($display_options);
 
+      if (empty($display_options['pager']['options']['items_per_page'])) {
+        continue;
+      }
+
       if ($display_options['pager']['options']['items_per_page'] > $this->getOption('threshold', 30)) {
-        $errors[] = "$view_name [$display_name] is displaying <code>{$display_options['pager']['options']['items_per_page']}</code>";
+        $errors[] = "$view_name <i>[$display_name]</i> is displaying <code>{$display_options['pager']['options']['items_per_page']}</code>";
         continue;
       }
 
@@ -49,7 +53,10 @@ class ViewsPagination extends Check {
 
     $this->setToken('total', $valid);
     $this->setToken('plural', $valid > 1 ? 's' : '');
-    $this->setToken('error', implode('</li><li>',  $this->errors));
-    $this->setToken('error_count', count($this->errors));
+    $this->setToken('error', implode('</li><li>',  $errors));
+    $this->setToken('threshold', $this->getOption('threshold', 30));
+    $this->setToken('error_count', count($errors));
+
+    return empty($errors) ? AuditResponse::AUDIT_SUCCESS : AuditResponse::AUDIT_FAILURE;
   }
 }
