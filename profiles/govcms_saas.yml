@@ -104,7 +104,7 @@ checks :
         login_security_user_wrong_count: 5
         login_security_host_wrong_count: 0
         login_security_host_wrong_count_hard: 0
-        login_security_disable_core_login_error: true
-        login_security_notice_attempts_available: FALSE
-        login_security_last_login_timestamp: true
-        login_security_last_access_timestamp: FALSE
+        login_security_disable_core_login_error: 1
+        login_security_notice_attempts_available: 0
+        login_security_last_login_timestamp: 1
+        login_security_last_access_timestamp: 0

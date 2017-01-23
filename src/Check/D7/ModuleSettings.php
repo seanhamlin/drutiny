@@ -19,7 +19,7 @@ use Symfony\Component\Debug\Exception\ClassNotFoundException;
  *   description = "Ensure :module is configured correctly",
  *   remediation = "Ensure that the :module has the following settings <ul><li>:settings</li></ul>",
  *   success = ":module is and correctly configured.",
- *   failure = "Found <code>:error_count</code> error:plural with :module",
+ *   failure = "Found <code>:error_count</code> error:plural with :module configuration",
  *   exception = "Error finding Login Security",
  *   not_available = "Cannot find configuration for Login Security.",
  * )
@@ -85,7 +85,7 @@ class ModuleSettings extends Check {
     foreach ($this->getSettings() as $setting) {
       do {
         if (!$setting->valid()) {
-          $errors[] = "{$setting->key()} should be <b>{$setting->current()}</b>";
+          $errors[] = "<code>{$setting->key()}</code> should be <b>{$setting->current()}</b>";
         }
       } while($setting->next());
     }

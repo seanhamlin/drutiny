@@ -7,6 +7,7 @@
 namespace SiteAudit\Check\D7;
 
 use SiteAudit\AuditResponse\AuditResponse;
+use SiteAudit\Base\Serializer;
 use SiteAudit\Check\Check;
 use SiteAudit\Annotation\CheckInfo;
 
@@ -37,14 +38,14 @@ class ViewsPagination extends Check {
 
     foreach ($views as $view) {
       list($display_id, $display_name, $display_options, $view_machine_name, $view_name) = explode("\t", $view);
-      $display_options = unserialize($display_options);
+      $display_options = Serializer::unserialize($display_options);
 
       if (empty($display_options['pager']['options']['items_per_page'])) {
         continue;
       }
 
       if ($display_options['pager']['options']['items_per_page'] > $this->getOption('threshold', 30)) {
-        $errors[] = "$view_name <i>[$display_name]</i> is displaying <code>{$display_options['pager']['options']['items_per_page']}</code>";
+        $errors[] = "<b>$view_name <i>[$display_name]</i></b> is displaying <code>{$display_options['pager']['options']['items_per_page']}</code>";
         continue;
       }
 
