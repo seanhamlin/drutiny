@@ -12,6 +12,7 @@ checks :
       - acsf_pingdom
       - acsf_theme
       - acsf_variables
+      - clamav
       - googleanalytics
       - govcms_account_security
       - govcms_tweaks
