@@ -122,6 +122,7 @@ class MultisiteAudit extends SiteAudit {
 
       $output->writeln("<comment>[$i] Running audit over: {$domain}</comment>");
       $results = $this->runChecks($context);
+      $results = array_merge($results, $this->runSettings($context));
       $unique_sites[$id]['results'] = $results;
       $passes = [];
       $warnings = [];
