@@ -6,22 +6,68 @@ use Symfony\Component\ClassLoader\ClassMapGenerator;
 use Symfony\Component\Yaml\Yaml;
 use SiteAudit\Check\Registry;
 
+/**
+ * Class Profile
+ * @package SiteAudit\Profile
+ */
 class Profile
 {
 
+  /**
+   * A title for a given profile.
+   *
+   * @var string
+   */
   protected $title;
+
+  /**
+   * A machine name for a given profile.
+   *
+   * @var string
+   */
   protected $machine_name;
+
+  /**
+   * Checks to run against a Drupal site.
+   *
+   * @var array
+   */
   protected $checks = array();
+
+  /**
+   * A list of modules and their settings to ensure correct configuration.
+   *
+   * @var array
+   */
+  protected $settings = array();
+
+  /**
+   * Application file paths.
+   *
+   * @var array
+   */
   protected $filepaths = array(
     'system' => 'profiles',
     'local' => '.',
     'user' => '~/.site-audit',
     'global' => '/etc/site-audit/profiles',
   );
+
+  /**
+   * The real path to the yml profile configuration file.
+   *
+   * @var bool|string
+   */
   protected $filepath = FALSE;
 
   /**
    * Set the Profile title
+   *
+   * @param string $title
+   *    A title to set for the profile.
+   *
+   * @return $this
+   *   The profile instance.
    */
   public function setTitle($title)
   {
@@ -31,6 +77,9 @@ class Profile
 
   /**
    * Get the Profile title
+   *
+   * @return string
+   *   The profile's title.
    */
   public function getTitle()
   {
@@ -39,8 +88,14 @@ class Profile
 
   /**
    * Set the Profile machine name
+   *
+   * @param string $machine_name
+   *   A machine name to set for this profile.
+   *
+   * @return $this
+   *   The profile instance.
    */
-  public function setMachineName($machine_name)
+  public function setMachineName($machine_name = '')
   {
     $this->machine_name = $machine_name;
     return $this;
@@ -48,6 +103,9 @@ class Profile
 
   /**
    * Get the Profile machine name
+   *
+   * @return string
+   *   The machine name for the profile.
    */
   public function getMachineName()
   {
@@ -56,6 +114,9 @@ class Profile
 
   /**
    * Add a check to the profile.
+   *
+   * @return bool
+   *   If the check was successfully added.
    */
   public function addCheck($check, $options = array())
   {
@@ -78,13 +139,32 @@ class Profile
   }
 
   /**
-   * Get the Profile machine name
+   * Get the Profile checks.
+   *
+   * @return array
+   *   A list of checks to perform for this profile.
    */
   public function getChecks()
   {
     return $this->checks;
   }
 
+  /**
+   * Get the Profile moduel settings.
+   *
+   * @return array
+   *   A list of module settings to verify.
+   */
+  public function getSettings()
+  {
+    return $this->settings;
+  }
+
+  /**
+   * Store a configured profile on disk.
+   *
+   * @return int
+   */
   public function save()
   {
     $data['metadata']['title'] = $this->getTitle();
@@ -100,7 +180,16 @@ class Profile
     return file_put_contents($this->getFilepath(), $yaml);
   }
 
-  public function load($machine_name)
+  /**
+   * Load a profile by a given machine name.
+   *
+   * @param string $machine_name
+   *   A string for the machine name.
+   *
+   * @return bool
+   *   If the file was successfully loaded.
+   */
+  public function load($machine_name = '')
   {
     if (!$this->filepath = $this->find($machine_name)) {
       return FALSE;
@@ -110,10 +199,23 @@ class Profile
     $data = Yaml::parse($yaml);
     $this->setTitle($data['metadata']['title'])
          ->setMachineName($data['metadata']['machine_name']);
+
     $this->checks = $data['checks'];
+    $this->settings = $data['settings'];
+
+    return TRUE;
   }
 
-  public function find($machine_name)
+  /**
+   * Find a yml profile file by a machine name.
+   *
+   * @param string $machine_name
+   *   A string for the machine name.
+   *
+   * @return bool|string
+   *   The file path or FALSE.
+   */
+  public function find($machine_name = '')
   {
     $filename = $machine_name . '.yml';
     foreach (array_filter($this->filepaths, 'is_dir') as $filepath) {
@@ -125,6 +227,12 @@ class Profile
     return FALSE;
   }
 
+  /**
+   * Accessor for filepath.
+   *
+   * @return bool|string
+   *   File path for the yml file or FALSE.
+   */
   public function getFilepath()
   {
     return $this->filepath;

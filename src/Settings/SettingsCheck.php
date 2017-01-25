@@ -4,31 +4,24 @@
  * Contains SiteAudit\Check\D7\LoginSecurity
  */
 
-namespace SiteAudit\Check\D7;
-
+namespace SiteAudit\Settings;
 
 use SiteAudit\AuditResponse\AuditResponse;
 use SiteAudit\Check\Check;
 use SiteAudit\Annotation\CheckInfo;
 
-use Symfony\Component\Debug\Exception\ClassNotFoundException;
-
 /**
  * @CheckInfo(
- *   title = "Module Settings",
+ *   title = "Module (:module) settings",
  *   description = "Ensure :module is configured correctly",
  *   remediation = "Ensure that the :module has the following settings <ul><li>:settings</li></ul>",
- *   success = ":module is and correctly configured.",
+ *   success = ":module is correctly configured.",
  *   failure = "Found <code>:error_count</code> error:plural with :module configuration",
- *   exception = "Error finding Login Security",
- *   not_available = "Cannot find configuration for Login Security.",
+ *   exception = "Error finding :module.",
+ *   not_available = "Cannot find configuration for :module.",
  * )
  */
-class ModuleSettings extends Check {
-
-  public function __construct(\SiteAudit\Context $context, array $options) {
-    parent::__construct($context, $options);
-  }
+class SettingsCheck extends Check {
 
   /**
    * Get the modules label.
@@ -40,13 +33,7 @@ class ModuleSettings extends Check {
    */
   private function getLabel() {
     $machine_name = $this->getOption('machine_name', FALSE);
-    $label = $this->getOption('label', $machine_name);
-
-    if (empty($label)) {
-      throw new \Exception();
-    }
-
-    return $label;
+    return $this->getOption('label', $machine_name);
   }
 
   /**
@@ -57,14 +44,14 @@ class ModuleSettings extends Check {
    * @return array
    *   Array of \SiteAudit\Settings\Settings.
    *
-   * @throws \Symfony\Component\Debug\Exception\ClassNotFoundException
+   * @throws \Exception
    */
   private function getSettings() {
     $settings = [];
 
     foreach ($this->getOption('settings', []) as $iterator => $values) {
       if (!class_exists($iterator)) {
-        throw new ClassNotFoundException($iterator);
+        throw new \Exception("Unable to load iterator: $iterator");
       }
       $settings[$iterator] = new $iterator($values, $this->context->drush);
     }
@@ -79,7 +66,6 @@ class ModuleSettings extends Check {
    *   Response code from AuditResponse.
    */
   protected function check() {
-    $this->setToken('module', $this->getLabel());
     $errors = [];
 
     foreach ($this->getSettings() as $setting) {
@@ -90,6 +76,7 @@ class ModuleSettings extends Check {
       } while($setting->next());
     }
 
+    $this->setToken('module', $this->getLabel());
     $this->setToken('settings', implode('</li><li>', $errors));
     $this->setToken('error_count', count($errors));
     $this->setToken('plural', count($errors) > 1 ? 's' : '');

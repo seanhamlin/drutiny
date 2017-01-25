@@ -6,6 +6,7 @@ use SiteAudit\AuditResponse\AuditResponse;
 use SiteAudit\Base\DrushCaller;
 use SiteAudit\Base\PhantomasCaller;
 use SiteAudit\Base\RandomLib;
+use SiteAudit\Settings\SettingsCheck;
 use SiteAudit\Context;
 use SiteAudit\Executor\Executor;
 use SiteAudit\Executor\ExecutorRemote;
@@ -144,6 +145,8 @@ class SiteAudit extends Command {
     }
 
     $results = $this->runChecks($context);
+    $results = array_merge($results, $this->runSettings($context));
+
     $site['domain'] = $alias['uri'];
     $site['results'] = $results;
     $passes = [];
@@ -188,6 +191,23 @@ class SiteAudit extends Command {
     foreach ($context->profile->getChecks() as $check => $options) {
       $test = new $check($context, $options);
       $result = $test->execute();
+      $results[] = $result;
+      $context->output->writeln(strip_tags((string) $result, '<info><comment><error>'));
+    }
+    return $results;
+  }
+
+  /**
+   * Perform settings checks for each module defined in the settings hash.
+   * @param $context
+   * @return array
+   */
+  protected function runSettings($context) {
+    $results = [];
+    foreach ($context->profile->getSettings() as $machine_name => $options) {
+      $options['machine_name'] = $machine_name;
+      $settings = new SettingsCheck($context, $options);
+      $result = $settings->execute();
       $results[] = $result;
       $context->output->writeln(strip_tags((string) $result, '<info><comment><error>'));
     }

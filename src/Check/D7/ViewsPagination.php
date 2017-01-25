@@ -45,7 +45,7 @@ class ViewsPagination extends Check {
       }
 
       if ($display_options['pager']['options']['items_per_page'] > $this->getOption('threshold', 30)) {
-        $errors[] = "<b>$view_name <i>[$display_name]</i></b> is displaying <code>{$display_options['pager']['options']['items_per_page']}</code>";
+        $errors[] = "<strong>$view_name</strong> <code>[$display_name]</code> is displaying <code>{$display_options['pager']['options']['items_per_page']}</code>";
         continue;
       }
 
