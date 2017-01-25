@@ -90,13 +90,8 @@ checks :
     warning_size : 2
   \SiteAudit\Check\Phantomas\InPage404s : {}
 
-  # Field specific checks.
-  \SiteAudit\Check\D7\EntityReferenceAutocomplete:
-    threshold: 100
-
 # Module configuration checks.
 settings :
-
   login_security:
     label: 'Login Security'
     settings:
