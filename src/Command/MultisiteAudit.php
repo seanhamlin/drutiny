@@ -9,6 +9,7 @@ use SiteAudit\Context;
 use SiteAudit\Profile\Profile;
 use SiteAudit\Executor\Executor;
 use SiteAudit\Executor\ExecutorRemote;
+use SiteAudit\Profile\ProfileController;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -61,8 +62,7 @@ class MultisiteAudit extends SiteAudit {
     $response = $drush->siteAlias('@' . $drush_alias, '--format=json')->parseJson(TRUE);
     $alias = $response[$drush_alias];
 
-    $profile = new Profile();
-    $profile->load($input->getOption('profile'));
+    $profile = ProfileController::load($input->getOption('profile'));
 
     // Some checks don't use drush and connect to the server directly so we need
     // a remote executor available as well.

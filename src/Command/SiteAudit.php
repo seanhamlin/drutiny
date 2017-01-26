@@ -10,7 +10,7 @@ use SiteAudit\Settings\SettingsCheck;
 use SiteAudit\Context;
 use SiteAudit\Executor\Executor;
 use SiteAudit\Executor\ExecutorRemote;
-use SiteAudit\Profile\Profile;
+use SiteAudit\Profile\ProfileController;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -108,8 +108,7 @@ class SiteAudit extends Command {
 
     $phantomas->setDomain($alias['uri']);
 
-    $profile = new Profile();
-    $profile->load($input->getOption('profile'));
+    $profile = ProfileController::load($input->getOption('profile'));
 
     $context = new Context();
     $context->set('input', $input)

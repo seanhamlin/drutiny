@@ -1,9 +1,6 @@
 <?php
 
 namespace SiteAudit\Profile;
-
-use Symfony\Component\ClassLoader\ClassMapGenerator;
-use Symfony\Component\Yaml\Yaml;
 use SiteAudit\Check\Registry;
 
 /**
@@ -42,23 +39,23 @@ class Profile
   protected $settings = array();
 
   /**
-   * Application file paths.
+   * Profile constructor.
    *
-   * @var array
+   * @param string $title
+   *   A valid title for this profile.
+   * @param string $machine_name
+   *   A valid machine name for this profile.
+   * @param array $checks
+   *   Defined checks for this profile.
+   * @param array $settings
+   *   Defined settings checks for this profile.
    */
-  protected $filepaths = array(
-    'system' => 'profiles',
-    'local' => '.',
-    'user' => '~/.site-audit',
-    'global' => '/etc/site-audit/profiles',
-  );
-
-  /**
-   * The real path to the yml profile configuration file.
-   *
-   * @var bool|string
-   */
-  protected $filepath = FALSE;
+  public function __construct($title = '', $machine_name = '', $checks = [], $settings = []) {
+    $this->title = $title;
+    $this->machine_name = $machine_name;
+    $this->checks = $checks;
+    $this->settings = $settings;
+  }
 
   /**
    * Set the Profile title
@@ -121,6 +118,7 @@ class Profile
   public function addCheck($check, $options = array())
   {
     $registry = Registry::load();
+    file_put_contents(json_encode($registry), '/Users/steven.worley/repos/site-audit/file.txt');
     $reverse_lookup = array_flip($registry);
 
     // Look for the check in the register as the class name.
@@ -158,83 +156,5 @@ class Profile
   public function getSettings()
   {
     return $this->settings;
-  }
-
-  /**
-   * Store a configured profile on disk.
-   *
-   * @return int
-   */
-  public function save()
-  {
-    $data['metadata']['title'] = $this->getTitle();
-    $data['metadata']['machine_name'] = $this->getMachineName();
-    $data['checks'] = $this->checks;
-
-    $yaml = Yaml::dump($data);
-
-    if (!$this->filepath) {
-      $this->filepath = $this->filepaths['local'] . '/' . $this->getMachineName() . '.yml';
-    }
-
-    return file_put_contents($this->getFilepath(), $yaml);
-  }
-
-  /**
-   * Load a profile by a given machine name.
-   *
-   * @param string $machine_name
-   *   A string for the machine name.
-   *
-   * @return bool
-   *   If the file was successfully loaded.
-   */
-  public function load($machine_name = '')
-  {
-    if (!$this->filepath = $this->find($machine_name)) {
-      return FALSE;
-    }
-
-    $yaml = file_get_contents($this->getFilepath($machine_name));
-    $data = Yaml::parse($yaml);
-    $this->setTitle($data['metadata']['title'])
-         ->setMachineName($data['metadata']['machine_name']);
-
-    $this->checks = $data['checks'];
-    $this->settings = $data['settings'];
-
-    return TRUE;
-  }
-
-  /**
-   * Find a yml profile file by a machine name.
-   *
-   * @param string $machine_name
-   *   A string for the machine name.
-   *
-   * @return bool|string
-   *   The file path or FALSE.
-   */
-  public function find($machine_name = '')
-  {
-    $filename = $machine_name . '.yml';
-    foreach (array_filter($this->filepaths, 'is_dir') as $filepath) {
-      $location = $filepath . '/' . $filename;
-      if (file_exists($location)) {
-        return $location;
-      }
-    }
-    return FALSE;
-  }
-
-  /**
-   * Accessor for filepath.
-   *
-   * @return bool|string
-   *   File path for the yml file or FALSE.
-   */
-  public function getFilepath()
-  {
-    return $this->filepath;
   }
 }

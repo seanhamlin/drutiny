@@ -2,6 +2,7 @@
 
 namespace SiteAudit\Command;
 
+use SiteAudit\Profile\ProfileController;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -19,8 +20,7 @@ class ProfileCreateCommand extends Command {
   protected function configure() {
     $this
       ->setName('profile:generate')
-      ->setDescription('Create a profile of checks.')
-      ;
+      ->setDescription('Create a profile of checks.');
   }
 
   /**
@@ -58,8 +58,8 @@ class ProfileCreateCommand extends Command {
       }
     }
 
-    $profile->save();
-    $output->writeln('<info>Profile written to ' . $profile->getFilepath() . '</info>');
+    $dir = ProfileController::save($profile);
+    $output->writeln('<info>Profile written to ' . $dir . '</info>');
   }
 
 }

@@ -3,6 +3,7 @@
 namespace SiteAudit\Check\Codebase;
 
 use SiteAudit\Annotation\CheckInfo;
+use SiteAudit\Check\Check;
 
 /**
  * @CheckInfo(

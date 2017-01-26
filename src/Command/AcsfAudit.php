@@ -7,6 +7,7 @@ use SiteAudit\Base\PhantomasCaller;
 use SiteAudit\Base\RandomLib;
 use SiteAudit\Context;
 use SiteAudit\Profile\Profile;
+use SiteAudit\Profile\ProfileController;
 use SiteAudit\Executor\Executor;
 use SiteAudit\Executor\ExecutorRemote;
 use Symfony\Component\Console\Command\Command;
@@ -59,8 +60,7 @@ class AcsfAudit extends SiteAudit {
     $response = $drush->siteAlias('@' . $drush_alias, '--format=json')->parseJson(TRUE);
     $alias = $response[$drush_alias];
 
-    $profile = new Profile();
-    $profile->load($input->getOption('profile'));
+    $profile = ProfileController::load($input->getOption('profile'));
 
     $context = new Context();
     $context->set('input', $input)
