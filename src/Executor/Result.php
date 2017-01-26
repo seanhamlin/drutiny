@@ -12,7 +12,7 @@ class Result {
     $return_val = 0;
     // Suppress StdErr output.
     $dev_null = ' 2> /dev/null';
-    if (stripos(PHP_OS, 'win') !== FALSE) {
+    if (stripos(PHP_OS, 'win') === 0) {
       $dev_null = ' 2> nul';
     }
     $command .= $dev_null;
