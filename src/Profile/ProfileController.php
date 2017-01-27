@@ -83,7 +83,7 @@ class ProfileController {
       }
     }
 
-    throw new ProfileNotFoundException($machine_name, 0);
+    throw new ProfileNotFoundException($machine_name);
   }
 
   /**
