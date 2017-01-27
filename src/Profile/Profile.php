@@ -118,7 +118,6 @@ class Profile
   public function addCheck($check, $options = array())
   {
     $registry = Registry::load();
-    file_put_contents(json_encode($registry), '/Users/steven.worley/repos/site-audit/file.txt');
     $reverse_lookup = array_flip($registry);
 
     // Look for the check in the register as the class name.
