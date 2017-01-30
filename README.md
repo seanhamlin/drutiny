@@ -1,16 +1,16 @@
-# Site audit
+# Drupal site audit
 
 This is a generic Drupal 7 and Drupal 8 site auditing and optional remediation tool.
 
 ## Why another site audit tool?
 
-Traditional site audits (e.g. the [checklist API](https://www.drupal.org/project/checklistapi)) in Drupal rely on having certain modules or code present on the server in order to gather the required metrics. The main issue is that if you fail to even have these modules enabled at all, then no auditing will take place in the first instance. This can be a real issue.
+Traditional site audits (e.g. the [checklist API](https://www.drupal.org/project/checklistapi) module or the [site_audit](https://www.drupal.org/project/site_audit) module) in Drupal rely on having certain modules or code present on the server in order to gather the required metrics. The main issue is that if you fail to even have these modules enabled at all, then no auditing will take place in the first instance. This can be a real issue.
 
-This tool is different, all checks are from the outside looking in, and require no special code or modules to be enabled on the remote site. This means you can audit all environments from development to production and not leave any lasting performance degradation.
+This tool is different, all checks are from the outside looking in, and require no special code or modules to be enabled on the remote site. This means you can audit all environments from development to production and not leave any lasting performance degradation. Your definition of best practice can evolve outside your Drupal sites, and the checks that you run against the site will always be up to date.
 
 ## What is a site audit comprised of?
 
-A site audit is comprised of a profile, and a profile can contain 1 or more checks, and those checks can have optional arguments supplied. This means that you can create a profile that is specific to your own internal guidelines, and not some generic report that may or may not be of any use to you.
+A site audit is comprised of a profile, and a profile can contain 1 or more checks, and those checks can have optional arguments supplied. This means that you can create a profile that is specific to your own internal guidelines, and not some generic report that someone else made that may or may not be of any use to you.
 
 Checks are simple self contained classes, that at the moment can either be Drush based, SSH based or [phantomas](https://github.com/macbre/phantomas) based. This allows for easy extension to cover any needs. If a particular check pertains to just Drupal 7 or Drupal 8 then it will be namespaced as such.
 
