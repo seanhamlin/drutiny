@@ -122,7 +122,12 @@ class EntityReferenceAutocomplete extends Check {
       $args = array_keys($handler_settings['target_bundles']);
     }
     elseif (isset($handler_settings['view']['args'])) {
-      $args = $handler_settings['view']['args'];
+      $args = [];
+      foreach ($handler_settings['view']['args'] as $arg) {
+        // If we're using views we can pass multiple entity types in
+        // contextually separated by a +.
+        $args = array_merge($args, explode('+', $arg));
+      }
     }
 
     return $args;
