@@ -4,25 +4,31 @@ This is a generic Drupal 7 and Drupal 8 site auditing and optional remediation t
 
 ## Why another site audit tool?
 
-Traditional site audits (e.g. the [checklist API](https://www.drupal.org/project/checklistapi) module or the [site_audit](https://www.drupal.org/project/site_audit) module) in Drupal rely on having certain modules or code present on the server in order to gather the required metrics. The main issue is that if you fail to even have these modules enabled at all, then no auditing will take place in the first instance. This can be a real issue.
+Traditional site audit (e.g. the [checklist API](https://www.drupal.org/project/checklistapi) modules in Drupal rely on having certain modules or code present on the server in order to gather the required metrics. The main issue is that if you fail to even have these modules enabled at all, then no auditing will take place in the first instance. This can be a real issue.
 
-This tool is different, all checks are from the outside looking in, and require no special code or modules to be enabled on the remote site. This means you can audit all environments from development to production and not leave any lasting performance degradation. Your definition of best practice can evolve outside your Drupal sites, and the checks that you run against the site will always be up to date.
+Other extensions (e.g. the [site_audit](https://www.drupal.org/project/site_audit) drush extension) are constrained to running only Drush based checks, and you are limited to only excluding checks, you also cannot customise anything about the checks you do run.
+
+This tool is different, all checks are from the outside looking in, and require no special code or modules to be enabled on the remote site. This means you can audit all environments from development to production and not leave any lasting performance degradation. Your definition of best practice can evolve outside your Drupal sites, and the checks that you run against the site will always be up to date. This tool also integrates with other best of breed tools to ensure that you have maximum flexibility when it comes to running checks, e.g.
+
+* Drush (e.g. check the status of a module, or get a variable value)
+* SSH (e.g. filesystem checks, directory size checks)
+* [Phantomas](https://github.com/macbre/phantomas) (e.g. check the actual rendering of the site and ensure there are no in-page 404s)
+
+If a particular check pertains to just Drupal 7 or Drupal 8 then it will be namespaced as such. In this fashion you are able to run site audits against either Drupal 7 or Drupal 8 sites using the same site-audit codebase.
 
 ## What is a site audit comprised of?
 
 A site audit is comprised of a profile, and a profile can contain 1 or more checks, and those checks can have optional arguments supplied. This means that you can create a profile that is specific to your own internal guidelines, and not some generic report that someone else made that may or may not be of any use to you.
 
-Checks are simple self contained classes, that at the moment can either be Drush based, SSH based or [phantomas](https://github.com/macbre/phantomas) based. This allows for easy extension to cover any needs. If a particular check pertains to just Drupal 7 or Drupal 8 then it will be namespaced as such.
-
-Site audit can be extended very easily to check for your own unique requirements. Pull requests are welcome as well.
+Checks are simple self contained classes that are simple to read and understand. Site audit can be extended very easily to check for your own unique requirements. Pull requests are welcome as well.
 
 ## Requirements
 
-**Drush installed**
+**1. Drush installed**
 
 Drush is required to be installed locally and be available on your path. Drush 8 is recommended. Having a remote-host attribute in the drush alias file is required if you want to run any of the SSH checks.
 
-**A Drush alias for the site**
+**2. A Drush alias for the site**
 
 For every site you want to run the report against, you require a complete drush alias:
 
@@ -41,7 +47,7 @@ $aliases['www.example.com'] = array(
 );
 ```
 
-**Composer**
+**3. Composer**
 
 Needed to install Symfony Console and other PHP libraries.
 
@@ -49,7 +55,7 @@ Needed to install Symfony Console and other PHP libraries.
 composer install
 ```
 
-**Phantomas**
+**4. Phantomas**
 
 If you wish to run browser based checks (e.g. page weight check), then you will require [Phantomas](https://github.com/macbre/phantomas) to be installed on your local system. Note that these checks are optional.
 
@@ -127,6 +133,8 @@ Run using the `govcms_saas` profile (replace [alias] with your drush alias):
 ```
 php bin/site-audit audit:multisite [alias] --profile=govcms_saas --report-dir=/tmp --domain-file=domains.yml
 ```
+
+You do not have to run the site audit against all sites, you can elect to run it against a subset, or even just one.
 
 ## Bash aliases
 
