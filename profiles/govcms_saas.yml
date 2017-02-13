@@ -68,10 +68,13 @@ checks :
   \SiteAudit\Check\D7\CronPoorMans: {}
   \SiteAudit\Check\D7\DateDefaultTimezone :
     timezone_whitelist :
-      - 'Australia/Melbourne'
-      - 'Australia/Canberra'
-      - 'Australia/Sydney'
+      - 'Australia/Adelaide'
       - 'Australia/Brisbane'
+      - 'Australia/Canberra'
+      - 'Australia/Darwin'
+      - 'Australia/Melbourne'
+      - 'Australia/Perth'
+      - 'Australia/Sydney'
   \SiteAudit\Check\D7\PageCompression: {}
   \SiteAudit\Check\D7\ZenRebuildRegistry: {}
   \SiteAudit\Check\D7\SearchDB:
