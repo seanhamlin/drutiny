@@ -12,6 +12,7 @@ checks :
       - backup_migrate
       - dblog
       - devel
+      - kint
       - linkchecker
       - overlay
       - php
@@ -21,6 +22,7 @@ checks :
       - simpletest
       - textsize
       - update
+      - webprofiler
   \SiteAudit\Check\Drush\UpdateDBStatus: {}
   \SiteAudit\Check\Drush\SessionsAnon: {}
   \SiteAudit\Check\D8\PreprocessCSS : {}
