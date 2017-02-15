@@ -20,7 +20,7 @@ If a particular check pertains to just Drupal 7 or Drupal 8 then it will be name
 
 A site audit is comprised of a profile, and a profile can contain 1 or more checks, and those checks can have optional arguments supplied. This means that you can create a profile that is specific to your own internal guidelines, and not some generic report that someone else made that may or may not be of any use to you.
 
-Checks are simple self contained classes that are simple to read and understand. Site audit can be extended very easily to check for your own unique requirements. Pull requests are welcome as well.
+Checks are simple self contained classes that are simple to read and understand. Drutiny can be extended very easily to check for your own unique requirements. Pull requests are welcome as well.
 
 ## Requirements
 

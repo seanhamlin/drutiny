@@ -184,7 +184,7 @@
   <hr>
 
   <footer>
-    <p>&copy; Site Audit <?php print date("Y"); ?></p>
+    <p>&copy; Drutiny <?php print date("Y"); ?></p>
   </footer>
 </div> <!-- /container -->
 
