@@ -2,12 +2,12 @@ metadata :
   machine_name: 'default'
   title : 'Site audit (Drupal 8)'
 checks :
-  \SiteAudit\Check\Drush\ModuleEnabled:
+  \Drutiny\Check\Drush\ModuleEnabled:
     modules:
       - syslog
       - acquia_spi
       - acquia_agent
-  \SiteAudit\Check\Drush\ModuleDisabled:
+  \Drutiny\Check\Drush\ModuleDisabled:
     modules:
       - backup_migrate
       - dblog
@@ -23,8 +23,8 @@ checks :
       - textsize
       - update
       - webprofiler
-  \SiteAudit\Check\Drush\UpdateDBStatus: {}
-  \SiteAudit\Check\Drush\SessionsAnon: {}
-  \SiteAudit\Check\D8\PreprocessCSS : {}
-  \SiteAudit\Check\D8\PreprocessJS : {}
-  \SiteAudit\Check\D8\UserRegister : {}
+  \Drutiny\Check\Drush\UpdateDBStatus: {}
+  \Drutiny\Check\Drush\SessionsAnon: {}
+  \Drutiny\Check\D8\PreprocessCSS : {}
+  \Drutiny\Check\D8\PreprocessJS : {}
+  \Drutiny\Check\D8\UserRegister : {}

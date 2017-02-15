@@ -1,11 +1,11 @@
 <?php
 
-namespace SiteAudit\Check\D7;
+namespace Drutiny\Check\D7;
 
-use SiteAudit\AuditResponse\AuditResponse;
-use SiteAudit\Check\Check;
-use SiteAudit\Executor\DoesNotApplyException;
-use SiteAudit\Annotation\CheckInfo;
+use Drutiny\AuditResponse\AuditResponse;
+use Drutiny\Check\Check;
+use Drutiny\Executor\DoesNotApplyException;
+use Drutiny\Annotation\CheckInfo;
 
 /**
  * @CheckInfo(

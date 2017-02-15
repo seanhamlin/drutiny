@@ -1,11 +1,11 @@
 <?php
 
-namespace SiteAudit\Profile;
-use SiteAudit\Check\Registry;
+namespace Drutiny\Profile;
+use Drutiny\Check\Registry;
 
 /**
  * Class Profile
- * @package SiteAudit\Profile
+ * @package Drutiny\Profile
  */
 class Profile
 {

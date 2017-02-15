@@ -1,15 +1,15 @@
 <?php
 /**
  * @file
- * Contains SiteAudit\Check\D7\ViewsPagination
+ * Contains Drutiny\Check\D7\ViewsPagination
  */
 
-namespace SiteAudit\Check\D7;
+namespace Drutiny\Check\D7;
 
-use SiteAudit\AuditResponse\AuditResponse;
-use SiteAudit\Base\Serializer;
-use SiteAudit\Check\Check;
-use SiteAudit\Annotation\CheckInfo;
+use Drutiny\AuditResponse\AuditResponse;
+use Drutiny\Base\Serializer;
+use Drutiny\Check\Check;
+use Drutiny\Annotation\CheckInfo;
 
 
 /**

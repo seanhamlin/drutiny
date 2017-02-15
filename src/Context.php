@@ -1,6 +1,6 @@
 <?php
 
-namespace SiteAudit;
+namespace Drutiny;
 
 class Context {
   protected $contexts = [];

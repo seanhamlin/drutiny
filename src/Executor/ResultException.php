@@ -1,6 +1,6 @@
 <?php
 
-namespace SiteAudit\Executor;
+namespace Drutiny\Executor;
 
 class ResultException extends \Exception {
   protected $result;

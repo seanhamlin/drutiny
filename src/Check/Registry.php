@@ -1,6 +1,6 @@
 <?php
 
-namespace SiteAudit\Check;
+namespace Drutiny\Check;
 
 use Symfony\Component\ClassLoader\ClassMapGenerator;
 use Doctrine\Common\Annotations\AnnotationReader;
@@ -22,7 +22,7 @@ class Registry
         if ($reflect->isAbstract()) {
           continue;
         }
-        if (!$reflect->isSubClassOf('SiteAudit\Check\Check')) {
+        if (!$reflect->isSubClassOf('Drutiny\Check\Check')) {
           continue;
         }
         $info = $reader->getClassAnnotations($reflect);

@@ -1,8 +1,8 @@
 <?php
 
-namespace SiteAudit\Executor;
+namespace Drutiny\Executor;
 
-use SiteAudit\Executor\ExecutorInterface;
+use Drutiny\Executor\ExecutorInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Executor implements ExecutorInterface {

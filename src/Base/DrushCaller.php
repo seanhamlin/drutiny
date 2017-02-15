@@ -1,8 +1,8 @@
 <?php
 
-namespace SiteAudit\Base;
+namespace Drutiny\Base;
 
-use SiteAudit\Executor\ExecutorInterface;
+use Drutiny\Executor\ExecutorInterface;
 
 class DrushCaller {
   protected $executor;

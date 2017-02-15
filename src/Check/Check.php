@@ -1,13 +1,13 @@
 <?php
 
-namespace SiteAudit\Check;
+namespace Drutiny\Check;
 
-use SiteAudit\Context;
-use SiteAudit\AuditResponse\AuditResponse;
-use SiteAudit\Executor\DoesNotApplyException;
-use SiteAudit\Executor\ResultException;
+use Drutiny\Context;
+use Drutiny\AuditResponse\AuditResponse;
+use Drutiny\Executor\DoesNotApplyException;
+use Drutiny\Executor\ResultException;
 use Doctrine\Common\Annotations\AnnotationReader;
-use SiteAudit\Annotation\CheckInfo;
+use Drutiny\Annotation\CheckInfo;
 
 abstract class Check {
 

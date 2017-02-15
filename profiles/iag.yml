@@ -2,12 +2,12 @@ metadata :
   machine_name: 'iag'
   title : 'IAG'
 checks :
-  \SiteAudit\Check\Drush\ModuleEnabled:
+  \Drutiny\Check\Drush\ModuleEnabled:
     modules:
       - syslog
       - acquia_spi
       - acquia_agent
-  \SiteAudit\Check\Drush\ModuleDisabled:
+  \Drutiny\Check\Drush\ModuleDisabled:
     modules:
       - backup_migrate
       - dblog
@@ -21,16 +21,16 @@ checks :
       - simpletest
       - textsize
       - update
-  \SiteAudit\Check\Drush\UpdateDBStatus: {}
-  \SiteAudit\Check\Drush\SessionsAnon: {}
-  \SiteAudit\Check\D7\PreprocessCSS : {}
-  \SiteAudit\Check\D7\PreprocessJS : {}
-  \SiteAudit\Check\D7\UserRegister : {}
-  \SiteAudit\Check\D7\PageCacheMaximumAge :
+  \Drutiny\Check\Drush\UpdateDBStatus: {}
+  \Drutiny\Check\Drush\SessionsAnon: {}
+  \Drutiny\Check\D7\PreprocessCSS : {}
+  \Drutiny\Check\D7\PreprocessJS : {}
+  \Drutiny\Check\D7\UserRegister : {}
+  \Drutiny\Check\D7\PageCacheMaximumAge :
     cache : 300
-  \SiteAudit\Check\D7\Search404: {}
-  \SiteAudit\Check\D7\SearchDB: {}
-  \SiteAudit\Check\D7\CronHasRun: {}
-  \SiteAudit\Check\D7\CronPoorMans: {}
-  \SiteAudit\Check\D7\XMLSiteMapBaseUrl:
+  \Drutiny\Check\D7\Search404: {}
+  \Drutiny\Check\D7\SearchDB: {}
+  \Drutiny\Check\D7\CronHasRun: {}
+  \Drutiny\Check\D7\CronPoorMans: {}
+  \Drutiny\Check\D7\XMLSiteMapBaseUrl:
     pattern : '^https?://[-a-z]{1,63}\.[-a-z]{1,63}\.com\.au$'

@@ -1,7 +1,7 @@
 {
-    "name": "seanhamlin/site-audit",
+    "name": "seanhamlin/drutiny",
     "type": "library",
-    "description": "Generic Drupal 7 site auditing tool",
+    "description": "This is a generic Drupal 7 and Drupal 8 site auditing and optional remediation tool.",
     "keywords": ["drupal", "audit", "drush", "ssh", "report"],
     "license": "GPL-2.0",
     "authors": [
@@ -9,8 +9,8 @@
         {"name": "Josh Waihi", "email": "joshwaihi@gmail.com"}
     ],
     "support": {
-        "issues": "https://github.com/seanhamlin/site-audit/issues",
-        "source": "https://github.com/seanhamlin/site-audit"
+        "issues": "https://github.com/seanhamlin/drutiny/issues",
+        "source": "https://github.com/seanhamlin/drutiny"
     },
     "require": {
         "symfony/console": "^3.1",
@@ -20,7 +20,7 @@
         "ircmaxell/random-lib": "^1.2"
     },
     "autoload": {
-        "psr-4": {"SiteAudit\\": "src/"}
+        "psr-4": {"Drutiny\\": "src/"}
     },
-    "bin": ["bin/site-audit"]
+    "bin": ["bin/drutiny"]
 }

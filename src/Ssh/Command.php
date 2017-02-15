@@ -1,6 +1,6 @@
 <?php
 
-namespace SiteAudit\Ssh;
+namespace Drutiny\Ssh;
 
 class Command {
   protected $hostname;

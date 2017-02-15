@@ -1,6 +1,6 @@
 <?php
 
-namespace SiteAudit\Base;
+namespace Drutiny\Base;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

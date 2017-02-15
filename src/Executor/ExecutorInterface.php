@@ -1,6 +1,6 @@
 <?php
 
-namespace SiteAudit\Executor;
+namespace Drutiny\Executor;
 
 use Symfony\Component\Console\Output\OutputInterface;
 

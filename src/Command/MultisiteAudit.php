@@ -1,22 +1,22 @@
 <?php
 
-namespace SiteAudit\Command;
+namespace Drutiny\Command;
 
-use SiteAudit\Base\DrushCaller;
-use SiteAudit\Base\PhantomasCaller;
-use SiteAudit\Base\RandomLib;
-use SiteAudit\Context;
-use SiteAudit\Profile\Profile;
-use SiteAudit\Executor\Executor;
-use SiteAudit\Executor\ExecutorRemote;
-use SiteAudit\Profile\ProfileController;
+use Drutiny\Base\DrushCaller;
+use Drutiny\Base\PhantomasCaller;
+use Drutiny\Base\RandomLib;
+use Drutiny\Context;
+use Drutiny\Profile\Profile;
+use Drutiny\Executor\Executor;
+use Drutiny\Executor\ExecutorRemote;
+use Drutiny\Profile\ProfileController;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Parser;
-use SiteAudit\AuditResponse\AuditResponse;
+use Drutiny\AuditResponse\AuditResponse;
 use Symfony\Component\Yaml\Yaml;
 
 class MultisiteAudit extends SiteAudit {
@@ -45,13 +45,19 @@ class MultisiteAudit extends SiteAudit {
   protected function execute(InputInterface $input, OutputInterface $output) {
     $this->timerStart();
 
-    $drush_alias = $input->getArgument('drush-alias');
     // Normalise the @ in the alias. Remove it to be safe.
-    $drush_alias = str_replace('@', '', $drush_alias);
+    $drush_alias = str_replace('@', '', $input->getArgument('drush-alias'));
 
+    // Validate the reports directory.
     $reports_dir = $input->getOption('report-dir');
     if (!is_dir($reports_dir) || !is_writeable($reports_dir)) {
       throw new \RuntimeException("Cannot write to $reports_dir");
+    }
+
+    // Validate the drush binary.
+    $drush_bin = $input->getOption('drush-bin');
+    if (!$this->command_exist($drush_bin)) {
+      throw new \RuntimeException("No drush binary available called '$drush_bin'.");
     }
 
     // Load the Drush alias which will contain more information we'll need.

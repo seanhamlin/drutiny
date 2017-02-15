@@ -1,10 +1,10 @@
 <?php
 /**
  * @file
- * Contains SiteAudit\Settings\VariableIterator
+ * Contains Drutiny\Settings\VariableIterator
  */
 
-namespace SiteAudit\Settings;
+namespace Drutiny\Settings;
 
 
 class VariablesIteratorD7 extends SettingsIterator {

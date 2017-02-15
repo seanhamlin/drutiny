@@ -2,7 +2,7 @@ metadata :
   machine_name: 'cub'
   title : 'CUB'
 checks :
-  \SiteAudit\Check\Drush\ModuleEnabled:
+  \Drutiny\Check\Drush\ModuleEnabled:
     modules:
       - acquia_spi
       - acquia_agent
@@ -14,7 +14,7 @@ checks :
       - acsf_variables
       - securepages
       - syslog
-  \SiteAudit\Check\Drush\ModuleDisabled:
+  \Drutiny\Check\Drush\ModuleDisabled:
     modules:
       - dblog
       - devel
@@ -22,33 +22,33 @@ checks :
       - php
       - simpletest
       - statistics
-  \SiteAudit\Check\D7\PreprocessCSS : {}
-  \SiteAudit\Check\D7\PreprocessJS : {}
-  \SiteAudit\Check\D7\ErrorLevel : {}
-  \SiteAudit\Check\D7\SecurepagesBasepath : {}
-  \SiteAudit\Check\D7\SecurepagesRedirectToHttps : {}
-  \SiteAudit\Check\D7\UserRegister : {}
-  \SiteAudit\Check\D7\PageCacheMaximumAge :
+  \Drutiny\Check\D7\PreprocessCSS : {}
+  \Drutiny\Check\D7\PreprocessJS : {}
+  \Drutiny\Check\D7\ErrorLevel : {}
+  \Drutiny\Check\D7\SecurepagesBasepath : {}
+  \Drutiny\Check\D7\SecurepagesRedirectToHttps : {}
+  \Drutiny\Check\D7\UserRegister : {}
+  \Drutiny\Check\D7\PageCacheMaximumAge :
     cache : 300
-  \SiteAudit\Check\Drush\UpdateDBStatus: {}
-  \SiteAudit\Check\D7\Search404: {}
-  \SiteAudit\Check\D7\SearchDB:
+  \Drutiny\Check\Drush\UpdateDBStatus: {}
+  \Drutiny\Check\D7\Search404: {}
+  \Drutiny\Check\D7\SearchDB:
      max_size : 50
-  \SiteAudit\Check\Drush\SessionsAnon: {}
-  \SiteAudit\Check\D7\CronHasRun: {}
-  \SiteAudit\Check\D7\CronPoorMans: {}
-  \SiteAudit\Check\D7\PageCompression: {}
-  \SiteAudit\Check\D7\ZenRebuildRegistry: {}
-  \SiteAudit\Check\D7\XMLSiteMapBaseUrl:
+  \Drutiny\Check\Drush\SessionsAnon: {}
+  \Drutiny\Check\D7\CronHasRun: {}
+  \Drutiny\Check\D7\CronPoorMans: {}
+  \Drutiny\Check\D7\PageCompression: {}
+  \Drutiny\Check\D7\ZenRebuildRegistry: {}
+  \Drutiny\Check\D7\XMLSiteMapBaseUrl:
     pattern : '^https?://[-a-z]{1,63}\.[-a-z]{1,63}\.com\.au$'
-  \SiteAudit\Check\Drush\User1 :
+  \Drutiny\Check\Drush\User1 :
     name_blacklist : '(admin|root|drupal|god|govcms|paul|sean|ruwan)'
     mail : 'admin@example.com'
     status: 1
 
   # ACSF specific checks.
-  \SiteAudit\Check\Acsf\ThemeSize :
+  \Drutiny\Check\Acsf\ThemeSize :
     max_size : 50
     warning_size : 20
-  \SiteAudit\Check\Acsf\ThemePhpLint : {}
-  \SiteAudit\Check\Acsf\ThemeSecurity : {}
+  \Drutiny\Check\Acsf\ThemePhpLint : {}
+  \Drutiny\Check\Acsf\ThemeSecurity : {}

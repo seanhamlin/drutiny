@@ -1,8 +1,8 @@
 <?php
 
-namespace SiteAudit\Executor;
+namespace Drutiny\Executor;
 
-use SiteAudit\Ssh\Command as SshCommand;
+use Drutiny\Ssh\Command as SshCommand;
 
 class ExecutorRemote extends Executor {
   protected $user = 'root';

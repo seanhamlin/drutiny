@@ -1,13 +1,13 @@
 <?php
 
-namespace SiteAudit\Command;
+namespace Drutiny\Command;
 
-use SiteAudit\Profile\ProfileController;
+use Drutiny\Profile\ProfileController;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use SiteAudit\Check\Registry;
-use SiteAudit\Profile\Profile;
+use Drutiny\Check\Registry;
+use Drutiny\Profile\Profile;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 

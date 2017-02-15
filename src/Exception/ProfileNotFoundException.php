@@ -4,7 +4,7 @@
  * Contains ${NAMESPACE}\ProfileNotFoundException
  */
 
-namespace SiteAudit\Exception;
+namespace Drutiny\Exception;
 
 use Symfony\Component\Console\Exception\ExceptionInterface;
 

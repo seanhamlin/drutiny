@@ -2,7 +2,7 @@ metadata :
   machine_name: 'sabm'
   title : 'SABM'
 checks :
-  \SiteAudit\Check\Drush\ModuleEnabled:
+  \Drutiny\Check\Drush\ModuleEnabled:
     modules:
       - acquia_spi
       - acquia_agent
@@ -13,7 +13,7 @@ checks :
       - acsf_theme
       - acsf_variables
       - syslog
-  \SiteAudit\Check\Drush\ModuleDisabled:
+  \Drutiny\Check\Drush\ModuleDisabled:
     modules:
       - services
       - dblog
@@ -22,21 +22,21 @@ checks :
       - simpletest
       - statistics
       - update
-  \SiteAudit\Check\Drush\UpdateDBStatus: {}
-  \SiteAudit\Check\D7\PreprocessCSS : {}
-  \SiteAudit\Check\D7\PreprocessJS : {}
-  \SiteAudit\Check\D7\PageCacheMaximumAge :
+  \Drutiny\Check\Drush\UpdateDBStatus: {}
+  \Drutiny\Check\D7\PreprocessCSS : {}
+  \Drutiny\Check\D7\PreprocessJS : {}
+  \Drutiny\Check\D7\PageCacheMaximumAge :
     cache : 300
 
   # ACSF specific checks.
-  \SiteAudit\Check\Acsf\ThemeSize :
+  \Drutiny\Check\Acsf\ThemeSize :
     max_size : 50
     warning_size : 20
-  \SiteAudit\Check\Acsf\ThemePhpLint : {}
-  \SiteAudit\Check\Acsf\ThemeSecurity : {}
+  \Drutiny\Check\Acsf\ThemePhpLint : {}
+  \Drutiny\Check\Acsf\ThemeSecurity : {}
 
   # Browser specific checks.
-  \SiteAudit\Check\Phantomas\PageWeight :
+  \Drutiny\Check\Phantomas\PageWeight :
     max_size : 5
     warning_size : 2
-  \SiteAudit\Check\Phantomas\InPage404s : {}
+  \Drutiny\Check\Phantomas\InPage404s : {}

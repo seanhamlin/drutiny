@@ -1,21 +1,21 @@
 metadata :
   title : 'HSF'
 checks :
-  \SiteAudit\Check\Drush\ModuleEnabled:
+  \Drutiny\Check\Drush\ModuleEnabled:
     modules:
       - syslog
       - seckit
       - acquia_spi
       - acquia_agent
       - securepages
-  \SiteAudit\Check\Drush\ModuleDisabled:
+  \Drutiny\Check\Drush\ModuleDisabled:
     modules:
       - dblog
       - overlay
       - php
       - statistics
-  \SiteAudit\Check\D7\PreprocessCSS : {}
-  \SiteAudit\Check\D7\PreprocessJS : {}
-  \SiteAudit\Check\D7\PageCacheMaximumAge :
+  \Drutiny\Check\D7\PreprocessCSS : {}
+  \Drutiny\Check\D7\PreprocessJS : {}
+  \Drutiny\Check\D7\PageCacheMaximumAge :
     cache : 300
-  \SiteAudit\Check\D7\CronHasRun: {}
+  \Drutiny\Check\D7\CronHasRun: {}

@@ -1,11 +1,11 @@
 <?php
 
-namespace SiteAudit\Check\Acsf;
+namespace Drutiny\Check\Acsf;
 
-use SiteAudit\Check\Check;
-use SiteAudit\AuditResponse\AuditResponse;
-use SiteAudit\Executor\DoesNotApplyException;
-use SiteAudit\Annotation\CheckInfo;
+use Drutiny\Check\Check;
+use Drutiny\AuditResponse\AuditResponse;
+use Drutiny\Executor\DoesNotApplyException;
+use Drutiny\Annotation\CheckInfo;
 
 /**
  * @CheckInfo(

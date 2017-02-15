@@ -1,6 +1,6 @@
 <?php
 
-namespace SiteAudit;
+namespace Drutiny;
 use Symfony\Component\ClassLoader\ClassMapGenerator;
 
 class CommandDiscovery

@@ -1,17 +1,17 @@
 <?php
 /**
  * @file
- * Contains SiteAudit\Base\Serializer
+ * Contains Drutiny\Base\Serializer
  */
 
-namespace SiteAudit\Base;
+namespace Drutiny\Base;
 
 /**
  * Class Serializer
  *
  * Attempts to repair broken serialised strings.
  *
- * @package SiteAudit\Base
+ * @package Drutiny\Base
  */
 class Serializer {
   /**

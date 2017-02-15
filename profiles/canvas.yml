@@ -2,12 +2,12 @@ metadata :
   machine_name: 'canvas'
   title : 'CANVAS'
 checks :
-  \SiteAudit\Check\Drush\ModuleEnabled:
+  \Drutiny\Check\Drush\ModuleEnabled:
     modules:
       - syslog
       - acquia_spi
       - acquia_agent
-  \SiteAudit\Check\Drush\ModuleDisabled:
+  \Drutiny\Check\Drush\ModuleDisabled:
     modules:
       - backup_migrate
       - dblog
@@ -21,34 +21,34 @@ checks :
       - simpletest
       - textsize
       - update
-  \SiteAudit\Check\D7\PreprocessCSS : {}
-  \SiteAudit\Check\D7\PreprocessJS : {}
-  \SiteAudit\Check\D7\ErrorLevel : {}
-  \SiteAudit\Check\D7\UserRegister : {}
-  \SiteAudit\Check\D7\CacheLifetime : {}
-  \SiteAudit\Check\D7\PageCacheMaximumAge :
+  \Drutiny\Check\D7\PreprocessCSS : {}
+  \Drutiny\Check\D7\PreprocessJS : {}
+  \Drutiny\Check\D7\ErrorLevel : {}
+  \Drutiny\Check\D7\UserRegister : {}
+  \Drutiny\Check\D7\CacheLifetime : {}
+  \Drutiny\Check\D7\PageCacheMaximumAge :
     cache : 300
-  \SiteAudit\Check\Drush\UpdateDBStatus: {}
-  \SiteAudit\Check\D7\Search404: {}
-  \SiteAudit\Check\D7\SearchDB:
+  \Drutiny\Check\Drush\UpdateDBStatus: {}
+  \Drutiny\Check\D7\Search404: {}
+  \Drutiny\Check\D7\SearchDB:
      max_size : 50
-  \SiteAudit\Check\Drush\SessionsAnon: {}
-  \SiteAudit\Check\D7\CronHasRun: {}
-  \SiteAudit\Check\D7\CronPoorMans: {}
-  \SiteAudit\Check\D7\PageCompression: {}
-  \SiteAudit\Check\D7\XMLSiteMapBaseUrl:
+  \Drutiny\Check\Drush\SessionsAnon: {}
+  \Drutiny\Check\D7\CronHasRun: {}
+  \Drutiny\Check\D7\CronPoorMans: {}
+  \Drutiny\Check\D7\PageCompression: {}
+  \Drutiny\Check\D7\XMLSiteMapBaseUrl:
     pattern : '^https://www\.[-a-z]{1,63}\.[a-z]{2,3}(\.[a-z]{2,3})?$'
-  \SiteAudit\Check\Drush\User1 :
+  \Drutiny\Check\Drush\User1 :
     name_blacklist : '(admin|root|drupal|god|govcms|paul|sean|ruwan)'
     mail : 'admin@example.com'
     status: 1
 
   # Field specific checks.
-  \SiteAudit\Check\D7\EntityReferenceAutocomplete:
+  \Drutiny\Check\D7\EntityReferenceAutocomplete:
     threshold: 100
 
   # Browser specific checks.
-  \SiteAudit\Check\Phantomas\PageWeight :
+  \Drutiny\Check\Phantomas\PageWeight :
     max_size : 5
     warning_size : 2
-  \SiteAudit\Check\Phantomas\InPage404s : {}
+  \Drutiny\Check\Phantomas\InPage404s : {}

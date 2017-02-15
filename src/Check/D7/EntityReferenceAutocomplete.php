@@ -1,16 +1,16 @@
 <?php
 /**
  * @file
- * Contains SiteAudit\Check\D7\EntityReferenceAutocomplete
+ * Contains Drutiny\Check\D7\EntityReferenceAutocomplete
  */
 
-namespace SiteAudit\Check\D7;
+namespace Drutiny\Check\D7;
 
-use SiteAudit\Base\Serializer;
-use SiteAudit\Check\Check;
-use SiteAudit\AuditResponse\AuditResponse;
-use SiteAudit\Annotation\CheckInfo;
-use SiteAudit\Executor\DoesNotApplyException;
+use Drutiny\Base\Serializer;
+use Drutiny\Check\Check;
+use Drutiny\AuditResponse\AuditResponse;
+use Drutiny\Annotation\CheckInfo;
+use Drutiny\Executor\DoesNotApplyException;
 
 /**
  * @CheckInfo(

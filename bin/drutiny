@@ -2,7 +2,7 @@
 <?php
 
 use Symfony\Component\Console\Application;
-use SiteAudit\CommandDiscovery;
+use Drutiny\CommandDiscovery;
 use Composer\Autoload\ClassLoader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 

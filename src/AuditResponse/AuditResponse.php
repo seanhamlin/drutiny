@@ -1,15 +1,15 @@
 <?php
 
-namespace SiteAudit\AuditResponse;
+namespace Drutiny\AuditResponse;
 
-use SiteAudit\Executor\DoesNotApplyException;
-use SiteAudit\Executor\ResultException;
-use SiteAudit\Check\Check;
+use Drutiny\Executor\DoesNotApplyException;
+use Drutiny\Executor\ResultException;
+use Drutiny\Check\Check;
 
 /**
  * Class AuditResponse
  *
- * @package SiteAudit\AuditResponse
+ * @package Drutiny\AuditResponse
  */
 class AuditResponse {
 
@@ -28,7 +28,7 @@ class AuditResponse {
   /**
    * AuditResponse constructor.
    *
-   * @param \SiteAudit\Check\Check $check
+   * @param \Drutiny\Check\Check $check
    *   The current check being performed.
    */
   public function __construct(Check $check) {

@@ -1,14 +1,14 @@
 <?php
 /**
  * @file
- * Contains SiteAudit\Check\D7\LoginSecurity
+ * Contains Drutiny\Check\D7\LoginSecurity
  */
 
-namespace SiteAudit\Settings;
+namespace Drutiny\Settings;
 
-use SiteAudit\AuditResponse\AuditResponse;
-use SiteAudit\Check\Check;
-use SiteAudit\Annotation\CheckInfo;
+use Drutiny\AuditResponse\AuditResponse;
+use Drutiny\Check\Check;
+use Drutiny\Annotation\CheckInfo;
 
 /**
  * @CheckInfo(
@@ -37,12 +37,12 @@ class SettingsCheck extends Check {
   }
 
   /**
-   * Return a list of \SiteAudit\Settings\Settings iterators.
+   * Return a list of \Drutiny\Settings\Settings iterators.
    *
    * Construct all settings objects and prepare them for checks.
    *
    * @return array
-   *   Array of \SiteAudit\Settings\Settings.
+   *   Array of \Drutiny\Settings\Settings.
    *
    * @throws \Exception
    */

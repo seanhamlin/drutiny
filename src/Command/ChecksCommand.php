@@ -1,13 +1,13 @@
 <?php
 
-namespace SiteAudit\Command;
+namespace Drutiny\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableSeparator;
-use SiteAudit\Check\Registry;
+use Drutiny\Check\Registry;
 
 
 class ChecksCommand extends Command {

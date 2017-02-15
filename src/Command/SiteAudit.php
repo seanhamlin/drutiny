@@ -1,16 +1,16 @@
 <?php
 
-namespace SiteAudit\Command;
+namespace Drutiny\Command;
 
-use SiteAudit\AuditResponse\AuditResponse;
-use SiteAudit\Base\DrushCaller;
-use SiteAudit\Base\PhantomasCaller;
-use SiteAudit\Base\RandomLib;
-use SiteAudit\Settings\SettingsCheck;
-use SiteAudit\Context;
-use SiteAudit\Executor\Executor;
-use SiteAudit\Executor\ExecutorRemote;
-use SiteAudit\Profile\ProfileController;
+use Drutiny\AuditResponse\AuditResponse;
+use Drutiny\Base\DrushCaller;
+use Drutiny\Base\PhantomasCaller;
+use Drutiny\Base\RandomLib;
+use Drutiny\Settings\SettingsCheck;
+use Drutiny\Context;
+use Drutiny\Executor\Executor;
+use Drutiny\Executor\ExecutorRemote;
+use Drutiny\Profile\ProfileController;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -38,7 +38,7 @@ class SiteAudit extends Command {
         'profile',
         'p',
         InputOption::VALUE_REQUIRED,
-        'What site audit profile do you want to use?',
+        'What drutiny profile do you want to use?',
         'default'
       )
       ->addOption(
@@ -82,13 +82,19 @@ class SiteAudit extends Command {
   protected function execute(InputInterface $input, OutputInterface $output) {
     $this->timerStart();
 
-    $drush_alias = $input->getArgument('drush-alias');
     // Normalise the @ in the alias. Remove it to be safe.
-    $drush_alias = str_replace('@', '', $drush_alias);
+    $drush_alias = str_replace('@', '', $input->getArgument('drush-alias'));
 
+    // Validate the reports directory.
     $reports_dir = $input->getOption('report-dir');
     if (!is_dir($reports_dir) || !is_writeable($reports_dir)) {
       throw new \RuntimeException("Cannot write to $reports_dir");
+    }
+
+    // Validate the drush binary.
+    $drush_bin = $input->getOption('drush-bin');
+    if (!$this->command_exist($drush_bin)) {
+      throw new \RuntimeException("No drush binary available called '$drush_bin'.");
     }
 
     // Load the Drush alias which will contain more information we'll need.
@@ -174,6 +180,19 @@ class SiteAudit extends Command {
 
     $seconds = $this->timerEnd();
     $output->writeln('<info>Execution time: ' . $seconds . ' seconds</info>');
+  }
+
+  /**
+   * Check to see if a given command exists in the source system.
+   *
+   * @param  String $cmd
+   *   The command you want to see if it exists.
+   * @return bool
+   *   Whether or not a particular command exists.
+   */
+  function command_exist($cmd) {
+    $return_val = shell_exec(sprintf("which %s", escapeshellarg($cmd)));
+    return !empty($return_val);
   }
 
   protected function timerStart() {

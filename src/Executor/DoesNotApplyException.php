@@ -1,5 +1,5 @@
 <?php
 
-namespace SiteAudit\Executor;
+namespace Drutiny\Executor;
 
 class DoesNotApplyException extends \Exception {}

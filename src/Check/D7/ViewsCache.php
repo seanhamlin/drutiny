@@ -1,9 +1,9 @@
 <?php
 
-namespace SiteAudit\Check\D7;
+namespace Drutiny\Check\D7;
 
-use SiteAudit\Check\Check;
-use SiteAudit\Annotation\CheckInfo;
+use Drutiny\Check\Check;
+use Drutiny\Annotation\CheckInfo;
 
 /**
  * @CheckInfo(

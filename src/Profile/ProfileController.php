@@ -1,26 +1,26 @@
 <?php
 /**
  * @file
- * Contains SiteAudit\Profile\ProfileContorller
+ * Contains Drutiny\Profile\ProfileContorller
  */
 
-namespace SiteAudit\Profile;
+namespace Drutiny\Profile;
 
-use SiteAudit\Exception\ProfileNotFoundException;
+use Drutiny\Exception\ProfileNotFoundException;
 use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class ProfileController
  *
- * @package SiteAudit\Profile
+ * @package Drutiny\Profile
  */
 class ProfileController {
 
   const FILE_PATHS = [
     'system' => 'profiles',
     'local' => '.',
-    'user' => '~/.site-audit',
-    'global' => '/etc/site-audit/profiles',
+    'user' => '~/.drutiny',
+    'global' => '/etc/drutiny/profiles',
   ];
 
   /**
@@ -38,11 +38,14 @@ class ProfileController {
     $yaml = file_get_contents($profile);
     $data = Yaml::parse($yaml);
 
+    $checks = array_key_exists('checks', $data) ? $data['checks'] : [];
+    $settings = array_key_exists('settings', $data) ? $data['settings'] : [];
+
     extract($data['metadata']);
     /** @var string $title */
     /** @var string $machine_name */
 
-    return new Profile($title, $machine_name, $data['checks'], $data['settings']);
+    return new Profile($title, $machine_name, $checks, $settings);
   }
 
   /**

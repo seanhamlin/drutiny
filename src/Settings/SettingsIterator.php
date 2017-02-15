@@ -1,12 +1,12 @@
 <?php
 
-namespace SiteAudit\Settings;
-use SiteAudit\Base\DrushCaller;
+namespace Drutiny\Settings;
+use Drutiny\Base\DrushCaller;
 
 
 /**
  * @file
- * Contains SiteAudit\Settings\SettingsIterator
+ * Contains Drutiny\Settings\SettingsIterator
  */
 abstract class SettingsIterator implements \Iterator {
 
@@ -45,7 +45,7 @@ abstract class SettingsIterator implements \Iterator {
    *
    * @param array $settings
    *   An array of settings {setting key} => {value}
-   * @param \SiteAudit\Base\DrushCaller $drush
+   * @param \Drutiny\Base\DrushCaller $drush
    *  An instance of DrushCaller so we can validate settings.
    */
   public function __construct(array $settings = [], DrushCaller $drush = NULL) {
@@ -94,7 +94,7 @@ abstract class SettingsIterator implements \Iterator {
   /**
    * Accessor for the Drush instance.
    *
-   * @return \SiteAudit\Base\DrushCaller
+   * @return \Drutiny\Base\DrushCaller
    */
   function drush() {
     return $this->drush;

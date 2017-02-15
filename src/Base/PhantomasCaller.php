@@ -1,9 +1,9 @@
 <?php
 
-namespace SiteAudit\Base;
+namespace Drutiny\Base;
 
-use SiteAudit\Base\DrushCaller;
-use SiteAudit\Executor\ExecutorInterface;
+use Drutiny\Base\DrushCaller;
+use Drutiny\Executor\ExecutorInterface;
 
 class PhantomasCaller {
   protected $executor;

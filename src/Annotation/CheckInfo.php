@@ -1,6 +1,6 @@
 <?php
 
-namespace SiteAudit\Annotation;
+namespace Drutiny\Annotation;
 
 /**
  * @Annotation

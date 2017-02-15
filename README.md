@@ -1,4 +1,4 @@
-# Drupal site audit
+# Drutiny (Drupal Scrutiny)
 
 This is a generic Drupal 7 and Drupal 8 site auditing and optional remediation tool.
 
@@ -8,13 +8,13 @@ Traditional site audit (e.g. the [checklist API](https://www.drupal.org/project/
 
 Other extensions (e.g. the [site_audit](https://www.drupal.org/project/site_audit) drush extension) are constrained to running only Drush based checks, and you are limited to only excluding checks, you also cannot customise anything about the checks you do run.
 
-This tool is different, all checks are from the outside looking in, and require no special code or modules to be enabled on the remote site. This means you can audit all environments from development to production and not leave any lasting performance degradation. Your definition of best practice can evolve outside your Drupal sites, and the checks that you run against the site will always be up to date. This tool also integrates with other best of breed tools to ensure that you have maximum flexibility when it comes to running checks, e.g.
+This tool is different, all checks are from the outside looking in, and require no special code or modules to be enabled on the remote site. This means you can audit all environments from development to production and not leave any lasting performance degradation. Your definition of best practice can evolve outside your Drupal sites, and the checks that you run against the site will always be up to date. Druntiny also integrates with other best of breed tools to ensure that you have maximum flexibility when it comes to running checks, e.g.
 
 * Drush (e.g. check the status of a module, or get a variable value)
 * SSH (e.g. filesystem checks, directory size checks)
 * [Phantomas](https://github.com/macbre/phantomas) (e.g. check the actual rendering of the site and ensure there are no in-page 404s)
 
-If a particular check pertains to just Drupal 7 or Drupal 8 then it will be namespaced as such. In this fashion you are able to run site audits against either Drupal 7 or Drupal 8 sites using the same site-audit codebase.
+If a particular check pertains to just Drupal 7 or Drupal 8 then it will be namespaced as such. In this fashion you are able to run site audits against either Drupal 7 or Drupal 8 sites using the same Drutiny codebase.
 
 ## What is a site audit comprised of?
 
@@ -76,19 +76,19 @@ npm install --global --no-optional phantomas phantomjs-prebuilt@^2.1.5
 Run using the `default` profile (replace [alias] with your drush alias):
 
 ```
-php bin/site-audit audit:site [alias]
+php bin/drutiny audit:site [alias]
 ```
 
 Run a side audit using the `govcms_saas` profile:
 
 ```
-php bin/site-audit audit:site [alias] --profile=govcms_saas
+php bin/drutiny audit:site [alias] --profile=govcms_saas
 ```
 
 Because this is Symfony console, you have some other familiar commands:
 
 ```
-php bin/site-audit help audit:site
+php bin/drutiny help audit:site
 ```
 
 In particular, if you use the `-v` argument, then you will see all the drush commands, and SSH commands printed to the screen.
@@ -96,7 +96,7 @@ In particular, if you use the `-v` argument, then you will see all the drush com
 You can also write the output to a file:
 
 ```
-php bin/site-audit audit:site [alias] --profile=govcms_saas --report-dir=/tmp
+php bin/drutiny audit:site [alias] --profile=govcms_saas --report-dir=/tmp
 ```
 
 ## How to run against an entire Site Factory
@@ -104,19 +104,19 @@ php bin/site-audit audit:site [alias] --profile=govcms_saas --report-dir=/tmp
 Run using the `default` profile (replace [alias] with your drush alias):
 
 ```
-php bin/site-audit audit:acsf [alias]
+php bin/drutiny audit:acsf [alias]
 ```
 
 Run a side audit using the `govcms_saas` profile:
 
 ```
-php bin/site-audit audit:acsf [alias] --profile=govcms_saas
+php bin/drutiny audit:acsf [alias] --profile=govcms_saas
 ```
 
 You can also write the output to a file:
 
 ```
-php bin/site-audit audit:acsf [alias] --profile=govcms_saas --report-dir=/tmp
+php bin/drutiny audit:acsf [alias] --profile=govcms_saas --report-dir=/tmp
 ```
 
 
@@ -131,7 +131,7 @@ cp domains{-example,}.yml
 Run using the `govcms_saas` profile (replace [alias] with your drush alias):
 
 ```
-php bin/site-audit audit:multisite [alias] --profile=govcms_saas --report-dir=/tmp --domain-file=domains.yml
+php bin/drutiny audit:multisite [alias] --profile=govcms_saas --report-dir=/tmp --domain-file=domains.yml
 ```
 
 You do not have to run the site audit against all sites, you can elect to run it against a subset, or even just one.
@@ -141,9 +141,9 @@ You do not have to run the site audit against all sites, you can elect to run it
 This could be helpful if you want to be able to run the command from anywhere:
 
 ```
-alias as='php /path/to/site-audit audit:site'
-alias aa='php /path/to/site-audit audit:acsf'
-alias am='php /path/to/site-audit audit:multisite'
+alias as='php /path/to/drutiny audit:site'
+alias aa='php /path/to/drutiny audit:acsf'
+alias am='php /path/to/drutiny audit:multisite'
 ```
 
 ## Auto remediation

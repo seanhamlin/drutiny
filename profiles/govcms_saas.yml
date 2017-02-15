@@ -2,7 +2,7 @@ metadata :
   machine_name: 'govcms_sass'
   title : 'govCMS SaaS'
 checks :
-  \SiteAudit\Check\Drush\ModuleEnabled:
+  \Drutiny\Check\Drush\ModuleEnabled:
     modules:
       - acquia_spi
       - acquia_agent
@@ -19,7 +19,7 @@ checks :
       - robotstxt
       - shield
       - syslog
-  \SiteAudit\Check\Drush\ModuleDisabled:
+  \Drutiny\Check\Drush\ModuleDisabled:
     modules:
       - services
       - dblog
@@ -28,13 +28,13 @@ checks :
       - simpletest
       - statistics
       - update
-  \SiteAudit\Check\Drush\UpdateDBStatus: {}
-  \SiteAudit\Check\Drush\SessionsAnon: {}
-  \SiteAudit\Check\Drush\User1 :
+  \Drutiny\Check\Drush\UpdateDBStatus: {}
+  \Drutiny\Check\Drush\SessionsAnon: {}
+  \Drutiny\Check\Drush\User1 :
     name_blacklist : '(admin|root|drupal|god|govcms|paul|sean|ruwan)'
     mail : 'no_reply@govcms.gov.au'
     status: 1
-  \SiteAudit\Check\D7\BlacklistPermissions:
+  \Drutiny\Check\D7\BlacklistPermissions:
     permissions:
       - 'add JS snippets for google analytics'
       - 'administer features'
@@ -50,23 +50,23 @@ checks :
       - 'generate features'
       - 'manage features'
       - 'rename features'
-  \SiteAudit\Check\D7\PreprocessCSS : {}
-  \SiteAudit\Check\D7\PreprocessJS : {}
-  \SiteAudit\Check\D7\ErrorLevel : {}
-  \SiteAudit\Check\D7\UserRegister : {}
-  \SiteAudit\Check\D7\GA :
+  \Drutiny\Check\D7\PreprocessCSS : {}
+  \Drutiny\Check\D7\PreprocessJS : {}
+  \Drutiny\Check\D7\ErrorLevel : {}
+  \Drutiny\Check\D7\UserRegister : {}
+  \Drutiny\Check\D7\GA :
     account : '^UA-\d{7,8}-\d{1,2}$'
     cache : '0'
     codesnippet_after : "ga('create', 'UA-54970022-1', 'auto', {'name': 'govcms'}); ga('govcms.send', 'pageview', {'anonymizeIp': true});"
-  \SiteAudit\Check\D7\NoAdministrators : {}
-  \SiteAudit\Check\D7\WebformUpload : {}
-  \SiteAudit\Check\D7\CacheLifetime : {}
-  \SiteAudit\Check\D7\PageCacheMaximumAge :
+  \Drutiny\Check\D7\NoAdministrators : {}
+  \Drutiny\Check\D7\WebformUpload : {}
+  \Drutiny\Check\D7\CacheLifetime : {}
+  \Drutiny\Check\D7\PageCacheMaximumAge :
     cache : 300
-  \SiteAudit\Check\D7\Search404: {}
-  \SiteAudit\Check\D7\CronHasRun: {}
-  \SiteAudit\Check\D7\CronPoorMans: {}
-  \SiteAudit\Check\D7\DateDefaultTimezone :
+  \Drutiny\Check\D7\Search404: {}
+  \Drutiny\Check\D7\CronHasRun: {}
+  \Drutiny\Check\D7\CronPoorMans: {}
+  \Drutiny\Check\D7\DateDefaultTimezone :
     timezone_whitelist :
       - 'Australia/Adelaide'
       - 'Australia/Brisbane'
@@ -75,36 +75,36 @@ checks :
       - 'Australia/Melbourne'
       - 'Australia/Perth'
       - 'Australia/Sydney'
-  \SiteAudit\Check\D7\PageCompression: {}
-  \SiteAudit\Check\D7\ZenRebuildRegistry: {}
-  \SiteAudit\Check\D7\SearchDB:
+  \Drutiny\Check\D7\PageCompression: {}
+  \Drutiny\Check\D7\ZenRebuildRegistry: {}
+  \Drutiny\Check\D7\SearchDB:
     max_size : 50
-  \SiteAudit\Check\D7\XMLSiteMapBaseUrl:
+  \Drutiny\Check\D7\XMLSiteMapBaseUrl:
     pattern : '^https://(www|ministerial|agency|blog|docs|annualreport|innovation)\.[-a-z]{1,63}(\.[-a-z]{1,63})?\.gov\.au$'
 
   # Field specific checks.
-  \SiteAudit\Check\D7\EntityReferenceAutocomplete:
+  \Drutiny\Check\D7\EntityReferenceAutocomplete:
     threshold: 100
 
   # ACSF specific checks.
-  \SiteAudit\Check\Acsf\ThemeSize :
+  \Drutiny\Check\Acsf\ThemeSize :
     max_size : 50
     warning_size : 20
-  \SiteAudit\Check\Acsf\ThemePhpLint : {}
-  \SiteAudit\Check\Acsf\ThemeSecurity : {}
+  \Drutiny\Check\Acsf\ThemePhpLint : {}
+  \Drutiny\Check\Acsf\ThemeSecurity : {}
 
   # Browser specific checks.
-  \SiteAudit\Check\Phantomas\PageWeight :
+  \Drutiny\Check\Phantomas\PageWeight :
     max_size : 5
     warning_size : 2
-  \SiteAudit\Check\Phantomas\InPage404s : {}
+  \Drutiny\Check\Phantomas\InPage404s : {}
 
 # Module configuration checks.
 settings :
   login_security:
     label: 'Login Security'
     settings:
-      \SiteAudit\Settings\VariablesIteratorD7:
+      \Drutiny\Settings\VariablesIteratorD7:
         login_security_track_time: 24
         login_security_user_wrong_count: 5
         login_security_host_wrong_count: 0
