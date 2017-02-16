@@ -27,6 +27,7 @@ class Result {
         'date_format() expects parameter',
         'common.inc:20',
         'given common.inc:20',
+        'Warning: Using a password on the command line interface can be insecure.',
       ];
       foreach ($invalid_strings as $invalid_string) {
         if (strpos($value, $invalid_string) === 0) {
