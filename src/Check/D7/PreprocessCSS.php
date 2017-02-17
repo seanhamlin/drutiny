@@ -16,7 +16,7 @@ use Drutiny\Annotation\CheckInfo;
  *  supports_remediation = TRUE,
  * )
  */
-class PreprocessCss extends Check {
+class PreprocessCSS extends Check {
   public function check()
   {
     $fixups = [];
