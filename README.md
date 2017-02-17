@@ -1,5 +1,7 @@
 # Drutiny (Drupal Scrutiny)
 
+[![Build Status](https://travis-ci.org/seanhamlin/drutiny.svg?branch=master)](https://travis-ci.org/seanhamlin/drutiny)
+
 This is a generic Drupal 7 and Drupal 8 site auditing and optional remediation tool.
 
 ## Why another site audit tool?
