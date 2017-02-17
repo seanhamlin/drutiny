@@ -20,9 +20,6 @@ class PageCompression extends Check {
   {
     $page_compression = (bool) $this->context->drush->getVariable('page_compression', TRUE);
     $this->setToken('page_compression', $page_compression);
-    if ($page_compression) {
-      return FALSE;
-    }
-    return TRUE;
+    return !$page_compression;
   }
 }

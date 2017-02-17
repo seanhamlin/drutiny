@@ -1,14 +1,14 @@
 <?php
 
-use Drutiny\Check\D7\PreprocessCSS;
+use Drutiny\Check\D7\PreprocessJS;
 use Drutiny\Base\DrushCaller;
 use Drutiny\Context;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass \Drutiny\Check\D7\PreprocessCSS
+ * @coversDefaultClass \Drutiny\Check\D7\PreprocessJS
  */
-class PreprocessCSSTest extends TestCase
+class PreprocessJSTest extends TestCase
 {
   /**
    * @covers ::check
@@ -26,7 +26,7 @@ class PreprocessCSSTest extends TestCase
     $context->set('drush', $drushStub)
             ->set('autoRemediate', FALSE);
 
-    $check = new PreprocessCSS($context);
+    $check = new PreprocessJS($context);
 
     $this->assertEquals(FALSE, $check->check()); // 0
     $this->assertEquals(TRUE, $check->check());  // 1
