@@ -1,0 +1,25 @@
+language: php
+sudo: false
+dist: trusty
+php:
+  - '5.6'
+  - '7.0'
+  - '7.1'
+
+install:
+  - composer install --no-interaction
+
+script:
+  - phpunit
+
+# Configure email notifications
+notifications:
+  email:
+    on_success: never
+    on_failure: always
+
+# You can delete cache using travis-ci web interface
+cache:
+  directories:
+    - vendor
+    - $HOME/.cache/composer
