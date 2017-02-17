@@ -15,7 +15,7 @@ abstract class Check {
   private $options;
   private $info;
 
-  public function __construct(Context $context, Array $options) {
+  public function __construct(Context $context, Array $options = []) {
     $this->context = $context;
     $this->options = $options;
   }

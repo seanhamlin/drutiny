@@ -22,5 +22,8 @@
     "autoload": {
         "psr-4": {"Drutiny\\": "src/"}
     },
-    "bin": ["bin/drutiny"]
+    "bin": ["bin/drutiny"],
+    "require-dev": {
+        "phpunit/phpunit": "^5.0"
+    }
 }

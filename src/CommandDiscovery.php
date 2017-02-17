@@ -19,5 +19,3 @@ class CommandDiscovery
     return $commands;
   }
 }
-
- ?>
