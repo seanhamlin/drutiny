@@ -1,0 +1,74 @@
+{% include 'includes/header.html.twig' %}
+
+<!-- Main jumbotron for a primary marketing message or call to action -->
+<div class="jumbotron">
+  <div class="container">
+    <h1>{{ profile.title }}</h1>
+    <p>Report run across {{ sites | length }} sites<br/>
+      {{ 'now' | date('Y-m-d h:i a (T)') }}
+    </p>
+  </div>
+</div>
+
+<div class="container">
+  <!-- Example row of columns -->
+  <div class="row">
+
+    <div class="col-sm-12">
+      <h2>Sites</h2>
+
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Domain</th>
+            <th>Check</th>
+            <th>Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for id, site in sites %}
+            {% for index, result in site.results %}
+              {% if result.status <= 0 %}
+                {% set class = 'success' %}
+              {% elseif result.status == 1 %}
+                {% set class = 'warning' %}
+              {% else %}
+                {% set class = 'danger' %}
+              {% endif %}
+              <tr>
+                {% if index == 0 %}
+                  <th rowspan="{{ site.results | length }}">{{ site.domain }}</th>
+                {% endif %}
+                <td class="{{ class }}">
+                  {{ result.title }}
+                </td>
+                <td class="{{ class }}">
+                  {{ result | filterXssAdmin }}
+                  {% if result.status > 1 %}
+                    <p>{{ result.description }}</p>
+                    <div class="panel panel-default">
+                      <div class="panel-heading">Remediation</div>
+                      <div class="panel-body">
+                        <p>{{ result.remediation | filterXssAdmin }}</p>
+                      </div>
+                    </div>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          {% endfor %}
+        </tbody>
+      </table>
+
+    </div>
+
+  </div>
+
+  <hr>
+
+  <footer>
+    <p>&copy; Drutiny {{ 'now' | date('Y') }}</p>
+  </footer>
+</div> <!-- /container -->
+
+{% include 'includes/footer.html.twig' %}

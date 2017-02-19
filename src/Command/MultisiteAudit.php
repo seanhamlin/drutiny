@@ -157,7 +157,7 @@ class MultisiteAudit extends SiteAudit {
       $context->output->writeln('----');
     }
 
-    // Optional report.
+    // Optional HTML report.
     if ($input->getOption('report-dir')) {
       uasort($unique_sites, function ($a, $b) {
         if ($a['pass'] == $b['pass']) {
@@ -169,7 +169,7 @@ class MultisiteAudit extends SiteAudit {
         return ($a['pass'] < $b['pass']) ? -1 : 1;
       });
       $this->ensureTimezoneSet();
-      $this->writeReport($reports_dir, $output, $profile, $unique_sites);
+      $this->writeHTMLReport('multisite', $reports_dir, $output, $profile, [], $unique_sites);
     }
 
     $seconds = $this->timerEnd();

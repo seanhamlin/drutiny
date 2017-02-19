@@ -172,10 +172,10 @@ class SiteAudit extends Command {
     $site['warn'] = count($warnings);
     $site['fail'] = count($failures);
 
-    // Optional report.
+    // Optional HTML report.
     if ($input->getOption('report-dir')) {
       $this->ensureTimezoneSet();
-      $this->writeReport($reports_dir, $output, $profile, $site);
+      $this->writeHTMLReport('site', $reports_dir, $output, $profile, $site);
     }
 
     $seconds = $this->timerEnd();
@@ -243,21 +243,59 @@ class SiteAudit extends Command {
     }
   }
 
-  protected function writeReport($reports_dir, OutputInterface $output, $profile, Array $site) {
-    ob_start();
-    include dirname(__FILE__) . '/report/report-site.tpl.php';
-    $report_output = ob_get_contents();
-    ob_end_clean();
+  /**
+   * Convert the results into HTML.
+   *
+   * @param string $template
+   * @param [type]          $reports_dir [description]
+   * @param OutputInterface $output      [description]
+   * @param Profile         $profile     [description]
+   * @param Array           $site        [description]
+   */
+  protected function writeHTMLReport($template, $reports_dir, OutputInterface $output, $profile, Array $site, Array $sites = []) {
+    $loader = new \Twig_Loader_Filesystem(__DIR__ . '/../../templates');
+    $twig = new \Twig_Environment($loader, array(
+      'cache' => sys_get_temp_dir() . '/cache',
+      'auto_reload' => true,
+    ));
+    $filter = new \Twig_SimpleFilter('filterXssAdmin', [$this, 'filterXssAdmin'], [
+      'is_safe' => ['html'],
+    ]);
+    $twig->addFilter($filter);
+    $template = $twig->load($template . '.html.twig');
+    $contents = $template->render([
+      'profile' => $profile,
+      'site' => $site,
+      'sites' => $sites,
+    ]);
 
-    $filename = implode('.', [$site['domain'], 'html']);
+    $filename = 'drutiny.html';
+    if (!empty($site)) {
+      $filename = implode('.', [$site['domain'], 'html']);
+    }
+    elseif (!empty($sites)) {
+      $filename = implode('.', [$profile->getMachineName(), 'html']);
+    }
     $filepath = $reports_dir . '/' . $filename;
 
     if (is_file($filepath) && !is_writeable($filepath)) {
       throw new \RuntimeException("Cannot overwrite file: $filepath");
     }
 
-    file_put_contents($filepath, $report_output);
+    file_put_contents($filepath, $contents);
     $output->writeln("<info>Report written to $filepath</info>");
+  }
+
+  /**
+   * Strip all HTML tags except certain safe tags.
+   *
+   * @param string $string
+   *   The string to strip.
+   * @return string
+   *   The stripped string.
+   */
+  public function filterXssAdmin($string) {
+    return strip_tags($string, '<a><abbr><br><code><em><p><pre><span><strong><ul><ol><li>');
   }
 
 }
