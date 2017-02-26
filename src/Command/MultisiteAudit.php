@@ -159,6 +159,7 @@ class MultisiteAudit extends SiteAudit {
 
     // Optional HTML report.
     if ($input->getOption('report-dir')) {
+      // @TODO make this a function.
       uasort($unique_sites, function ($a, $b) {
         if ($a['pass'] == $b['pass']) {
           if ($a['warn'] == $b['warn']) {
