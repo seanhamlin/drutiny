@@ -115,7 +115,7 @@ class Profile
    * @return bool
    *   If the check was successfully added.
    */
-  public function addCheck($check, $options = array())
+  public function addCheck($check, $options = [])
   {
     $registry = Registry::load();
     $reverse_lookup = array_flip($registry);
@@ -147,7 +147,7 @@ class Profile
   }
 
   /**
-   * Get the Profile moduel settings.
+   * Get the Profile module settings.
    *
    * @return array
    *   A list of module settings to verify.

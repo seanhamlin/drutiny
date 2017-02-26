@@ -21,7 +21,10 @@
         "twig/twig": "~1.0"
     },
     "autoload": {
-        "psr-4": {"Drutiny\\": "src/"}
+        "psr-4": {
+            "Drutiny\\": "src/",
+            "DrutinyTests\\": "tests/src/"
+        }
     },
     "bin": ["bin/drutiny"],
     "require-dev": {

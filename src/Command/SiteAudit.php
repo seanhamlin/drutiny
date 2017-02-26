@@ -294,7 +294,7 @@ class SiteAudit extends Command {
    * @return string
    *   The stripped string.
    */
-  public function filterXssAdmin($string) {
+  public static function filterXssAdmin($string) {
     return strip_tags($string, '<a><abbr><br><code><em><p><pre><span><strong><ul><ol><li>');
   }
 
