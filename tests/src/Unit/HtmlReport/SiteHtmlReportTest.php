@@ -77,5 +77,10 @@ class SiteHtmlReportTest extends TestCase
     $this->assertNotRegExp('/Sample failure success\./', $contents);
     $this->assertRegExp('/Sample failure descripion\./', $contents);
     $this->assertRegExp('/Sample failure remediation\./', $contents);
+
+    // Ensure no Symfony console HTML is in the report.
+    $this->assertNotRegExp('/<info>/', $contents);
+    $this->assertNotRegExp('/<comment>/', $contents);
+    $this->assertNotRegExp('/<error>/', $contents);
   }
 }
