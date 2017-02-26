@@ -41,10 +41,12 @@ PHPUnit 5.7.13 by Sebastian Bergmann and contributors.
 
 Available test group(s):
  - check
+ - report
 ```
 
 e.g.
 
 ```
 ./vendor/bin/phpunit --group check
+./vendor/bin/phpunit --group report
 ```
