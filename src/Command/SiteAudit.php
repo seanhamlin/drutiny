@@ -204,7 +204,17 @@ class SiteAudit extends Command {
     return (int) ($this->end - $this->start);
   }
 
-  protected function runChecks($context) {
+  /**
+   * Perform the checks.
+   *
+   * @param $context
+   *   The context of the check.
+   * @param $print
+   *   Whether the check should print to the CLI.
+   * @return array
+   *   Array of results.
+   */
+  protected function runChecks($context, $print = TRUE) {
     $results = [];
     foreach ($context->profile->getChecks() as $check => $options) {
       $test = new $check($context, $options);
@@ -219,8 +229,13 @@ class SiteAudit extends Command {
 
   /**
    * Perform settings checks for each module defined in the settings hash.
+   *
    * @param $context
+   *   The context of the check.
+   * @param $print
+   *   Whether the check should print to the CLI.
    * @return array
+   *   Array of results.
    */
   protected function runSettings($context, $print = TRUE) {
     $results = [];
