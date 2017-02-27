@@ -149,7 +149,7 @@ class SiteAudit extends Command {
       $context->set('drush', $drush);
     }
 
-    $results = $this->runChecks($context);
+    $results = $this->runChecks($context, TRUE);
     $results = array_merge($results, $this->runSettings($context));
 
     $site['domain'] = $alias['uri'];
@@ -210,7 +210,9 @@ class SiteAudit extends Command {
       $test = new $check($context, $options);
       $result = $test->execute();
       $results[] = $result;
-      $context->output->writeln(strip_tags((string) $result, '<info><comment><error>'));
+      if ($print) {
+        $context->output->writeln(strip_tags((string) $result, '<info><comment><error>'));
+      }
     }
     return $results;
   }
@@ -220,14 +222,16 @@ class SiteAudit extends Command {
    * @param $context
    * @return array
    */
-  protected function runSettings($context) {
+  protected function runSettings($context, $print = TRUE) {
     $results = [];
     foreach ($context->profile->getSettings() as $machine_name => $options) {
       $options['machine_name'] = $machine_name;
       $settings = new SettingsCheck($context, $options);
       $result = $settings->execute();
       $results[] = $result;
-      $context->output->writeln(strip_tags((string) $result, '<info><comment><error>'));
+      if ($print) {
+        $context->output->writeln(strip_tags((string) $result, '<info><comment><error>'));
+      }
     }
     return $results;
   }
