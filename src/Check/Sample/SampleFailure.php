@@ -12,6 +12,7 @@ use Drutiny\AuditResponse\AuditResponse;
  *  description = "Sample failure descripion.",
  *  remediation = "Sample failure remediation.",
  *  success = "Sample failure success.",
+ *  warning = "Sample failure warning.",
  *  failure = "Sample failure failure.",
  *  exception = "Sample failure exception.",
  * )

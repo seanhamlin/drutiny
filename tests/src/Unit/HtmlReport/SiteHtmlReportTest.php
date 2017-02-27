@@ -21,6 +21,7 @@ class SiteHtmlReportTest extends TestCase
   {
     $this->profile = new Profile('Sample title', 'sample', [
       '\Drutiny\Check\Sample\SamplePass' => [],
+      '\Drutiny\Check\Sample\SampleWarning' => [],
       '\Drutiny\Check\Sample\SampleFailure' => [],
     ]);
 
@@ -68,13 +69,22 @@ class SiteHtmlReportTest extends TestCase
 
     // Pass should pass, and not print remediation.
     $this->assertRegExp('/Sample pass success\./', $contents);
+    $this->assertNotRegExp('/Sample pass warning\./', $contents);
     $this->assertNotRegExp('/Sample pass failure\./', $contents);
     $this->assertNotRegExp('/Sample pass descripion\./', $contents);
     $this->assertNotRegExp('/Sample pass remediation\./', $contents);
 
+    // Warning should provide a warning.
+    $this->assertRegExp('/Sample warning warning\./', $contents);
+    $this->assertNotRegExp('/Sample warning success\./', $contents);
+    $this->assertNotRegExp('/Sample warning failure\./', $contents);
+    $this->assertNotRegExp('/Sample warning descripion\./', $contents);
+    $this->assertNotRegExp('/Sample warning remediation\./', $contents);
+
     // Failure should fail and print remediation.
     $this->assertRegExp('/Sample failure failure\./', $contents);
     $this->assertNotRegExp('/Sample failure success\./', $contents);
+    $this->assertNotRegExp('/Sample failure warning\./', $contents);
     $this->assertRegExp('/Sample failure descripion\./', $contents);
     $this->assertRegExp('/Sample failure remediation\./', $contents);
 
