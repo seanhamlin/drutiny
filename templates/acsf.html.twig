@@ -21,21 +21,21 @@
         <legend><h2>Filters <small>(and)</small></h2></legend>
         <div class="row">
           <div class="col-sm-4">
-            <span class="page-header"><small>Domain:</small></span>
-            <select id="filter-filter-domains" value="na">
+            <label for="filter-filter-domains">Domain</label>
+            <select id="filter-filter-domains">
               <option name="na" value="na"></option>
               {% for id, site in sites %}
-                <option name="{{ id }}" value="{{ id }}">{{ site.domain | lower }}</option>
+                <option value="{{ id }}">{{ site.domain | lower }}</option>
               {% endfor %}
             </select>
           </div>
           <div class="col-sm-4">
-            <span class="page-header"><small>Status:</small></span>
-            <select id="filter-filter-status" value="na">
-              <option name="na" value="na"></option>
-              <option name="success" value="success">Success</option>
-              <option name="warning" value="warning">Warning</option>
-              <option name="danger" value="danger">Error</option>
+            <label for="filter-filter-status">Status</label>
+            <select id="filter-filter-status">
+              <option value="na"></option>
+              <option value="success">Success</option>
+              <option value="warning">Warning</option>
+              <option value="danger">Error</option>
             </select>
           </div>
           <div class="col-sm-4">
@@ -83,7 +83,7 @@
                 <td class="{{ class }}">
                   {{ result | filterXssAdmin }}
                   {% if result.status > 1 %}
-                    <p>{{ result.description }}</p>
+                    <p><em>{{ result.description }}</em></p>
                     <div class="panel panel-default">
                       <div class="panel-heading">Remediation</div>
                       <div class="panel-body">
