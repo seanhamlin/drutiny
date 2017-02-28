@@ -13,7 +13,7 @@ use Drutiny\Annotation\CheckInfo;
  *  description = "Some basic checks to ensure that the theme is not doing any seriously bad things. Note this is not supposed to be perfect, but used as an aid in code review.",
  *  remediation = "Look to shift the functionality to a module, and get it out of the theme.",
  *  success = "No security issues found.",
- *  failure = "Security issue:plural :prefix found - <br><br><code>:issues</code>.",
+ *  failure = "Security issue:plural :prefix found - <ul><li><code>:issues</code></li></ul>",
  *  exception = "Could not determine theme security.",
  *  not_available = "No custom theme is linked.",
  * )
@@ -36,6 +36,9 @@ class ThemeSecurity extends Check {
       "->query",
       "drupal_http_request",
       "curl_init",
+      "passthru",
+      "proc_open",
+      "system(",
     ];
 
     // This command is probably more complex then it should be due to wanting to
@@ -76,7 +79,7 @@ class ThemeSecurity extends Check {
       }
     }
 
-    $this->setToken('issues', implode('</code>, <br><code>', $rows));
+    $this->setToken('issues', implode('</code></li><li><code>', $rows));
     $this->setToken('plural', count($rows) > 1 ? 's' : '');
     $this->setToken('prefix', count($rows) > 1 ? 'were' : 'was');
 
