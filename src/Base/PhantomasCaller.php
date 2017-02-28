@@ -60,11 +60,11 @@ class PhantomasCaller {
     // authentication is hard coded in settings.php for example. You can set
     // these by:
     //
-    // export SITE_AUDIT_HTTP_AUTH_USER=[USERNAME]
-    // export SITE_AUDIT_HTTP_AUTH_PASS=[PASSWORD]
-    else if (!empty(getenv('SITE_AUDIT_HTTP_AUTH_USER'))) {
-      $username = getenv('SITE_AUDIT_HTTP_AUTH_USER');
-      $password = getenv('SITE_AUDIT_HTTP_AUTH_PASS');
+    // export DRUTINY_HTTP_AUTH_USER=[USERNAME]
+    // export DRUTINY_HTTP_AUTH_PASS=[PASSWORD]
+    else if (!empty(getenv('DRUTINY_HTTP_AUTH_USER'))) {
+      $username = getenv('DRUTINY_HTTP_AUTH_USER');
+      $password = getenv('DRUTINY_HTTP_AUTH_PASS');
       $command[] = "--auth-user='$username'";
       $command[] = "--auth-pass='$password'";
     }
