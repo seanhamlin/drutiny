@@ -92,6 +92,7 @@ checks :
     warning_size : 20
   \Drutiny\Check\Acsf\ThemePhpLint : {}
   \Drutiny\Check\Acsf\ThemeSecurity : {}
+  \Drutiny\Check\Acsf\DefaultThemePath : {}
 
   # Browser specific checks.
   \Drutiny\Check\Phantomas\PageWeight :
