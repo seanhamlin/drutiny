@@ -31,6 +31,10 @@ class ChecksCommand extends Command {
 
     $rows = array();
     foreach ($map as $class => $info) {
+      // Skip over testing checks.
+      if ($info->testing) {
+        continue;
+      }
       $rows[] = array(
         'title' => wordwrap($info->title, 14),
         'class' => $class,

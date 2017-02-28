@@ -15,6 +15,7 @@ use Drutiny\AuditResponse\AuditResponse;
  *  warning = "Sample pass warning.",
  *  failure = "Sample pass failure.",
  *  exception = "Sample pass exception.",
+ *  testing = TRUE,
  * )
  */
 class SamplePass extends Check {

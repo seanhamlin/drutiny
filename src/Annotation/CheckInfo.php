@@ -17,4 +17,5 @@ class CheckInfo
   public $warning;
   public $notice;
   public $supports_remediation = FALSE;
+  public $testing = FALSE;
 }
