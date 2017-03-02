@@ -334,9 +334,58 @@ class DrushCaller {
    */
   public function getRolesForPermission($permission) {
     try {
-      return $this->roleList('--format=json', '--filter="' . $permission . '"')->parseJson(TRUE);
+      return $this->roleList('--format=json', '--filter=\'' . $permission . '\'')->parseJson(TRUE);
     } catch (\Exception $e) {
       return NULL;
     }
+  }
+
+  /**
+   * Try to return a list of module implementation hooks.
+   *
+   * @param string $hook
+   *   A hook name as expected by module_implements.
+   *
+   * @return array
+   *   A array of module names that implement the hook.
+   */
+  public function moduleImplements($hook = '') {
+    $cmd = '\'echo json_encode(module_implements(":hook"));\'';
+
+    // Build the command based on the arguments.
+    $cmd = strtr($cmd, [
+      ':hook' => $hook,
+    ]);
+
+    return $this->phpEval($cmd)->parseJson(TRUE);
+  }
+
+  /**
+   * Invoke a hook to build output that a check can use.
+   *
+   * @param string $hook
+   *   A hook name as expected by module_invoke.
+   * @param string $module
+   *   A module to invoke the hook against (or all for module_invoke_all).
+   * @param bool|string $alter
+   *   A string for an alter function.
+   *
+   * @return array
+   *   Output from the hook invocation.
+   */
+  public function invokeHook($hook = '', $module = 'all', $alter = FALSE) {
+    if ($module == 'all') {
+      $cmd = '\'$output = module_invoke_all(":hook"); :alter echo json_encode($output);\'';
+    } else {
+      $cmd = '\'$output = module_invoke(":hook", ":module"); :alter echo json_encode($output);\'';
+    }
+
+    $cmd = strtr($cmd, [
+      ':hook' => $hook,
+      ':module' => $module,
+      ':alter' => $alter ? 'drupal_alter("' . $alter . '", $output);' : '',
+    ]);
+
+    return $this->phpEval($cmd)->parseJson();
   }
 }

@@ -18,6 +18,15 @@ class PhantomasCaller {
     $this->drush = $drush;
   }
 
+  /**
+   * Mutator for the domain proeprty.
+   *
+   * @param string $domain
+   *   The domain for the given drush alias.
+   *
+   * @return $this
+   *   The PhantomasCaller.
+   */
   public function setDomain($domain) {
     // @todo make the URL protocol configurable.
     if (strpos($domain, 'http') !== 0) {
@@ -25,6 +34,16 @@ class PhantomasCaller {
     }
     $this->domain = $domain;
     return $this;
+  }
+
+  /**
+   * Accessor for the domain property.
+   *
+   * @return string
+   *   The configured domain for the alias.
+   */
+  public function getDomain() {
+    return $this->domain;
   }
 
   public function setUrls($urls) {
@@ -37,23 +56,15 @@ class PhantomasCaller {
     return $this;
   }
 
-  public function getMetrics($url = '/') {
-    $command = ['phantomas'];
-    $command[] = '"' . $this->domain . $url . '"';
-    $command[] = '--ignore-ssl-errors';
-    $command[] = '--reporter=json';
-    $command[] = '--timeout=30';
-
-    // Remove a lot of output that we don't need at the moment.
-    $command[] = '--skip-modules=domMutations,domQueries,domHiddenContent,domComplexity,jQuery';
-
+  /**
+   * Get authentication details for the request.
+   */
+  public function getAuth() {
     // Check for the presence of shield as this will potentially block
     // phantomas.
     if ($this->drush->isShieldEnabled()) {
       $username = $this->drush->getVariable('shield_user', '');
       $password = $this->drush->getVariable('shield_pass', '');
-      $command[] = "--auth-user='$username'";
-      $command[] = "--auth-pass='$password'";
     }
 
     // Allow users to set environment variables as well if the HTTP
@@ -65,6 +76,23 @@ class PhantomasCaller {
     else if (!empty(getenv('SITE_AUDIT_HTTP_AUTH_USER'))) {
       $username = getenv('SITE_AUDIT_HTTP_AUTH_USER');
       $password = getenv('SITE_AUDIT_HTTP_AUTH_PASS');
+    }
+
+    return !empty($username) && !empty($password) ? [$username, $password] : FALSE;
+  }
+
+  public function getMetrics($url = '/') {
+    $command = ['phantomas'];
+    $command[] = '"' . $this->domain . $url . '"';
+    $command[] = '--ignore-ssl-errors';
+    $command[] = '--reporter=json';
+    $command[] = '--timeout=30';
+
+    // Remove a lot of output that we don't need at the moment.
+    $command[] = '--skip-modules=domMutations,domQueries,domHiddenContent,domComplexity,jQuery';
+
+    if ($auth = $this->getAuth()) {
+      list($username, $password) = $auth;
       $command[] = "--auth-user='$username'";
       $command[] = "--auth-pass='$password'";
     }

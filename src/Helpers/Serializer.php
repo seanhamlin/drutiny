@@ -4,7 +4,7 @@
  * Contains Drutiny\Base\Serializer
  */
 
-namespace Drutiny\Base;
+namespace Drutiny\Helpers;
 
 /**
  * Class Serializer

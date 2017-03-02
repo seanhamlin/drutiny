@@ -7,7 +7,7 @@
 namespace Drutiny\Check\D7;
 
 use Drutiny\AuditResponse\AuditResponse;
-use Drutiny\Base\Serializer;
+use Drutiny\Helpers\Serializer;
 use Drutiny\Check\Check;
 use Drutiny\Annotation\CheckInfo;
 

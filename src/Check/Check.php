@@ -31,12 +31,20 @@ abstract class Check {
 
   public function getTokens() {
     $tokens = [];
-    foreach ($this->options as $key => $value) {
-      if (is_array($value)) {
-        $value = implode(', ', $value);
+
+    // So we can support multidimensional arrays we convert the options array
+    // to a recursive iterator- this will allow us to flatten arrays separated
+    // with dot notation.
+    $iterator = new \RecursiveIteratorIterator(new \RecursiveArrayIterator($this->options));
+
+    foreach ($iterator as $leafValue) {
+      $keys = array();
+      foreach (range(0, $iterator->getDepth()) as $depth) {
+        $keys[] = $iterator->getSubIterator($depth)->key();
       }
-      $tokens[':' . $key] = $value;
+      $tokens[':' . join('.', $keys)] = $leafValue;
     }
+
     return $tokens;
   }
 
