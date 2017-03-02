@@ -12,8 +12,10 @@ use Drutiny\AuditResponse\AuditResponse;
  *  description = "Sample pass descripion.",
  *  remediation = "Sample pass remediation.",
  *  success = "Sample pass success.",
+ *  warning = "Sample pass warning.",
  *  failure = "Sample pass failure.",
  *  exception = "Sample pass exception.",
+ *  testing = TRUE,
  * )
  */
 class SamplePass extends Check {

@@ -127,8 +127,8 @@ class MultisiteAudit extends SiteAudit {
       $context->set('phantomas', $phantomas);
 
       $output->writeln("<comment>[$i] Running audit over: {$domain}</comment>");
-      $results = $this->runChecks($context);
-      $results = array_merge($results, $this->runSettings($context));
+      $results = $this->runChecks($context, FALSE);
+      $results = array_merge($results, $this->runSettings($context, FALSE));
       $unique_sites[$id]['results'] = $results;
       $passes = [];
       $warnings = [];
@@ -176,31 +176,4 @@ class MultisiteAudit extends SiteAudit {
     $seconds = $this->timerEnd();
     $output->writeln('<info>Execution time: ' . $seconds . ' seconds</info>');
   }
-
-  protected function runChecks($context) {
-    $results = [];
-    foreach ($context->profile->getChecks() as $check => $options) {
-      $test = new $check($context, $options);
-      $results[] = $test->execute();
-    }
-    return $results;
-  }
-
-  protected function writeReport($reports_dir, OutputInterface $output, $profile, Array $unique_sites) {
-    ob_start();
-    include dirname(__FILE__) . '/report/report-multisite.tpl.php';
-    $report_output = ob_get_contents();
-    ob_end_clean();
-
-    $filename = implode('.', [$profile->getMachineName(), 'html']);
-    $filepath = $reports_dir . '/' . $filename;
-
-    if (is_file($filepath) && !is_writeable($filepath)) {
-      throw new \RuntimeException("Cannot overwrite file: $filepath");
-    }
-
-    file_put_contents($filepath, $report_output);
-    $output->writeln("<info>Report written to $filepath</info>");
-  }
-
 }

@@ -45,7 +45,7 @@
                 <td class="{{ class }}">
                   {{ result | filterXssAdmin }}
                   {% if result.status > 1 %}
-                    <p>{{ result.description }}</p>
+                    <p><em>{{ result.description }}</em></p>
                     <div class="panel panel-default">
                       <div class="panel-heading">Remediation</div>
                       <div class="panel-body">

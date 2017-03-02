@@ -149,7 +149,7 @@ class SiteAudit extends Command {
       $context->set('drush', $drush);
     }
 
-    $results = $this->runChecks($context);
+    $results = $this->runChecks($context, TRUE);
     $results = array_merge($results, $this->runSettings($context));
 
     $site['domain'] = $alias['uri'];
@@ -204,30 +204,49 @@ class SiteAudit extends Command {
     return (int) ($this->end - $this->start);
   }
 
-  protected function runChecks($context) {
+  /**
+   * Perform the checks.
+   *
+   * @param $context
+   *   The context of the check.
+   * @param $print
+   *   Whether the check should print to the CLI.
+   * @return array
+   *   Array of results.
+   */
+  protected function runChecks($context, $print = TRUE) {
     $results = [];
     foreach ($context->profile->getChecks() as $check => $options) {
       $test = new $check($context, $options);
       $result = $test->execute();
       $results[] = $result;
-      $context->output->writeln(strip_tags((string) $result, '<info><comment><error>'));
+      if ($print) {
+        $context->output->writeln(strip_tags((string) $result, '<info><comment><error>'));
+      }
     }
     return $results;
   }
 
   /**
    * Perform settings checks for each module defined in the settings hash.
+   *
    * @param $context
+   *   The context of the check.
+   * @param $print
+   *   Whether the check should print to the CLI.
    * @return array
+   *   Array of results.
    */
-  protected function runSettings($context) {
+  protected function runSettings($context, $print = TRUE) {
     $results = [];
     foreach ($context->profile->getSettings() as $machine_name => $options) {
       $options['machine_name'] = $machine_name;
       $settings = new SettingsCheck($context, $options);
       $result = $settings->execute();
       $results[] = $result;
-      $context->output->writeln(strip_tags((string) $result, '<info><comment><error>'));
+      if ($print) {
+        $context->output->writeln(strip_tags((string) $result, '<info><comment><error>'));
+      }
     }
     return $results;
   }
