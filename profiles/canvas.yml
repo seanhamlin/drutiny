@@ -24,6 +24,7 @@ checks :
   \Drutiny\Check\D7\PreprocessCSS : {}
   \Drutiny\Check\D7\PreprocessJS : {}
   \Drutiny\Check\D7\ErrorLevel : {}
+  \Drutiny\Check\D7\ImageDerivatives : {}
   \Drutiny\Check\D7\UserRegister : {}
   \Drutiny\Check\D7\CacheLifetime : {}
   \Drutiny\Check\D7\PageCacheMaximumAge :
@@ -39,7 +40,7 @@ checks :
   \Drutiny\Check\D7\XMLSiteMapBaseUrl:
     pattern : '^https://www\.[-a-z]{1,63}\.[a-z]{2,3}(\.[a-z]{2,3})?$'
   \Drutiny\Check\Drush\User1 :
-    name_blacklist : '(admin|root|drupal|god|govcms|paul|sean|ruwan)'
+    name_blacklist : '(admin|root|drupal|god)'
     mail : 'admin@example.com'
     status: 1
 
