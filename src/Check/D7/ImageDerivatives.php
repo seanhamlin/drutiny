@@ -20,6 +20,8 @@ class ImageDerivatives extends Check {
   public function check()
   {
     $fixups = [];
+
+    // @see https://github.com/drupal/drupal/blob/7.x/modules/image/image.module#L821
     $image_allow_insecure_derivatives = (bool) $this->context->drush->getVariable('image_allow_insecure_derivatives', FALSE);
 
     if ($image_allow_insecure_derivatives && $this->context->autoRemediate) {
