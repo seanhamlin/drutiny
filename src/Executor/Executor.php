@@ -3,20 +3,21 @@
 namespace Drutiny\Executor;
 
 use Drutiny\Executor\ExecutorInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 class Executor implements ExecutorInterface {
 
-  protected $output;
+  protected $io;
 
-  public function __construct(OutputInterface $output) {
-    $this->output = $output;
+  public function __construct(SymfonyStyle $io) {
+    $this->io = $io;
   }
 
   public function execute($command) {
 
-    if ($this->output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
-      $this->output->writeln($command);
+    // Optional debug loggins.
+    if ($this->io->isVerbose()) {
+      $this->io->text($command);
     }
 
     return new Result($command);

@@ -2,9 +2,9 @@
 
 namespace Drutiny\Executor;
 
-use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 Interface ExecutorInterface {
-  public function __construct(OutputInterface $output);
+  public function __construct(SymfonyStyle $io);
   public function execute($command);
 }

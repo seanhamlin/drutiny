@@ -15,6 +15,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Yaml\Parser;
 use Drutiny\AuditResponse\AuditResponse;
 use Symfony\Component\Yaml\Yaml;
@@ -45,6 +46,9 @@ class MultisiteAudit extends SiteAudit {
   protected function execute(InputInterface $input, OutputInterface $output) {
     $this->timerStart();
 
+    $io = new SymfonyStyle($input, $output);
+    $io->title('Drutiny multisite audit');
+
     // Normalise the @ in the alias. Remove it to be safe.
     $drush_alias = str_replace('@', '', $input->getArgument('drush-alias'));
 
@@ -61,7 +65,7 @@ class MultisiteAudit extends SiteAudit {
     }
 
     // Load the Drush alias which will contain more information we'll need.
-    $executor = new Executor($output);
+    $executor = new Executor($io);
     $drush = new DrushCaller($executor, $input->getOption('drush-bin'));
     $phantomas = new PhantomasCaller($executor, $drush);
     $random_lib = new RandomLib();
@@ -73,7 +77,7 @@ class MultisiteAudit extends SiteAudit {
     // Some checks don't use drush and connect to the server directly so we need
     // a remote executor available as well.
     if (isset($alias['remote-host'], $alias['remote-user'])) {
-      $executor = new ExecutorRemote($output);
+      $executor = new ExecutorRemote($io);
       $executor->setRemoteUser($alias['remote-user'])
                ->setRemoteHost($alias['remote-host']);
       if (isset($alias['ssh-options'])) {
@@ -89,6 +93,7 @@ class MultisiteAudit extends SiteAudit {
     $context = new Context();
     $context->set('input', $input)
             ->set('output', $output)
+            ->set('io', $io)
             ->set('reportsDir', $reports_dir)
             ->set('executor', $executor)
             ->set('profile', $profile)
@@ -107,7 +112,7 @@ class MultisiteAudit extends SiteAudit {
       $unique_sites[$domain] = ['domain' => $domain];
     }
 
-    $output->writeln('<comment>Found ' . count($unique_sites) . ' unique sites</comment>');
+    $io->comment('Found ' . count($unique_sites) . ' unique sites.');
 
     $i = 0;
     foreach ($unique_sites as $id => $values) {
@@ -126,7 +131,7 @@ class MultisiteAudit extends SiteAudit {
                 ->clearMetrics();
       $context->set('phantomas', $phantomas);
 
-      $output->writeln("<comment>[$i] Running audit over: {$domain}</comment>");
+      $io->comment("[{$i}] Running audit over: {$domain}");
       $results = $this->runChecks($context, FALSE);
       $results = array_merge($results, $this->runSettings($context, FALSE));
       $unique_sites[$id]['results'] = $results;
@@ -147,14 +152,14 @@ class MultisiteAudit extends SiteAudit {
       $unique_sites[$id]['pass'] = count($passes);
       $unique_sites[$id]['warn'] = count($warnings);
       $unique_sites[$id]['fail'] = count($failures);
-      $output->writeln('<info>' . count($passes) . '/' . count($results) . ' tests passed.</info>');
+      $io->writeln('<info>' . count($passes) . '/' . count($results) . ' tests passed.</info>');
       foreach ($warnings as $warning) {
-        $context->output->writeln("\t" . strip_tags($warning, '<info><comment><error>'));
+        $io->writeln("\t" . strip_tags($warning, '<info><comment><error>'));
       }
       foreach ($failures as $fail) {
-        $context->output->writeln("\t" . strip_tags($fail, '<info><comment><error>'));
+        $io->writeln("\t" . strip_tags($fail, '<info><comment><error>'));
       }
-      $context->output->writeln('----');
+      $io->writeln('----');
     }
 
     // Optional HTML report.
@@ -170,10 +175,9 @@ class MultisiteAudit extends SiteAudit {
         return ($a['pass'] < $b['pass']) ? -1 : 1;
       });
       $this->ensureTimezoneSet();
-      $this->writeHTMLReport('multisite', $reports_dir, $output, $profile, [], $unique_sites);
+      $this->writeHTMLReport('multisite', $reports_dir, $io, $profile, [], $unique_sites);
     }
 
-    $seconds = $this->timerEnd();
-    $output->writeln('<info>Execution time: ' . $seconds . ' seconds</info>');
+    $io->text('Execution time: ' . $this->timerEnd() . ' seconds');
   }
 }
