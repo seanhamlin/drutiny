@@ -53,6 +53,7 @@ checks :
   \Drutiny\Check\D7\PreprocessCSS : {}
   \Drutiny\Check\D7\PreprocessJS : {}
   \Drutiny\Check\D7\ErrorLevel : {}
+  \Drutiny\Check\D7\ImageDerivatives : {}
   \Drutiny\Check\D7\UserRegister : {}
   \Drutiny\Check\D7\GA :
     account : '^UA-\d{7,8}-\d{1,2}$'
