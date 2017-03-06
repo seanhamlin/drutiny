@@ -48,11 +48,15 @@ abstract class Check {
   abstract protected function check();
 
   /**
-   * The namespace AuditReponse should use to discover a .yml file for check.
+   * If the check has failed, then the user can opt to auto-remediate the issue.
+   * Not all checks will implement this method.
+   *
+   * @return bool
+   *   Whether or not the remediate method was run and was successful.
    */
-  static public function getNamespace()
+  protected function remediate()
   {
-    throw new \Exception("This method is now deprecated. Please use self::getInfo() instead.");
+    return FALSE;
   }
 
   /**
@@ -95,6 +99,16 @@ abstract class Check {
           case FALSE:
             $response->setStatus(AuditResponse::AUDIT_FAILURE);
             break;
+        }
+      }
+
+      // Attempt to auto remediate the issue, but only if we have a failure, and
+      // the user wants to remediate the issue.
+      $this->setToken('fixups', '');
+      if ($response->getStatus() === AuditResponse::AUDIT_FAILURE && $this->context->autoRemediate) {
+        if ($this->remediate()) {
+          $response->setStatus(AuditResponse::AUDIT_SUCCESS);
+          $this->setToken('fixups', ' This was auto remediated.');
         }
       }
 

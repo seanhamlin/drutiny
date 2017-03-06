@@ -27,6 +27,7 @@ class SiteHtmlReportTest extends TestCase
 
     $results = [];
     $this->context = new Context();
+    $this->context->set('autoRemediate', FALSE);
     foreach ($this->profile->getChecks() as $check => $options) {
       $test = new $check($this->context, $options);
       $result = $test->execute();

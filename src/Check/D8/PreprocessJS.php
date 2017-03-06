@@ -17,18 +17,21 @@ use Drutiny\Annotation\CheckInfo;
  * )
  */
 class PreprocessJs extends Check {
+
+  /**
+   * @inheritDoc
+   */
   public function check()
   {
-    $fixups = [];
-    $preprocess_js = $this->context->drush->getConfig('system.performance', 'js.preprocess', TRUE);
+    return $this->context->drush->getConfig('system.performance', 'js.preprocess', TRUE);
+  }
 
-    if (!$preprocess_js && $this->context->autoRemediate) {
-      $this->context->drush->configSet('system.performance', 'js.preprocess', TRUE);
-      $fixups[] = 'This was auto remediated.';
-      $preprocess_js = TRUE;
-    }
-
-    $this->setToken('fixups', ' ' . implode(', ', $fixups));
-    return $preprocess_js;
+  /**
+   * @inheritDoc
+   */
+  public function remediate()
+  {
+    $res = $this->context->drush->configSet('system.performance', 'js.preprocess', TRUE);
+    return $res->isSuccessful();
   }
 }

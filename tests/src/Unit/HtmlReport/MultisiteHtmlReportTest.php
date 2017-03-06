@@ -26,6 +26,7 @@ class MultisiteHtmlReportTest extends TestCase
     ]);
 
     $this->context = new Context();
+    $this->context->set('autoRemediate', FALSE);
 
     $domains = ['www.sample.com', 'www.example.com'];
     foreach ($domains as $domain) {

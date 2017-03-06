@@ -26,6 +26,7 @@ class AcsfHtmlReportTest extends TestCase
     ]);
 
     $this->context = new Context();
+    $this->context->set('autoRemediate', FALSE);
 
     $domains = ['siteID1' => 'www.sample.com', 'siteID2' => 'www.example.com'];
     foreach ($domains as $id => $domain) {

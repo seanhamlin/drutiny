@@ -17,20 +17,23 @@ use Drutiny\Annotation\CheckInfo;
  * )
  */
 class ImageDerivatives extends Check {
+
+  /**
+   * @inheritDoc
+   * @see https://github.com/drupal/drupal/blob/7.x/modules/image/image.module#L821
+   */
   public function check()
   {
-    $fixups = [];
-
-    // @see https://github.com/drupal/drupal/blob/7.x/modules/image/image.module#L821
     $image_allow_insecure_derivatives = (bool) $this->context->drush->getVariable('image_allow_insecure_derivatives', FALSE);
-
-    if ($image_allow_insecure_derivatives && $this->context->autoRemediate) {
-      $this->context->drush->variableDelete('image_allow_insecure_derivatives', '--exact', '--yes');
-      $fixups[] = 'This was auto remediated.';
-      $image_allow_insecure_derivatives = FALSE;
-    }
-
-    $this->setToken('fixups', ' ' . implode(', ', $fixups));
     return !$image_allow_insecure_derivatives;
+  }
+
+  /**
+   * @inheritDoc
+   */
+  public function remediate()
+  {
+    $res = $this->context->drush->deleteVariable('image_allow_insecure_derivatives');
+    return $res->isSuccessful();
   }
 }

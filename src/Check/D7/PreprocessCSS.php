@@ -17,18 +17,21 @@ use Drutiny\Annotation\CheckInfo;
  * )
  */
 class PreprocessCSS extends Check {
+
+  /**
+   * @inheritDoc
+   */
   public function check()
   {
-    $fixups = [];
-    $preprocess_css = (bool) (int) $this->context->drush->getVariable('preprocess_css', 0);
+    return (bool) (int) $this->context->drush->getVariable('preprocess_css', 0);
+  }
 
-    if (!$preprocess_css && $this->context->autoRemediate) {
-      $this->context->drush->variableSet('preprocess_css', 1);
-      $fixups[] = 'This was auto remediated.';
-      $preprocess_css = TRUE;
-    }
-
-    $this->setToken('fixups', ' ' . implode(', ', $fixups));
-    return $preprocess_css;
+  /**
+   * @inheritDoc
+   */
+  public function remediate()
+  {
+    $res = $this->context->drush->setVariable('preprocess_css', 1);
+    return $res->isSuccessful();
   }
 }

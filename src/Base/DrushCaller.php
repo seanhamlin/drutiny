@@ -191,7 +191,8 @@ class DrushCaller {
   }
 
   /**
-   * Try to return a variable value.
+   * Try to return a variable value. There is caching in the variable get to
+   * avoid expensive round trips to the Drupal site.
    *
    * @param $name
    *   The name of the variable (exact).
@@ -217,6 +218,34 @@ class DrushCaller {
     catch (\Exception $e) {
       return $default;
     }
+  }
+
+  /**
+   * Try to set a variable value. This updates both the local cache (in case a
+   * subsequent checks requests it) and the remote Drupal site.
+   *
+   * @param $name
+   *   The name of the variable (exact).
+   * @param int $default
+   *   The value to return if the variable is not set.
+   * @return mixed
+   */
+  public function setVariable($name, $value) {
+    $this->variablesList->{$name} = $value;
+    return $this->variableSet($name, $value);
+  }
+
+  /**
+   * Try to delete a variable value. This updates both the local cache (in case
+   * a subsequent checks requests it) and the remote Drupal site.
+   *
+   * @param $name
+   *   The name of the variable (exact).
+   * @return mixed
+   */
+  public function deleteVariable($name) {
+    unset($this->variablesList->{$name});
+    return $this->variableDelete($name, '--exact', '--yes');
   }
 
   /**
