@@ -4,7 +4,7 @@
 <div class="jumbotron">
   <div class="container">
     <h1>{{ profile.title }}</h1>
-    <p>Report run across {{ sites | length }} sites<br/>
+    <p>Report run across <strong>{{ sites | length }}</strong> site{% if sites | length > 1 %}s{% endif %}<br/>
       {{ 'now' | date('Y-m-d h:i a (T)') }}
     </p>
   </div>

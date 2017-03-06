@@ -69,7 +69,7 @@ class AcsfHtmlReportTest extends TestCase
 
     // Global report tests.
     $this->assertRegExp('/<h1>Sample title<\/h1>/', $contents);
-    $this->assertRegExp('/Report run across 2 sites/', $contents);
+    $this->assertRegExp('/Report run across <strong>2<\/strong> sites/', $contents);
     $this->assertRegExp('/&copy; Drutiny \d{4}/', $contents);
 
     // Print the site IDs.
