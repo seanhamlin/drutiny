@@ -4,7 +4,6 @@ namespace Drutiny\Command;
 
 use Drutiny\Base\DrushCaller;
 use Drutiny\Base\PhantomasCaller;
-use Drutiny\Base\RandomLib;
 use Drutiny\Context;
 use Drutiny\Profile\Profile;
 use Drutiny\Profile\ProfileController;
@@ -66,7 +65,6 @@ class AcsfAudit extends SiteAudit {
     $executor = new Executor($io);
     $drush = new DrushCaller($executor, $input->getOption('drush-bin'));
     $phantomas = new PhantomasCaller($executor, $drush);
-    $random_lib = new RandomLib();
     $response = $drush->siteAlias('@' . $drush_alias, '--format=json')->parseJson(TRUE);
     $alias = $response[$drush_alias];
 
@@ -82,7 +80,6 @@ class AcsfAudit extends SiteAudit {
             ->set('remoteExecutor', $executor)
             ->set('drush', $drush)
             ->set('phantomas', $phantomas)
-            ->set('randomLib', $random_lib)
             ->set('autoRemediate', $input->getOption('auto-remediate'));
 
     // Some checks don't use drush and connect to the server

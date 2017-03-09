@@ -5,7 +5,6 @@ namespace Drutiny\Command;
 use Drutiny\AuditResponse\AuditResponse;
 use Drutiny\Base\DrushCaller;
 use Drutiny\Base\PhantomasCaller;
-use Drutiny\Base\RandomLib;
 use Drutiny\Settings\SettingsCheck;
 use Drutiny\Context;
 use Drutiny\Executor\Executor;
@@ -105,7 +104,6 @@ class SiteAudit extends Command {
     $executor = new Executor($io);
     $drush = new DrushCaller($executor, $input->getOption('drush-bin'));
     $phantomas = new PhantomasCaller($executor, $drush);
-    $random_lib = new RandomLib();
     $response = $drush->siteAlias('@' . $drush_alias, '--format=json')->parseJson(TRUE);
 
     // Check for made up aliases.
@@ -130,7 +128,6 @@ class SiteAudit extends Command {
             ->set('remoteExecutor', $executor)
             ->set('drush', $drush)
             ->set('phantomas', $phantomas)
-            ->set('randomLib', $random_lib)
             ->set('alias', $drush_alias)
             ->set('config', $alias)
             ->set('autoRemediate', $input->getOption('auto-remediate'));

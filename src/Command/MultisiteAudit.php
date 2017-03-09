@@ -4,7 +4,6 @@ namespace Drutiny\Command;
 
 use Drutiny\Base\DrushCaller;
 use Drutiny\Base\PhantomasCaller;
-use Drutiny\Base\RandomLib;
 use Drutiny\Context;
 use Drutiny\Profile\Profile;
 use Drutiny\Executor\Executor;
@@ -68,7 +67,6 @@ class MultisiteAudit extends SiteAudit {
     $executor = new Executor($io);
     $drush = new DrushCaller($executor, $input->getOption('drush-bin'));
     $phantomas = new PhantomasCaller($executor, $drush);
-    $random_lib = new RandomLib();
     $response = $drush->siteAlias('@' . $drush_alias, '--format=json')->parseJson(TRUE);
     $alias = $response[$drush_alias];
 
@@ -100,7 +98,6 @@ class MultisiteAudit extends SiteAudit {
             ->set('remoteExecutor', $executor)
             ->set('drush', $drush)
             ->set('phantomas', $phantomas)
-            ->set('randomLib', $random_lib)
             ->set('autoRemediate', $input->getOption('auto-remediate'));
 
     $yaml = file_get_contents($input->getOption('domain-file'));
