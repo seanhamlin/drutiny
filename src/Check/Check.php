@@ -29,6 +29,10 @@ abstract class Check {
     return $this;
   }
 
+  protected function missingToken($name) {
+    return !isset($this->options[$name]);
+  }
+
   public function getTokens() {
     $tokens = [];
     foreach ($this->options as $key => $value) {
@@ -102,9 +106,14 @@ abstract class Check {
         }
       }
 
+      // Set the fixups token if not already set to avoid it showing in any
+      // messages.
+      if ($this->missingToken('fixups')) {
+        $this->setToken('fixups', '');
+      }
+
       // Attempt to auto remediate the issue, but only if we have a failure, and
       // the user wants to remediate the issue.
-      $this->setToken('fixups', '');
       if ($response->getStatus() === AuditResponse::AUDIT_FAILURE && $this->context->autoRemediate) {
         if ($this->remediate()) {
           $response->setStatus(AuditResponse::AUDIT_SUCCESS);
