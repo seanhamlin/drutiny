@@ -25,7 +25,7 @@ class RandomLib {
    * @return string
    *   the random string
    */
-  public function generateRandomString($length = 32, $characters = '') {
+  public function generateRandomString($length = 32, $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ') {
     return $this->generator->generateString($length, $characters);
   }
 
