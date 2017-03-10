@@ -1,6 +1,6 @@
 # Drutiny (Drupal Scrutiny)
 
-[![Build Status](https://travis-ci.org/seanhamlin/drutiny.svg?branch=master)](https://travis-ci.org/seanhamlin/drutiny)
+[![Build Status](https://travis-ci.org/seanhamlin/drutiny.svg?branch=master)](https://travis-ci.org/seanhamlin/drutiny) [![Latest Stable Version](https://poser.pugx.org/seanhamlin/drutiny/v/stable)](https://packagist.org/packages/seanhamlin/drutiny) [![Total Downloads](https://poser.pugx.org/seanhamlin/drutiny/downloads)](https://packagist.org/packages/seanhamlin/drutiny) [![Latest Unstable Version](https://poser.pugx.org/seanhamlin/drutiny/v/unstable)](https://packagist.org/packages/seanhamlin/drutiny) [![License](https://poser.pugx.org/seanhamlin/drutiny/license)](https://packagist.org/packages/seanhamlin/drutiny)
 
 This is a generic Drupal 7 and Drupal 8 site auditing and optional remediation tool.
 
