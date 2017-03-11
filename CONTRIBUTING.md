@@ -27,7 +27,18 @@ In general the Drutiny team will be looking to find ways to help people contribu
 
 PHPunit is being used in Drutiny, and ideally every check should have a simple test class to accompany it.
 
-## How to run the tests
+## Code style
+
+./vendor/bin/phpcs --config-set installed_paths ../../drupal/coder/coder_sniffer
+./vendor/bin/phpcs --standard=Drupal --extensions=php,css,txt,md src/
+./vendor/bin/phpcbf --standard=Drupal --extensions=php,css,txt,md src/
+
+```
+./vendor/bin/phpcs -h
+./vendor/bin/phpcbf -h
+```
+
+## How to run PHPunit
 
 ```
 ./vendor/bin/phpunit
