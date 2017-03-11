@@ -9,6 +9,7 @@ use Drutiny\Settings\SettingsCheck;
 use Drutiny\Context;
 use Drutiny\Executor\Executor;
 use Drutiny\Executor\ExecutorRemote;
+use Drutiny\Profile\Profile;
 use Drutiny\Profile\ProfileController;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -93,13 +94,13 @@ class SiteAudit extends Command {
 
     // Validate the reports directory.
     $reports_dir = $input->getOption('report-dir');
-    if (!is_dir($reports_dir) || !is_writeable($reports_dir)) {
+    if (!is_dir($reports_dir) || !is_writable($reports_dir)) {
       throw new \RuntimeException("Cannot write to $reports_dir");
     }
 
     // Validate the drush binary.
     $drush_bin = $input->getOption('drush-bin');
-    if (!$this->command_exist($drush_bin)) {
+    if (!$this->commandExists($drush_bin)) {
       throw new \RuntimeException("No drush binary available called '$drush_bin'.");
     }
 
@@ -196,7 +197,7 @@ class SiteAudit extends Command {
    * @return bool
    *   Whether or not a particular command exists.
    */
-  public function command_exist($cmd) {
+  protected function commandExists($cmd) {
     $return_val = shell_exec(sprintf("which %s", escapeshellarg($cmd)));
     return !empty($return_val);
   }
@@ -292,7 +293,7 @@ class SiteAudit extends Command {
    * @param array $sites
    *   Information for multiple single sites.
    */
-  protected function writeHTMLReport($template, $reports_dir, SymfonyStyle $io, $profile, array $site, array $sites = []) {
+  protected function writeHTMLReport($template, $reports_dir, SymfonyStyle $io, Profile $profile, array $site, array $sites = []) {
     $loader = new \Twig_Loader_Filesystem(__DIR__ . '/../../templates');
     $twig = new \Twig_Environment($loader, array(
       'cache' => sys_get_temp_dir() . '/cache',
@@ -318,7 +319,7 @@ class SiteAudit extends Command {
     }
     $filepath = $reports_dir . '/' . $filename;
 
-    if (is_file($filepath) && !is_writeable($filepath)) {
+    if (is_file($filepath) && !is_writable($filepath)) {
       throw new \RuntimeException("Cannot overwrite file: $filepath");
     }
 

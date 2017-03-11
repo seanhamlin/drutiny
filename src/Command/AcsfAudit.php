@@ -50,13 +50,13 @@ class AcsfAudit extends SiteAudit {
 
     // Validate the reports directory.
     $reports_dir = $input->getOption('report-dir');
-    if (!is_dir($reports_dir) || !is_writeable($reports_dir)) {
+    if (!is_dir($reports_dir) || !is_writable($reports_dir)) {
       throw new \RuntimeException("Cannot write to $reports_dir");
     }
 
     // Validate the drush binary.
     $drush_bin = $input->getOption('drush-bin');
-    if (!$this->command_exist($drush_bin)) {
+    if (!$this->commandExists($drush_bin)) {
       throw new \RuntimeException("No drush binary available called '$drush_bin'.");
     }
 

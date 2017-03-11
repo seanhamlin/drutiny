@@ -23,20 +23,30 @@ In general the Drutiny team will be looking to find ways to help people contribu
 * Vendor specific checks that cannot be re-used
 
 
+# Coding standards
+
+This project adhears to the same coding standards as the Drupal project.
+
+## How to check code style
+
+```
+./vendor/bin/phpcs --config-set installed_paths ../../drupal/coder/coder_sniffer
+./vendor/bin/phpcs --standard=Drupal --extensions=php,css,txt,md src/ -sp
+
+```
+
+## How to fix using phpcbf
+
+```
+./vendor/bin/phpcbf --standard=Drupal --extensions=php,css,txt,md src/
+```
+
+
 # Tests
 
 PHPunit is being used in Drutiny, and ideally every check should have a simple test class to accompany it.
 
-## Code style
 
-./vendor/bin/phpcs --config-set installed_paths ../../drupal/coder/coder_sniffer
-./vendor/bin/phpcs --standard=Drupal --extensions=php,css,txt,md src/
-./vendor/bin/phpcbf --standard=Drupal --extensions=php,css,txt,md src/
-
-```
-./vendor/bin/phpcs -h
-./vendor/bin/phpcbf -h
-```
 
 ## How to run PHPunit
 
