@@ -32,7 +32,6 @@ This project adhears to the same coding standards as the Drupal project.
 ```
 ./vendor/bin/phpcs --config-set installed_paths ../../drupal/coder/coder_sniffer
 ./vendor/bin/phpcs --standard=Drupal --extensions=php,css,txt,md src/ -sp
-
 ```
 
 ## How to fix using phpcbf
@@ -58,9 +57,10 @@ You can run a subset of the tests by running just a group:
 
 ```
 $ ./vendor/bin/phpunit --list-groups
-PHPUnit 5.7.13 by Sebastian Bergmann and contributors.
+PHPUnit 5.7.15 by Sebastian Bergmann and contributors.
 
 Available test group(s):
+ - base
  - check
  - report
 ```
@@ -68,6 +68,7 @@ Available test group(s):
 e.g.
 
 ```
+./vendor/bin/phpunit --group base
 ./vendor/bin/phpunit --group check
 ./vendor/bin/phpunit --group report
 ```
