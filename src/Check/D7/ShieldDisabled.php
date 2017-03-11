@@ -3,10 +3,9 @@
 namespace Drutiny\Check\D7;
 
 use Drutiny\Check\Check;
-use Drutiny\Annotation\CheckInfo;
 
 /**
- * @CheckInfo(
+ * @Drutiny\Annotation\CheckInfo(
  *  title = "Shield disabled",
  *  description = "The shield module protects Drupal sites from prying eyes, often it is used to protect sites that are not yet live, but should never be enabled for live sites.",
  *  remediation = "Disable shield through the shield user interface, set the variable <code>shield_enabled</code> to 0.",
@@ -16,7 +15,12 @@ use Drutiny\Annotation\CheckInfo;
  * )
  */
 class ShieldDisabled extends Check {
+
+  /**
+   *
+   */
   public function check() {
-    return ! $this->context->drush->isShieldEnabled();
+    return !$this->context->drush->isShieldEnabled();
   }
+
 }

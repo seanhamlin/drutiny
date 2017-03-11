@@ -5,10 +5,9 @@ namespace Drutiny\Check\Acsf;
 use Drutiny\Check\Check;
 use Drutiny\AuditResponse\AuditResponse;
 use Drutiny\Executor\DoesNotApplyException;
-use Drutiny\Annotation\CheckInfo;
 
 /**
- * @CheckInfo(
+ * @Drutiny\Annotation\CheckInfo(
  *  title = "ACSF theme security",
  *  description = "Some basic checks to ensure that the theme is not doing any seriously bad things. Note this is not supposed to be perfect, but used as an aid in code review.",
  *  remediation = "Look to shift the functionality to a module, and get it out of the theme.",
@@ -20,8 +19,10 @@ use Drutiny\Annotation\CheckInfo;
  */
 class ThemeSecurity extends Check {
 
-  public function check()
-  {
+  /**
+   *
+   */
+  public function check() {
     $root = $this->context->drush->getCoreStatus('root');
     $site = $this->context->drush->getCoreStatus('site');
 
@@ -47,7 +48,7 @@ class ThemeSecurity extends Check {
     // Yields something like:
     //
     // ./zen/template.php:159:    $path = drupal_get_path_alias($_GET['q']);
-    // ./zen/template.php:162:    $arg = explode('/', $_GET['q']);
+    // ./zen/template.php:162:    $arg = explode('/', $_GET['q']);.
     $command = "if [ -d '{$root}/{$site}/themes/site/' ]; then cd {$root}/{$site}/themes/site/ ; grep -nrI --include=*.php --include=*.inc '" . implode('\|', $look_out_for) . "' . || echo 'nosecissues' ; else echo 'nope'; fi";
     $output = (string) $this->context->remoteExecutor->execute($command);
 
@@ -85,4 +86,5 @@ class ThemeSecurity extends Check {
 
     return count($rows) === 0;
   }
+
 }

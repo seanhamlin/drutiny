@@ -3,10 +3,9 @@
 namespace Drutiny\Check\D7;
 
 use Drutiny\Check\Check;
-use Drutiny\Annotation\CheckInfo;
 
 /**
- * @CheckInfo(
+ * @Drutiny\Annotation\CheckInfo(
  *  title = "Cron last run",
  *  description = "Cron should be run regularly to ensure that scheduled events are processed in a timely manner.",
  *  remediation = "Ensure a cron job has been configured for the site. If so, file a support ticket to investigate why cron has stopped working.",
@@ -16,8 +15,11 @@ use Drutiny\Annotation\CheckInfo;
  * )
  */
 class CronHasRun extends Check {
-  public function check()
-  {
+
+  /**
+   *
+   */
+  public function check() {
     if (!$cron_last = $this->context->drush->getVariable('cron_last')) {
       throw new \Exception("Cron has not run on the site.");
     }
@@ -38,4 +40,5 @@ class CronHasRun extends Check {
 
     return TRUE;
   }
+
 }

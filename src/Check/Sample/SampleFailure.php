@@ -3,11 +3,10 @@
 namespace Drutiny\Check\Sample;
 
 use Drutiny\Check\Check;
-use Drutiny\Annotation\CheckInfo;
 use Drutiny\AuditResponse\AuditResponse;
 
 /**
- * @CheckInfo(
+ * @Drutiny\Annotation\CheckInfo(
  *  title = "Sample failure",
  *  description = "Sample failure descripion.",
  *  remediation = "Sample failure remediation.",
@@ -19,8 +18,12 @@ use Drutiny\AuditResponse\AuditResponse;
  * )
  */
 class SampleFailure extends Check {
-  public function check()
-  {
+
+  /**
+   *
+   */
+  public function check() {
     return AuditResponse::AUDIT_FAILURE;
   }
+
 }

@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains Drutiny\Profile\ProfileContorller
- */
 
 namespace Drutiny\Profile;
 
@@ -10,7 +6,7 @@ use Drutiny\Exception\ProfileNotFoundException;
 use Symfony\Component\Yaml\Yaml;
 
 /**
- * Class ProfileController
+ * Class ProfileController.
  *
  * @package Drutiny\Profile
  */
@@ -104,4 +100,5 @@ class ProfileController {
 
     return $available_profiles;
   }
+
 }

@@ -4,10 +4,9 @@ namespace Drutiny\Check\D7;
 
 use Drutiny\Check\Check;
 use Drutiny\AuditResponse\AuditResponse;
-use Drutiny\Annotation\CheckInfo;
 
 /**
- * @CheckInfo(
+ * @Drutiny\Annotation\CheckInfo(
  * title = "No administrators",
  * description = "There should be no administrators other than user ID #1.",
  * remediation = "Check that only no users have the 'administrator' role, other than user ID #1.",
@@ -17,8 +16,11 @@ use Drutiny\Annotation\CheckInfo;
  * )
  */
 class NoAdministrators extends Check {
-  public function check()
-  {
+
+  /**
+   *
+   */
+  public function check() {
     $admin_role = $this->context->drush->getVariable('user_admin_role', 0);
     if (isset($admin_role)) {
       $user_roles = $this->context->drush->getAllUserRoles();
@@ -39,4 +41,5 @@ class NoAdministrators extends Check {
 
     return AuditResponse::AUDIT_SUCCESS;
   }
+
 }

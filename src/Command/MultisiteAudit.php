@@ -5,20 +5,19 @@ namespace Drutiny\Command;
 use Drutiny\Base\DrushCaller;
 use Drutiny\Base\PhantomasCaller;
 use Drutiny\Context;
-use Drutiny\Profile\Profile;
 use Drutiny\Executor\Executor;
 use Drutiny\Executor\ExecutorRemote;
 use Drutiny\Profile\ProfileController;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Yaml\Parser;
 use Drutiny\AuditResponse\AuditResponse;
 use Symfony\Component\Yaml\Yaml;
 
+/**
+ *
+ */
 class MultisiteAudit extends SiteAudit {
 
   /**
@@ -77,28 +76,29 @@ class MultisiteAudit extends SiteAudit {
     if (isset($alias['remote-host'], $alias['remote-user'])) {
       $executor = new ExecutorRemote($io);
       $executor->setRemoteUser($alias['remote-user'])
-               ->setRemoteHost($alias['remote-host']);
+        ->setRemoteHost($alias['remote-host']);
       if (isset($alias['ssh-options'])) {
         $executor->setArgument($alias['ssh-options']);
       }
       try {
         $executor->setArgument($input->getOption('ssh_options'));
       }
-      catch (InvalidArgumentException $e) {}
+      catch (InvalidArgumentException $e) {
+      }
       $this->isRemote = TRUE;
     }
 
     $context = new Context();
     $context->set('input', $input)
-            ->set('output', $output)
-            ->set('io', $io)
-            ->set('reportsDir', $reports_dir)
-            ->set('executor', $executor)
-            ->set('profile', $profile)
-            ->set('remoteExecutor', $executor)
-            ->set('drush', $drush)
-            ->set('phantomas', $phantomas)
-            ->set('autoRemediate', $input->getOption('auto-remediate'));
+      ->set('output', $output)
+      ->set('io', $io)
+      ->set('reportsDir', $reports_dir)
+      ->set('executor', $executor)
+      ->set('profile', $profile)
+      ->set('remoteExecutor', $executor)
+      ->set('drush', $drush)
+      ->set('phantomas', $phantomas)
+      ->set('autoRemediate', $input->getOption('auto-remediate'));
 
     $yaml = file_get_contents($input->getOption('domain-file'));
     $domains = Yaml::parse($yaml);
@@ -117,15 +117,15 @@ class MultisiteAudit extends SiteAudit {
       $domain = $values['domain'];
       $drush = new DrushCaller($executor, $input->getOption('drush-bin'));
       $drush->setArgument('--uri=' . $domain)
-            ->setArgument('--root=' . $alias['root'])
-            ->setIsRemote($this->isRemote)
-            ->setSingleSite(FALSE);
+        ->setArgument('--root=' . $alias['root'])
+        ->setIsRemote($this->isRemote)
+        ->setSingleSite(FALSE);
 
       $context->set('drush', $drush);
 
       $phantomas->setDomain($domain)
-                ->setDrush($drush)
-                ->clearMetrics();
+        ->setDrush($drush)
+        ->clearMetrics();
       $context->set('phantomas', $phantomas);
 
       $io->comment("[{$i}] Running audit over: {$domain}");
@@ -139,7 +139,7 @@ class MultisiteAudit extends SiteAudit {
         if (in_array($result->getStatus(), [AuditResponse::AUDIT_SUCCESS, AuditResponse::AUDIT_NA], TRUE)) {
           $passes[] = (string) $result;
         }
-        else if ($result->getStatus() === AuditResponse::AUDIT_WARNING) {
+        elseif ($result->getStatus() === AuditResponse::AUDIT_WARNING) {
           $warnings[] = (string) $result;
         }
         else {
@@ -177,4 +177,5 @@ class MultisiteAudit extends SiteAudit {
 
     $io->text('Execution time: ' . $this->timerEnd() . ' seconds');
   }
+
 }

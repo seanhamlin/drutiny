@@ -4,11 +4,9 @@ namespace Drutiny\Check\Phantomas;
 
 use Drutiny\Check\Check;
 use Drutiny\AuditResponse\AuditResponse;
-use Drutiny\Executor\DoesNotApplyException;
-use Drutiny\Annotation\CheckInfo;
 
 /**
- * @CheckInfo(
+ * @Drutiny\Annotation\CheckInfo(
  *  title = "Page weight",
  *  description = "You should aim to keep your page weight as low as possible to ensure speedy download and rendering times for your site. This impacts not only your site's user experience but also it's SEO.",
  *  remediation = "Look to optimise the largest and slowest files.",
@@ -20,8 +18,10 @@ use Drutiny\Annotation\CheckInfo;
  */
 class PageWeight extends Check {
 
-  public function check()
-  {
+  /**
+   *
+   */
+  public function check() {
     $pageWeightBytes = $this->context->phantomas->getMetric('contentLength');
     $pageWeightInMB = (float) ($pageWeightBytes / (1024 * 1024));
     $pageWeightFriendly = sprintf('%0.2f', $pageWeightInMB);
@@ -45,4 +45,5 @@ class PageWeight extends Check {
 
     return AuditResponse::AUDIT_SUCCESS;
   }
+
 }

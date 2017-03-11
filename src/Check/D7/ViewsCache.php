@@ -3,10 +3,9 @@
 namespace Drutiny\Check\D7;
 
 use Drutiny\Check\Check;
-use Drutiny\Annotation\CheckInfo;
 
 /**
- * @CheckInfo(
+ * @Drutiny\Annotation\CheckInfo(
  *  title = "Views caching",
  *  description = "Having views caching can be great for performance.",
  *  remediation = "Enable views caching",
@@ -16,6 +15,10 @@ use Drutiny\Annotation\CheckInfo;
  * )
  */
 class ViewsCache extends Check {
+
+  /**
+   *
+   */
   public function check() {
 
     $output = $this->context->drush->runScript('ViewsCache');
@@ -23,4 +26,5 @@ class ViewsCache extends Check {
 
     return TRUE;
   }
+
 }

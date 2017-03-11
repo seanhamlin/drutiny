@@ -4,11 +4,9 @@ namespace Drutiny\Check\Phantomas;
 
 use Drutiny\Check\Check;
 use Drutiny\AuditResponse\AuditResponse;
-use Drutiny\Executor\DoesNotApplyException;
-use Drutiny\Annotation\CheckInfo;
 
 /**
- * @CheckInfo(
+ * @Drutiny\Annotation\CheckInfo(
  *  title = "In page 404s",
  *  description = "You should not have any broken assets on your page.",
  *  remediation = "Fix the 404s.",
@@ -19,8 +17,10 @@ use Drutiny\Annotation\CheckInfo;
  */
 class InPage404s extends Check {
 
-  public function check()
-  {
+  /**
+   *
+   */
+  public function check() {
     $not_found = (int) $this->context->phantomas->getMetric('notFound');
     $total = $this->context->phantomas->getMetric('requests');
 
@@ -36,4 +36,5 @@ class InPage404s extends Check {
 
     return AuditResponse::AUDIT_SUCCESS;
   }
+
 }

@@ -2,15 +2,18 @@
 
 namespace Drutiny\Base;
 
-use Drutiny\Executor\ExecutorInterface;
-
+/**
+ *
+ */
 class RandomLib {
 
   /**
-   * Generate a random string
+   * Generate a random string.
    *
-   * @param integer $length [optional]
+   * @param int $length
+   *   [optional]
    *   the length of the random string.
+   *
    * @return string
    *   the random string.
    */

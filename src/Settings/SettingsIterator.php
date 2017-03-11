@@ -1,12 +1,15 @@
 <?php
 
 namespace Drutiny\Settings;
-use Drutiny\Base\DrushCaller;
 
+use Drutiny\Base\DrushCaller;
 
 /**
  * @file
- * Contains Drutiny\Settings\SettingsIterator
+ * Contains Drutiny\Settings\SettingsIterator.
+ */
+/**
+ *
  */
 abstract class SettingsIterator implements \Iterator {
 
@@ -36,7 +39,7 @@ abstract class SettingsIterator implements \Iterator {
    *
    * @TODO: Consider injecting or having accessible as a singleton.
    *
-   * @var DrushCaller
+   * @var \Drutiny\Base\DrushCaller
    */
   private $drush;
 
@@ -44,9 +47,9 @@ abstract class SettingsIterator implements \Iterator {
    * SettingsIterator constructor.
    *
    * @param array $settings
-   *   An array of settings {setting key} => {value}
+   *   An array of settings {setting key} => {value}.
    * @param \Drutiny\Base\DrushCaller $drush
-   *  An instance of DrushCaller so we can validate settings.
+   *   An instance of DrushCaller so we can validate settings.
    */
   public function __construct(array $settings = [], DrushCaller $drush = NULL) {
     $this->position = 0;
@@ -58,7 +61,7 @@ abstract class SettingsIterator implements \Iterator {
   /**
    * Restart the iterator.
    */
-  function rewind() {
+  public function rewind() {
     $this->position = 0;
   }
 
@@ -67,7 +70,7 @@ abstract class SettingsIterator implements \Iterator {
    *
    * @return mixed
    */
-  function current() {
+  public function current() {
     return $this->values[$this->position];
   }
 
@@ -76,7 +79,7 @@ abstract class SettingsIterator implements \Iterator {
    *
    * @return string
    */
-  function key() {
+  public function key() {
     return $this->keys[$this->position];
   }
 
@@ -86,7 +89,7 @@ abstract class SettingsIterator implements \Iterator {
    * @return bool
    *   If there are more items to iterate through.
    */
-  function next() {
+  public function next() {
     ++$this->position;
     return $this->position < count($this->keys);
   }
@@ -96,10 +99,13 @@ abstract class SettingsIterator implements \Iterator {
    *
    * @return \Drutiny\Base\DrushCaller
    */
-  function drush() {
+  public function drush() {
     return $this->drush;
   }
 
-  abstract function valid();
+  /**
+   *
+   */
+  abstract public function valid();
 
 }

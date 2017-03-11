@@ -2,13 +2,10 @@
 
 namespace Drutiny\Check\D7;
 
-use Drutiny\AuditResponse\AuditResponse;
 use Drutiny\Check\Check;
-use Drutiny\Executor\DoesNotApplyException;
-use Drutiny\Annotation\CheckInfo;
 
 /**
- * @CheckInfo(
+ * @Drutiny\Annotation\CheckInfo(
  *  title = "Date timezone",
  *  description = "Tests to ensure the site has a timezone that matches what is expected. If the timezone is set incorrectly it can result in dates that make no sense to your end users.",
  *  remediation = "Set the timezone correctly.",
@@ -18,6 +15,10 @@ use Drutiny\Annotation\CheckInfo;
  * )
  */
 class DateDefaultTimezone extends Check {
+
+  /**
+   *
+   */
   public function check() {
     // This defaults to "date_default_timezone_get()" in Drupal.
     $date_default_timezone = $this->context->drush->getVariable('date_default_timezone', '');
@@ -39,4 +40,5 @@ class DateDefaultTimezone extends Check {
     $this->setToken('errors', implode(', ', $errors));
     return empty($errors);
   }
+
 }

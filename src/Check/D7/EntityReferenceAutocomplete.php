@@ -1,19 +1,14 @@
 <?php
-/**
- * @file
- * Contains Drutiny\Check\D7\EntityReferenceAutocomplete
- */
 
 namespace Drutiny\Check\D7;
 
 use Drutiny\Base\Serializer;
 use Drutiny\Check\Check;
 use Drutiny\AuditResponse\AuditResponse;
-use Drutiny\Annotation\CheckInfo;
 use Drutiny\Executor\DoesNotApplyException;
 
 /**
- * @CheckInfo(
+ * @Drutiny\Annotation\CheckInfo(
  *  title = "Entity reference autocomplete",
  *  description = "Ensure that entity reference fields are configured correctly.",
  *  remediation = "Change the following field definitions to autocomplete as they are referencing entities above the threshold (<b>:threshold</b>): <ul><li>:error_replace.</li></ul>",
@@ -48,8 +43,9 @@ class EntityReferenceAutocomplete extends Check {
 
     try {
       $output = $this->context->drush->sqlQuery("SELECT fc.field_name, fc.data, fci.data FROM {field_config} fc JOIN {field_config_instance} fci ON fc.id = fci.field_id WHERE fc.type = 'entityreference'");
-    } catch (\Exception $e) {
-      throw new DoesNotApplyException;
+    }
+    catch (\Exception $e) {
+      throw new DoesNotApplyException();
     }
 
     foreach ($output as $line) {
@@ -88,7 +84,7 @@ class EntityReferenceAutocomplete extends Check {
 
     $this->setToken('num_fields', $valid);
     $this->setToken('num_plural', $valid > 1 ? 's' : '');
-    $this->setToken('error_replace', implode('</li><li>',  $this->errors));
+    $this->setToken('error_replace', implode('</li><li>', $this->errors));
     $this->setToken('error_count', count($this->errors));
     $this->setToken('error_plural', count($this->errors) > 1 ? 's' : '');
     $this->setToken('threshold', $this->getOption('threshold', 100));
@@ -148,6 +144,7 @@ class EntityReferenceAutocomplete extends Check {
    *   Field info array as extracted from the DB.
    * @param array $field_instance_info
    *   Field instance info array as extracted from the DB.
+   *
    * @return bool
    */
   private function processResult(array $result = [], $field_name = '', array $field_info = [], array $field_instance_info = []) {
@@ -184,7 +181,8 @@ class EntityReferenceAutocomplete extends Check {
 
     try {
       $result = $this->context->drush->sqlQuery("SELECT count(ttd.tid) as count FROM {taxonomy_term_data} ttd");
-    } catch(\Exception $e) {
+    }
+    catch (\Exception $e) {
       return $this->getOption('implicit', TRUE);
     }
 
@@ -213,10 +211,12 @@ class EntityReferenceAutocomplete extends Check {
 
     try {
       $result = $this->context->drush->sqlQuery("SELECT count(node.nid) as count FROM {node} node WHERE node.type in (" . $node_types . ")");
-    } catch (\Exception $e) {
+    }
+    catch (\Exception $e) {
       return $this->getOption('implicit', TRUE);
     }
 
     return $result;
   }
+
 }

@@ -3,10 +3,9 @@
 namespace Drutiny\Check\D7;
 
 use Drutiny\Check\Check;
-use Drutiny\Annotation\CheckInfo;
 
 /**
- * @CheckInfo(
+ * @Drutiny\Annotation\CheckInfo(
  *  title = "Securepages basepath",
  *  description = "The securepages module redirects the user to HTTPS given certain conditions. It is known to cause issues when you redirect to the production domain in all cases (e.g. you are trying to test on a test version of the site).",
  *  remediation = "Delete the 2 variables <code>securepages_basepath</code> and <code>securepages_basepath_ssl</code>, or set them to a blank string.",
@@ -16,8 +15,11 @@ use Drutiny\Annotation\CheckInfo;
  * )
  */
 class SecurepagesBasepath extends Check {
-  public function check()
-  {
+
+  /**
+   *
+   */
+  public function check() {
     // If the module is disabled, then no shield.
     if ($this->context->drush->moduleEnabled('securepages')) {
       // Shield must be enabled, defaults to on.
@@ -33,4 +35,5 @@ class SecurepagesBasepath extends Check {
 
     return TRUE;
   }
+
 }

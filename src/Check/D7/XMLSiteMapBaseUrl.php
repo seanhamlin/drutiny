@@ -4,10 +4,9 @@ namespace Drutiny\Check\D7;
 
 use Drutiny\Check\Check;
 use Drutiny\Executor\DoesNotApplyException;
-use Drutiny\Annotation\CheckInfo;
 
 /**
- * @CheckInfo(
+ * @Drutiny\Annotation\CheckInfo(
  *  title = "XML sitemap base URL",
  *  description = "The XML sitemap module adds a sitemap on the URL <code>/sitemap.xml</code>. If not properly configured, the sitemap will point to an incorrect or possibly broken site.",
  *  remediation = "Set the variable <code>xmlsitemap_base_url</code> to be the production www URL. e.g. <code>'https://www.govcms.gov.au'</code>. Note there is no trailing slash.",
@@ -18,8 +17,11 @@ use Drutiny\Annotation\CheckInfo;
  * )
  */
 class XMLSiteMapBaseUrl extends Check {
-  public function check()
-  {
+
+  /**
+   *
+   */
+  public function check() {
     // If the module is disabled, then no xmlsitemap.
     if ($this->context->drush->moduleEnabled('xmlsitemap')) {
 
@@ -43,4 +45,5 @@ class XMLSiteMapBaseUrl extends Check {
 
     return TRUE;
   }
+
 }

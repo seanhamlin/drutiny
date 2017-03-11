@@ -4,6 +4,9 @@ namespace Drutiny\Base;
 
 use Drutiny\Executor\ExecutorInterface;
 
+/**
+ * Drush integration.
+ */
 class DrushCaller {
   protected $executor;
   protected $drushAlias;
@@ -18,6 +21,9 @@ class DrushCaller {
   protected $isRemote = FALSE;
   protected $singleSite = TRUE;
 
+  /**
+   *
+   */
   public function __construct(ExecutorInterface $executor, $drushAlias = 'drush') {
     $this->executor = $executor;
 
@@ -26,30 +32,45 @@ class DrushCaller {
     $this->configurationList = new \stdClass();
   }
 
+  /**
+   *
+   */
   public function setAlias($alias) {
     $this->alias = $alias;
     return $this;
   }
 
+  /**
+   *
+   */
   public function setArgument($arg) {
     $this->args[] = $arg;
     return $this;
   }
 
+  /**
+   * Is the site being audited being executed through a SSH wrapper.
+   */
   public function setIsRemote($isRemote) {
     $this->isRemote = $isRemote;
     return $this;
   }
 
+  /**
+   *
+   */
   public function setSingleSite($singleSite) {
     $this->singleSite = $singleSite;
     return $this;
   }
 
+  /**
+   * Converts into method into a Drush command.
+   */
   public function __call($method, $args) {
     // Convert method from camelCase to Drush hyphen based method naming.
     // E.g. PmInfo will become pm-info.
-    preg_match_all('/((?:^|[A-Z])[a-z]+)/',$method,$matches);
+    preg_match_all('/((?:^|[A-Z])[a-z]+)/', $method, $matches);
     $method = implode('-', array_map('strtolower', $matches[0]));
 
     $command = [$this->drushAlias];
@@ -62,13 +83,10 @@ class DrushCaller {
     }
 
     foreach ($args as &$arg) {
-      // no need to quote drush arguments.
+      // No need to quote drush arguments.
       if (strpos($arg, '--') === 0) {
         $arg = addcslashes($arg, '"');
       }
-      /*else {
-        $arg = "'" . addcslashes($arg, '"') . "'";
-      }*/
     }
 
     $command[] = $method;
@@ -84,6 +102,7 @@ class DrushCaller {
    *   The filename of the script in the './src/Scripts/' folder. The .php
    *   extens is not required. The script in question should return JSON for
    *   all of it's results.
+   *
    * @return [String]
    *   The result of the Drush command.
    */
@@ -136,11 +155,12 @@ class DrushCaller {
     return $result->getOutput();
   }
 
-
   /**
    * Get a drush core status from the site.
    *
-   * @param $key [string]
+   * @param [string] $key
+   *   Filters the core status array by a key if present.
+   *
    * @return a drush core status object.
    */
   public function getCoreStatus($key = NULL) {
@@ -166,6 +186,8 @@ class DrushCaller {
    * Try to find out if a module is enabled or not.
    *
    * @param $name
+   *   The module machine name.
+   *
    * @return bool
    *   TRUE if the module is enabled, FALSE otherwise (including if the module
    *   was not found).
@@ -198,6 +220,7 @@ class DrushCaller {
    *   The name of the variable (exact).
    * @param int $default
    *   The value to return if the variable is not set.
+   *
    * @return mixed
    */
   public function getVariable($name, $default = 0) {
@@ -228,6 +251,7 @@ class DrushCaller {
    *   The name of the variable (exact).
    * @param int $default
    *   The value to return if the variable is not set.
+   *
    * @return mixed
    */
   public function setVariable($name, $value) {
@@ -241,6 +265,7 @@ class DrushCaller {
    *
    * @param $name
    *   The name of the variable (exact).
+   *
    * @return mixed
    */
   public function deleteVariable($name) {
@@ -257,6 +282,7 @@ class DrushCaller {
    *   The config key, for example "page.front".
    * @param int $default
    *   The value to return if the configuration key is not set.
+   *
    * @return mixed
    */
   public function getConfig($configName, $key, $default = 0) {
@@ -286,9 +312,10 @@ class DrushCaller {
   }
 
   /**
-   * Determine if shield module is active, and is also enabled.
+   * Determine if shield module is enabled, and is also active.
    *
-   * @return boolean
+   * @return bool
+   *   Whether or no sheild is enabled and active.
    */
   public function isShieldEnabled() {
     // If the module is disabled, then no shield.
@@ -315,6 +342,7 @@ class DrushCaller {
    *   The name of the variable (exact).
    * @param int $default
    *   The value to return if the variable is not set.
+   *
    * @return mixed
    */
   public function getVariableFromDB($name, $default = 0) {
@@ -323,7 +351,7 @@ class DrushCaller {
       if (empty($output)) {
         $value = $default;
       }
-      else if (count($output) == 1) {
+      elseif (count($output) == 1) {
         if (empty($output[0])) {
           $value = $default;
         }
@@ -344,28 +372,36 @@ class DrushCaller {
     }
   }
 
+  /**
+   * List all role assignments to users who are not user #1.
+   */
   public function getAllUserRoles() {
     return $this->sqlQuery('SELECT rid FROM {users_roles} WHERE uid > 1;');
   }
 
+  /**
+   * List all roles.
+   */
   public function getAllRoles() {
     return $this->roleList('--format=json')->parseJson(TRUE);
   }
 
   /**
-   * Try to return a list of roles assigned to a permission
+   * Try to return a list of roles assigned to a permission.
    *
    * @param $permission
-   *  The permission name,e.g. 'administer nodes'
+   *   The permission name,e.g. 'administer nodes'.
    *
    * @return list
-   *  Return a list of roles assigned to the permission
+   *   Return a list of roles assigned to the permission.
    */
   public function getRolesForPermission($permission) {
     try {
       return $this->roleList('--format=json', '--filter="' . $permission . '"')->parseJson(TRUE);
-    } catch (\Exception $e) {
+    }
+    catch (\Exception $e) {
       return NULL;
     }
   }
+
 }

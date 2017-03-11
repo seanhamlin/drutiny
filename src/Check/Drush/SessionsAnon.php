@@ -3,10 +3,9 @@
 namespace Drutiny\Check\Drush;
 
 use Drutiny\Check\Check;
-use Drutiny\Annotation\CheckInfo;
 
 /**
- * @CheckInfo(
+ * @Drutiny\Annotation\CheckInfo(
  *  title = "Anonymous sessions",
  *  description = "If you are generating sessions for anonymous users, you are causing a major performance impact to your site. Having anonymous sessions will break traditional page caching in Varnish and CDNs.",
  *  remediation = "Find out what modules are causing the sessions, and look to remove them.",
@@ -16,6 +15,10 @@ use Drutiny\Annotation\CheckInfo;
  * )
  */
 class SessionsAnon extends Check {
+
+  /**
+   *
+   */
   public function check() {
 
     // Exclude openid sessions, as these are for people that are trying to login
@@ -24,7 +27,7 @@ class SessionsAnon extends Check {
     if (empty($output)) {
       $number_of_anon_sessions = 0;
     }
-    else if (count($output) == 1) {
+    elseif (count($output) == 1) {
       $number_of_anon_sessions = (int) $output[0];
     }
     else {
@@ -36,4 +39,5 @@ class SessionsAnon extends Check {
 
     return $number_of_anon_sessions === 0;
   }
+
 }

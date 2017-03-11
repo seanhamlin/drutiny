@@ -5,6 +5,9 @@ namespace Drutiny\Base;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ *
+ */
 class CoreStatus {
 
   const DRUSH_BIN = 'drush';
@@ -21,6 +24,9 @@ class CoreStatus {
   protected $root;
   protected $site;
 
+  /**
+   *
+   */
   public function __construct($alias, InputInterface $input, OutputInterface $output) {
     $this->alias = $alias;
     $this->input = $input;
@@ -37,6 +43,9 @@ class CoreStatus {
     $this->remote_user = $this->site_alias['remote-user'];
   }
 
+  /**
+   *
+   */
   private function fetchCoreStatus() {
     $command = self::DRUSH_BIN . ' @' . $this->alias . ' core-status --format=json';
 
@@ -54,7 +63,7 @@ class CoreStatus {
       throw new \Exception("Drush command failed ($return_var): " . print_r($output, 1));
     }
 
-    // unwrap output if there is only a single line.
+    // Unwrap output if there is only a single line.
     if (count($output) === 1) {
       $output = json_decode(current($output));
       return $output;
@@ -63,6 +72,9 @@ class CoreStatus {
     throw new \Exception('invalid response');
   }
 
+  /**
+   *
+   */
   private function fetchSiteAlias() {
     $command = self::DRUSH_BIN . ' site-alias @' . $this->alias . ' --format=json';
 
@@ -80,7 +92,7 @@ class CoreStatus {
       throw new \Exception("Drush command failed ($return_var): " . print_r($output, 1));
     }
 
-    // unwrap output if there is only a single line.
+    // Unwrap output if there is only a single line.
     if (count($output) === 1) {
       $output = json_decode(current($output));
       return (array) $output->{$this->alias};

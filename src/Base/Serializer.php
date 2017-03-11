@@ -1,19 +1,16 @@
 <?php
-/**
- * @file
- * Contains Drutiny\Base\Serializer
- */
 
 namespace Drutiny\Base;
 
 /**
- * Class Serializer
+ * Class Serializer.
  *
  * Attempts to repair broken serialised strings.
  *
  * @package Drutiny\Base
  */
 class Serializer {
+
   /**
    * Attempt to unserialize data from the DB.
    *
@@ -38,7 +35,7 @@ class Serializer {
     // Attempt to recalculate the length of each part of the serialised string.
     $data = preg_replace_callback(
       '/(?<=^|\{|;)s:(\d+):\"(.*?)\";(?=[asbdiO]\:\d|N;|\}|$)/s',
-      function($m){
+      function ($m) {
         return 's:' . mb_strlen($m[2]) . ':"' . $m[2] . '";';
       },
       $data
@@ -47,4 +44,5 @@ class Serializer {
     // Will === FALSE if we still can't unserialise.
     return @unserialize($data);
   }
+
 }

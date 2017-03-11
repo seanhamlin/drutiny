@@ -2,12 +2,10 @@
 
 namespace Drutiny\AuditResponse;
 
-use Drutiny\Executor\DoesNotApplyException;
-use Drutiny\Executor\ResultException;
 use Drutiny\Check\Check;
 
 /**
- * Class AuditResponse
+ * Class AuditResponse.
  *
  * @package Drutiny\AuditResponse
  */
@@ -41,16 +39,20 @@ class AuditResponse {
   public function __toString() {
     try {
       switch ($this->status) {
-        case self::AUDIT_SUCCESS :
+        case self::AUDIT_SUCCESS:
           return '<info>' . $this->getMessage('success') . '</info>';
-        case self::AUDIT_NA :
+
+        case self::AUDIT_NA:
           return '<info>' . $this->getMessage('na') . '</info>';
-        case self::AUDIT_WARNING :
+
+        case self::AUDIT_WARNING:
           return '<comment>' . $this->getMessage('warning') . '</comment>';
-        case self::AUDIT_FAILURE :
+
+        case self::AUDIT_FAILURE:
           return '<error>' . $this->getMessage('failure') . '</error>';
-        case self::AUDIT_ERROR :
-        default :
+
+        case self::AUDIT_ERROR:
+        default:
           return '<error>' . $this->getMessage('exception') . '</error>';
       }
     }
@@ -159,4 +161,5 @@ class AuditResponse {
   public function getTitle() {
     return $this->translate($this->check->getInfo()->title);
   }
+
 }

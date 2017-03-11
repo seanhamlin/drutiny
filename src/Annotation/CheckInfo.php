@@ -5,8 +5,7 @@ namespace Drutiny\Annotation;
 /**
  * @Annotation
  */
-class CheckInfo
-{
+class CheckInfo {
   public $title;
   public $description;
   public $remediation;
@@ -18,4 +17,5 @@ class CheckInfo
   public $notice;
   public $supports_remediation = FALSE;
   public $testing = FALSE;
+
 }

@@ -2,9 +2,11 @@
 
 namespace Drutiny\Base;
 
-use Drutiny\Base\DrushCaller;
 use Drutiny\Executor\ExecutorInterface;
 
+/**
+ *
+ */
 class PhantomasCaller {
   protected $executor;
   protected $drush;
@@ -13,11 +15,17 @@ class PhantomasCaller {
   protected $metrics = NULL;
   protected $urls = [];
 
+  /**
+   *
+   */
   public function __construct(ExecutorInterface $executor, DrushCaller $drush) {
     $this->executor = $executor;
     $this->drush = $drush;
   }
 
+  /**
+   *
+   */
   public function setDomain($domain) {
     // @todo make the URL protocol configurable.
     if (strpos($domain, 'http') !== 0) {
@@ -27,16 +35,25 @@ class PhantomasCaller {
     return $this;
   }
 
+  /**
+   *
+   */
   public function setUrls($urls) {
     $this->urls = $urls;
     return $this;
   }
 
+  /**
+   *
+   */
   public function setDrush(DrushCaller $drush) {
     $this->drush = $drush;
     return $this;
   }
 
+  /**
+   *
+   */
   public function getMetrics($url = '/') {
     $command = ['phantomas'];
     $command[] = '"' . $this->domain . $url . '"';
@@ -61,8 +78,8 @@ class PhantomasCaller {
     // these by:
     //
     // export DRUTINY_HTTP_AUTH_USER=[USERNAME]
-    // export DRUTINY_HTTP_AUTH_PASS=[PASSWORD]
-    else if (!empty(getenv('DRUTINY_HTTP_AUTH_USER'))) {
+    // export DRUTINY_HTTP_AUTH_PASS=[PASSWORD].
+    elseif (!empty(getenv('DRUTINY_HTTP_AUTH_USER'))) {
       $username = getenv('DRUTINY_HTTP_AUTH_USER');
       $password = getenv('DRUTINY_HTTP_AUTH_PASS');
       $command[] = "--auth-user='$username'";
@@ -127,7 +144,5 @@ class PhantomasCaller {
       return $default;
     }
   }
-
-
 
 }

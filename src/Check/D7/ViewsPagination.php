@@ -1,19 +1,13 @@
 <?php
-/**
- * @file
- * Contains Drutiny\Check\D7\ViewsPagination
- */
 
 namespace Drutiny\Check\D7;
 
 use Drutiny\AuditResponse\AuditResponse;
 use Drutiny\Base\Serializer;
 use Drutiny\Check\Check;
-use Drutiny\Annotation\CheckInfo;
-
 
 /**
- * @CheckInfo(
+ * @Drutiny\Annotation\CheckInfo(
  *   title = "Views Pagination",
  *   description = "Ensure views pagination is not over a threshold",
  *   remediation = "Change the following views pagination settings to below :threshold: <ul><li>:error</li></ul>",
@@ -24,6 +18,10 @@ use Drutiny\Annotation\CheckInfo;
  * )
  */
 class ViewsPagination extends Check {
+
+  /**
+   *
+   */
   public function check() {
 
     if (!$this->context->drush->moduleEnabled('views')) {
@@ -54,10 +52,11 @@ class ViewsPagination extends Check {
 
     $this->setToken('total', $valid);
     $this->setToken('plural', $valid > 1 ? 's' : '');
-    $this->setToken('error', implode('</li><li>',  $errors));
+    $this->setToken('error', implode('</li><li>', $errors));
     $this->setToken('threshold', $this->getOption('threshold', 30));
     $this->setToken('error_count', count($errors));
 
     return empty($errors) ? AuditResponse::AUDIT_SUCCESS : AuditResponse::AUDIT_FAILURE;
   }
+
 }

@@ -4,22 +4,24 @@ namespace Drutiny\Check\Drush;
 
 use Drutiny\Base\RandomLib;
 use Drutiny\Check\Check;
-use Drutiny\Annotation\CheckInfo;
 
 /**
- * @CheckInfo(
- * title = "User #1",
- * description = "It is important to lock down user #1 in Drupal, this user is special an ignores access control.",
- * remediation = "Change the username to be random, set the email address to go nowhere, set the password to something secure.",
- * success = "User #1 is locked down.:fixups",
- * failure = "User #1 is not secure.:errors",
- * exception = "Could not determine user #1 settings.",
- * supports_remediation = TRUE,
+ * @Drutiny\Annotation\CheckInfo(
+ *  title = "User #1",
+ *  description = "It is important to lock down user #1 in Drupal, this user is special an ignores access control.",
+ *  remediation = "Change the username to be random, set the email address to go nowhere, set the password to something secure.",
+ *  success = "User #1 is locked down.:fixups",
+ *  failure = "User #1 is not secure.:errors",
+ *  exception = "Could not determine user #1 settings.",
+ *  supports_remediation = TRUE,
  * )
  */
 class User1 extends Check {
-  public function check()
-  {
+
+  /**
+   *
+   */
+  public function check() {
     // Get the details for user #1.
     $user = (array) $this->context->drush->userInformation('--format=json', '1')->parseJson();
     $user = array_pop($user);
@@ -79,4 +81,5 @@ class User1 extends Check {
     $this->setToken('fixups', ' ' . implode(', ', $fixups));
     return empty($errors);
   }
+
 }

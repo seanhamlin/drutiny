@@ -16,15 +16,19 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Yaml\Parser;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 
+/**
+ *
+ */
 class SiteAudit extends Command {
 
   protected $start = NULL;
   protected $end = NULL;
 
-  // Keeps track on whether this is a local or remote site audit.
+  /**
+   * Keeps track on whether this is a local or remote site audit.
+   */
   protected $isRemote = FALSE;
 
   /**
@@ -43,7 +47,7 @@ class SiteAudit extends Command {
       )
       ->addOption(
         'ssh_options',
-        null,
+        NULL,
         InputOption::VALUE_REQUIRED,
         'Passthrough any SSH options directly to SSH.',
         ''
@@ -72,8 +76,7 @@ class SiteAudit extends Command {
         'drush-alias',
         InputArgument::REQUIRED,
         'The drush alias for the site you wish to audit.'
-      )
-    ;
+      );
   }
 
   /**
@@ -120,31 +123,32 @@ class SiteAudit extends Command {
 
     $context = new Context();
     $context->set('input', $input)
-            ->set('output', $output)
-            ->set('io', $io)
-            ->set('reportsDir', $reports_dir)
-            ->set('profile', $profile)
-            ->set('executor', $executor)
-            ->set('remoteExecutor', $executor)
-            ->set('drush', $drush)
-            ->set('phantomas', $phantomas)
-            ->set('alias', $drush_alias)
-            ->set('config', $alias)
-            ->set('autoRemediate', $input->getOption('auto-remediate'));
+      ->set('output', $output)
+      ->set('io', $io)
+      ->set('reportsDir', $reports_dir)
+      ->set('profile', $profile)
+      ->set('executor', $executor)
+      ->set('remoteExecutor', $executor)
+      ->set('drush', $drush)
+      ->set('phantomas', $phantomas)
+      ->set('alias', $drush_alias)
+      ->set('config', $alias)
+      ->set('autoRemediate', $input->getOption('auto-remediate'));
 
     // Some checks don't use drush and connect to the server directly so we need
     // a remote executor available as well.
     if (isset($alias['remote-host'], $alias['remote-user'])) {
       $executor = new ExecutorRemote($io);
       $executor->setRemoteUser($alias['remote-user'])
-               ->setRemoteHost($alias['remote-host']);
+        ->setRemoteHost($alias['remote-host']);
       if (isset($alias['ssh-options'])) {
         $executor->setArgument($alias['ssh-options']);
       }
       try {
         $executor->setArgument($input->getOption('ssh_options'));
       }
-      catch (InvalidArgumentException $e) {}
+      catch (InvalidArgumentException $e) {
+      }
       $context->set('remoteExecutor', $executor);
       $this->isRemote = TRUE;
       $drush->setIsRemote($this->isRemote);
@@ -163,7 +167,7 @@ class SiteAudit extends Command {
       if (in_array($result->getStatus(), [AuditResponse::AUDIT_SUCCESS, AuditResponse::AUDIT_NA], TRUE)) {
         $passes[] = (string) $result;
       }
-      else if ($result->getStatus() === AuditResponse::AUDIT_WARNING) {
+      elseif ($result->getStatus() === AuditResponse::AUDIT_WARNING) {
         $warnings[] = (string) $result;
       }
       else {
@@ -186,22 +190,29 @@ class SiteAudit extends Command {
   /**
    * Check to see if a given command exists in the source system.
    *
-   * @param  String $cmd
+   * @param string $cmd
    *   The command you want to see if it exists.
+   *
    * @return bool
    *   Whether or not a particular command exists.
    */
-  function command_exist($cmd) {
+  public function command_exist($cmd) {
     $return_val = shell_exec(sprintf("which %s", escapeshellarg($cmd)));
     return !empty($return_val);
   }
 
+  /**
+   * Start the execution timer.
+   */
   protected function timerStart() {
-    $this->start = microtime(true);
+    $this->start = microtime(TRUE);
   }
 
+  /**
+   * Stop the execution timer.
+   */
   protected function timerEnd() {
-    $this->end = microtime(true);
+    $this->end = microtime(TRUE);
     return (int) ($this->end - $this->start);
   }
 
@@ -212,6 +223,7 @@ class SiteAudit extends Command {
    *   The context of the check.
    * @param $print
    *   Whether the check should print to the CLI.
+   *
    * @return array
    *   Array of results.
    */
@@ -235,6 +247,7 @@ class SiteAudit extends Command {
    *   The context of the check.
    * @param $print
    *   Whether the check should print to the CLI.
+   *
    * @return array
    *   Array of results.
    */
@@ -267,16 +280,23 @@ class SiteAudit extends Command {
    * Convert the results into HTML.
    *
    * @param string $template
-   * @param [type]          $reports_dir [description]
-   * @param OutputInterface $output      [description]
-   * @param Profile         $profile     [description]
-   * @param Array           $site        [description]
+   *   The name of the twig template (without the .html.twig extension).
+   * @param string $reports_dir
+   *   Where the report will be written to.
+   * @param \Symfony\Component\Console\Style\SymfonyStyle $io
+   *   The output style.
+   * @param Profile $profile
+   *   All the information about the checks.
+   * @param array $site
+   *   Information for a single site.
+   * @param array $sites
+   *   Information for multiple single sites.
    */
-  protected function writeHTMLReport($template, $reports_dir, SymfonyStyle $io, $profile, Array $site, Array $sites = []) {
+  protected function writeHTMLReport($template, $reports_dir, SymfonyStyle $io, $profile, array $site, array $sites = []) {
     $loader = new \Twig_Loader_Filesystem(__DIR__ . '/../../templates');
     $twig = new \Twig_Environment($loader, array(
       'cache' => sys_get_temp_dir() . '/cache',
-      'auto_reload' => true,
+      'auto_reload' => TRUE,
     ));
     $filter = new \Twig_SimpleFilter('filterXssAdmin', [$this, 'filterXssAdmin'], [
       'is_safe' => ['html'],
@@ -311,6 +331,7 @@ class SiteAudit extends Command {
    *
    * @param string $string
    *   The string to strip.
+   *
    * @return string
    *   The stripped string.
    */

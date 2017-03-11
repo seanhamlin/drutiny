@@ -1,14 +1,15 @@
 <?php
 
 namespace Drutiny\Profile;
+
 use Drutiny\Check\Registry;
 
 /**
- * Class Profile
+ * Class Profile.
+ *
  * @package Drutiny\Profile
  */
-class Profile
-{
+class Profile {
 
   /**
    * A title for a given profile.
@@ -58,33 +59,31 @@ class Profile
   }
 
   /**
-   * Set the Profile title
+   * Set the Profile title.
    *
    * @param string $title
-   *    A title to set for the profile.
+   *   A title to set for the profile.
    *
    * @return $this
    *   The profile instance.
    */
-  public function setTitle($title)
-  {
+  public function setTitle($title) {
     $this->title = $title;
     return $this;
   }
 
   /**
-   * Get the Profile title
+   * Get the Profile title.
    *
    * @return string
    *   The profile's title.
    */
-  public function getTitle()
-  {
+  public function getTitle() {
     return $this->title;
   }
 
   /**
-   * Set the Profile machine name
+   * Set the Profile machine name.
    *
    * @param string $machine_name
    *   A machine name to set for this profile.
@@ -92,20 +91,18 @@ class Profile
    * @return $this
    *   The profile instance.
    */
-  public function setMachineName($machine_name = '')
-  {
+  public function setMachineName($machine_name = '') {
     $this->machine_name = $machine_name;
     return $this;
   }
 
   /**
-   * Get the Profile machine name
+   * Get the Profile machine name.
    *
    * @return string
    *   The machine name for the profile.
    */
-  public function getMachineName()
-  {
+  public function getMachineName() {
     return $this->machine_name;
   }
 
@@ -115,8 +112,7 @@ class Profile
    * @return bool
    *   If the check was successfully added.
    */
-  public function addCheck($check, $options = [])
-  {
+  public function addCheck($check, $options = []) {
     $registry = Registry::load();
     $reverse_lookup = array_flip($registry);
 
@@ -141,8 +137,7 @@ class Profile
    * @return array
    *   A list of checks to perform for this profile.
    */
-  public function getChecks()
-  {
+  public function getChecks() {
     return $this->checks;
   }
 
@@ -152,8 +147,8 @@ class Profile
    * @return array
    *   A list of module settings to verify.
    */
-  public function getSettings()
-  {
+  public function getSettings() {
     return $this->settings;
   }
+
 }

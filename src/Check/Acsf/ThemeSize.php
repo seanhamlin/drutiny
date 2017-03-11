@@ -5,10 +5,9 @@ namespace Drutiny\Check\Acsf;
 use Drutiny\Check\Check;
 use Drutiny\AuditResponse\AuditResponse;
 use Drutiny\Executor\DoesNotApplyException;
-use Drutiny\Annotation\CheckInfo;
 
 /**
- * @CheckInfo(
+ * @Drutiny\Annotation\CheckInfo(
  *  title = "ACSF theme size",
  *  description = "In Acquia Cloud Site Factory, you should aim to keep your theme repositories as small as possible to avoid exhausting the disk. Having theme repositories less than 50 MB is recommended.",
  *  remediation = "Reduce the number of unneeded files, e.g. PDFs, and PSDs of any initial designs, any node modules SaaS cache files.",
@@ -21,8 +20,10 @@ use Drutiny\Annotation\CheckInfo;
  */
 class ThemeSize extends Check {
 
-  public function check()
-  {
+  /**
+   *
+   */
+  public function check() {
     $root = $this->context->drush->getCoreStatus('root');
     $site = $this->context->drush->getCoreStatus('site');
     $command = "du -ms {$root}/{$site}/themes/site/ || echo 'nope'";
@@ -59,4 +60,5 @@ class ThemeSize extends Check {
 
     return AuditResponse::AUDIT_SUCCESS;
   }
+
 }

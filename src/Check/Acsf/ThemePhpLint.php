@@ -5,10 +5,9 @@ namespace Drutiny\Check\Acsf;
 use Drutiny\Check\Check;
 use Drutiny\AuditResponse\AuditResponse;
 use Drutiny\Executor\DoesNotApplyException;
-use Drutiny\Annotation\CheckInfo;
 
 /**
- * @CheckInfo(
+ * @Drutiny\Annotation\CheckInfo(
  *  title = "ACSF theme PHP lint",
  *  description = "All PHP files in the theme should not have syntax errors with them.",
  *  remediation = "Fix syntax errors - :errors.",
@@ -20,11 +19,13 @@ use Drutiny\Annotation\CheckInfo;
  */
 class ThemePhpLint extends Check {
 
-  public function check()
-  {
+  /**
+   *
+   */
+  public function check() {
     $root = $this->context->drush->getCoreStatus('root');
     $site = $this->context->drush->getCoreStatus('site');
-    // find . -type f -name '*.php' -exec php -l {} \; | grep -v "No syntax errors detected"
+    // Find . -type f -name '*.php' -exec php -l {} \; | grep -v "No syntax errors detected".
     $command = "find {$root}/{$site}/themes/site/ -type f -name '*.php' -exec php -l {} \; || echo 'nope'";
     $output = (string) $this->context->remoteExecutor->execute($command);
 
@@ -63,4 +64,5 @@ class ThemePhpLint extends Check {
 
     return AuditResponse::AUDIT_SUCCESS;
   }
+
 }

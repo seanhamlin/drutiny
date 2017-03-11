@@ -9,30 +9,48 @@ use Drutiny\Executor\ResultException;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Drutiny\Annotation\CheckInfo;
 
+/**
+ * Base class for all checks.
+ */
 abstract class Check {
 
   protected $context;
   private $options;
   private $info;
 
-  public function __construct(Context $context, Array $options = []) {
+  /**
+   * Constructor.
+   */
+  public function __construct(Context $context, array $options = []) {
     $this->context = $context;
     $this->options = $options;
   }
 
+  /**
+   *
+   */
   protected function getOption($name, $default = NULL) {
     return empty($this->options[$name]) ? $default : $this->options[$name];
   }
 
+  /**
+   *
+   */
   protected function setToken($name, $value) {
     $this->options[$name] = $value;
     return $this;
   }
 
+  /**
+   *
+   */
   protected function missingToken($name) {
     return !isset($this->options[$name]);
   }
 
+  /**
+   *
+   */
   public function getTokens() {
     $tokens = [];
     foreach ($this->options as $key => $value) {
@@ -58,21 +76,19 @@ abstract class Check {
    * @return bool
    *   Whether or not the remediate method was run and was successful.
    */
-  protected function remediate()
-  {
+  protected function remediate() {
     return FALSE;
   }
 
   /**
-   * Retrieve CheckInfo object.
+   * Retrieve the CheckInfo object from the classes annotation.
    */
-  final public function getInfo()
-  {
+  final public function getInfo() {
     if (empty($this->info)) {
       $reflection = new \ReflectionClass($this);
       $reader = new AnnotationReader();
-      $info = $reader->getClassAnnotations($reflection);
-      $this->info = !empty($info[0]) ? $info[0] : new CheckInfo();
+      $info = $reader->getClassAnnotation($reflection, 'Drutiny\Annotation\CheckInfo');
+      $this->info = !empty($info) ? $info : new CheckInfo();
     }
     return $this->info;
   }
@@ -80,10 +96,9 @@ abstract class Check {
   /**
    * Execute the check in a sandbox.
    *
-   * @return AuditResponse the outcome of the check.
+   * @return \Drutiny\AuditResponse\AuditResponse the outcome of the check.
    */
-  public function execute()
-  {
+  public function execute() {
     $response = new AuditResponse($this);
 
     try {
@@ -135,4 +150,5 @@ abstract class Check {
     }
     return $response;
   }
+
 }

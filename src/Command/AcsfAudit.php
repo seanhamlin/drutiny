@@ -5,19 +5,18 @@ namespace Drutiny\Command;
 use Drutiny\Base\DrushCaller;
 use Drutiny\Base\PhantomasCaller;
 use Drutiny\Context;
-use Drutiny\Profile\Profile;
 use Drutiny\Profile\ProfileController;
 use Drutiny\Executor\Executor;
 use Drutiny\Executor\ExecutorRemote;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Yaml\Parser;
 use Drutiny\AuditResponse\AuditResponse;
 
+/**
+ *
+ */
 class AcsfAudit extends SiteAudit {
 
   /**
@@ -72,29 +71,30 @@ class AcsfAudit extends SiteAudit {
 
     $context = new Context();
     $context->set('input', $input)
-            ->set('output', $output)
-            ->set('io', $io)
-            ->set('reportsDir', $reports_dir)
-            ->set('executor', $executor)
-            ->set('profile', $profile)
-            ->set('remoteExecutor', $executor)
-            ->set('drush', $drush)
-            ->set('phantomas', $phantomas)
-            ->set('autoRemediate', $input->getOption('auto-remediate'));
+      ->set('output', $output)
+      ->set('io', $io)
+      ->set('reportsDir', $reports_dir)
+      ->set('executor', $executor)
+      ->set('profile', $profile)
+      ->set('remoteExecutor', $executor)
+      ->set('drush', $drush)
+      ->set('phantomas', $phantomas)
+      ->set('autoRemediate', $input->getOption('auto-remediate'));
 
     // Some checks don't use drush and connect to the server
     // directly so we need a remote executor available as well.
     if (isset($alias['remote-host'], $alias['remote-user'])) {
       $executor = new ExecutorRemote($io);
       $executor->setRemoteUser($alias['remote-user'])
-               ->setRemoteHost($alias['remote-host']);
+        ->setRemoteHost($alias['remote-host']);
       if (isset($alias['ssh-options'])) {
         $executor->setArgument($alias['ssh-options']);
       }
       try {
         $executor->setArgument($input->getOption('ssh_options'));
       }
-      catch (InvalidArgumentException $e) {}
+      catch (InvalidArgumentException $e) {
+      }
       $context->set('remoteExecutor', $executor);
       $this->isRemote = TRUE;
     }
@@ -124,7 +124,7 @@ class AcsfAudit extends SiteAudit {
         }
         // Not www but still a custom domain, only add it if there is a www in
         // it.
-        else if (!$is_acsf_domain && strpos($unique_sites[$site['name']]['domain'], 'www.') !== 0 && !$www_only) {
+        elseif (!$is_acsf_domain && strpos($unique_sites[$site['name']]['domain'], 'www.') !== 0 && !$www_only) {
           $unique_sites[$site['name']] = ['domain' => $domain];
         }
         else {
@@ -149,15 +149,15 @@ class AcsfAudit extends SiteAudit {
       $domain = $values['domain'];
       $drush = new DrushCaller($executor, $input->getOption('drush-bin'));
       $drush->setArgument('--uri=' . $domain)
-            ->setArgument('--root=' . $alias['root'])
-            ->setIsRemote($this->isRemote)
-            ->setSingleSite(FALSE);
+        ->setArgument('--root=' . $alias['root'])
+        ->setIsRemote($this->isRemote)
+        ->setSingleSite(FALSE);
 
       $context->set('drush', $drush);
 
       $phantomas->setDomain($domain)
-                ->setDrush($drush)
-                ->clearMetrics();
+        ->setDrush($drush)
+        ->clearMetrics();
       $context->set('phantomas', $phantomas);
 
       $io->comment("[{$i}] Running audit over: {$domain}");
@@ -171,7 +171,7 @@ class AcsfAudit extends SiteAudit {
         if (in_array($result->getStatus(), [AuditResponse::AUDIT_SUCCESS, AuditResponse::AUDIT_NA], TRUE)) {
           $passes[] = (string) $result;
         }
-        else if ($result->getStatus() === AuditResponse::AUDIT_WARNING) {
+        elseif ($result->getStatus() === AuditResponse::AUDIT_WARNING) {
           $warnings[] = (string) $result;
         }
         else {
@@ -209,4 +209,5 @@ class AcsfAudit extends SiteAudit {
 
     $io->text('Execution time: ' . $this->timerEnd() . ' seconds');
   }
+
 }

@@ -3,10 +3,9 @@
 namespace Drutiny\Check\D7;
 
 use Drutiny\Check\Check;
-use Drutiny\Annotation\CheckInfo;
 
 /**
- * @CheckInfo(
+ * @Drutiny\Annotation\CheckInfo(
  *  title = "Page compression",
  *  description = "Drupal's Compress cached pages option (page_compression) can cause unexpected behavior when an external cache such as Varnish is employed, and typically provides no benefit. Therefore, Compress cached pages should be disabled.",
  *  remediation = "Set the variable <code>page_compression</code> to <code>0</code>.",
@@ -16,10 +15,14 @@ use Drutiny\Annotation\CheckInfo;
  * )
  */
 class PageCompression extends Check {
-  public function check()
-  {
+
+  /**
+   *
+   */
+  public function check() {
     $page_compression = (bool) $this->context->drush->getVariable('page_compression', TRUE);
     $this->setToken('page_compression', $page_compression);
     return !$page_compression;
   }
+
 }

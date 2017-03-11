@@ -3,10 +3,9 @@
 namespace Drutiny\Check\Drush;
 
 use Drutiny\Check\Check;
-use Drutiny\Annotation\CheckInfo;
 
 /**
- * @CheckInfo(
+ * @Drutiny\Annotation\CheckInfo(
  *  title = "Database updates",
  *  description = "Updates to Drupal core or contrib modules sometimes include important database changes which should be applied after the code updates have been deployed.",
  *  remediation = "Required database updates should be applied by running <code>drush updatedb</code>.",
@@ -16,8 +15,11 @@ use Drutiny\Annotation\CheckInfo;
  * )
  */
 class UpdateDBStatus extends Check {
-  public function check()
-  {
+
+  /**
+   *
+   */
+  public function check() {
     $context = $this->context;
     $output = $context->drush->updatedbStatus()->getOutput();
     // Sometimes "No database updates required" is in Stderr, and thus is
@@ -34,4 +36,5 @@ class UpdateDBStatus extends Check {
 
     return FALSE;
   }
+
 }

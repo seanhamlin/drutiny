@@ -2,13 +2,11 @@
 
 namespace Drutiny\Check\D7;
 
-use Drutiny\AuditResponse\AuditResponse;
 use Drutiny\Check\Check;
 use Drutiny\Executor\DoesNotApplyException;
-use Drutiny\Annotation\CheckInfo;
 
 /**
- * @CheckInfo(
+ * @Drutiny\Annotation\CheckInfo(
  *  title = "Google analytics",
  *  description = "Tests to ensure the site is correctly configured google analytics.",
  *  remediation = "Fix the failures.",
@@ -19,6 +17,10 @@ use Drutiny\Annotation\CheckInfo;
  * )
  */
 class GA extends Check {
+
+  /**
+   *
+   */
   public function check() {
     if (!$this->context->drush->moduleEnabled('googleanalytics')) {
       throw new DoesNotApplyException();
@@ -56,4 +58,5 @@ class GA extends Check {
 
     return empty($errors);
   }
+
 }

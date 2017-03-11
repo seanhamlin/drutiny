@@ -9,7 +9,9 @@ use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableSeparator;
 use Drutiny\Check\Registry;
 
-
+/**
+ *
+ */
 class ChecksCommand extends Command {
 
   /**
@@ -18,15 +20,13 @@ class ChecksCommand extends Command {
   protected function configure() {
     $this
       ->setName('checks:list')
-      ->setDescription('Show all checks available.')
-      ;
+      ->setDescription('Show all checks available.');
   }
 
   /**
    * @inheritdoc
    */
-  protected function execute(InputInterface $input, OutputInterface $output)
-  {
+  protected function execute(InputInterface $input, OutputInterface $output) {
     $map = Registry::load();
 
     $rows = array();
@@ -46,8 +46,8 @@ class ChecksCommand extends Command {
     array_pop($rows);
     $table = new Table($output);
     $table
-        ->setHeaders(array('Title', 'Class', 'Description', 'Supports remediation'))
-        ->setRows($rows);
+      ->setHeaders(array('Title', 'Class', 'Description', 'Supports remediation'))
+      ->setRows($rows);
 
     $table->render();
   }
