@@ -95,6 +95,25 @@ class DrushCaller {
   }
 
   /**
+   * Wraps around php-eval to provide escpaing of quotes.
+   *
+   * @param string $command
+   *   The command to execute.
+   * @return mixed
+   */
+  public function executePhp($command) {
+    // Remote execution on multiple sites requires more escaping.
+    if ($this->isRemote && !$this->singleSite) {
+      $output = $this->phpEval('\"' . $command . '\"');
+    }
+    else {
+      $output = $this->phpEval('"' . $command . '"');
+    }
+
+    return $output;
+  }
+
+  /**
    * Execute a PHP script in the context of the Drupal site. This uses a rather
    * tricky amount of base64 encoding to ensure no characters are lost.
    *
@@ -113,15 +132,8 @@ class DrushCaller {
     }
     $base64 = base64_encode(file_get_contents($location));
 
-    // Remote execution on multiple sites requires more escaping.
-    if ($this->isRemote && !$this->singleSite) {
-      $output = $this->phpEval('\"' . "eval(base64_decode('" . $base64 . "'));" . '\"')->parseJson();
-    }
-    else {
-      $output = $this->phpEval('"' . "eval(base64_decode('" . $base64 . "'));" . '"')->parseJson();
-    }
-
-    return $output;
+    $output = $this->executePhp('\"' . "eval(base64_decode('" . $base64 . "'));" . '\"');
+    return $output->parseJson();
   }
 
   /**
