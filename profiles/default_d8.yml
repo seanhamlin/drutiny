@@ -28,3 +28,4 @@ checks :
   \Drutiny\Check\D8\PreprocessCSS : {}
   \Drutiny\Check\D8\PreprocessJS : {}
   \Drutiny\Check\D8\UserRegister : {}
+  \Drutiny\Check\D8\ShieldDisabled : {}
