@@ -2,7 +2,7 @@ metadata :
   machine_name: 'govcms_sass'
   title : 'govCMS SaaS'
 checks :
-  \Drutiny\Check\Drush\ModuleEnabled:
+  \Drutiny\Check\Drush\ModuleEnabled :
     modules:
       - acquia_spi
       - acquia_agent
@@ -19,7 +19,7 @@ checks :
       - robotstxt
       - shield
       - syslog
-  \Drutiny\Check\Drush\ModuleDisabled:
+  \Drutiny\Check\Drush\ModuleDisabled :
     modules:
       - services
       - dblog
@@ -28,13 +28,16 @@ checks :
       - simpletest
       - statistics
       - update
-  \Drutiny\Check\Drush\UpdateDBStatus: {}
-  \Drutiny\Check\Drush\SessionsAnon: {}
+  \Drutiny\Check\Drush\UpdateDBStatus : {}
+  \Drutiny\Check\Drush\SessionsAnon : {}
   \Drutiny\Check\Drush\User1 :
     name_blacklist : '(admin|root|drupal|god|govcms|paul|sean|ruwan)'
     mail : 'no_reply@govcms.gov.au'
     status: 1
-  \Drutiny\Check\D7\BlacklistPermissions:
+  \Drutiny\Check\Drush\DatabaseSize :
+    max_size : 1000
+    warning_size : 250
+  \Drutiny\Check\D7\BlacklistPermissions :
     permissions:
       - 'add JS snippets for google analytics'
       - 'administer features'
@@ -65,10 +68,10 @@ checks :
   \Drutiny\Check\D7\PageCacheMaximumAge :
     cache : 300
   \Drutiny\Check\D7\RobotsTxt :
-    robotstxt: "#\n# robots.txt\n#\n# This file is to prevent the crawling and indexing of certain parts\n# of your site by web crawlers and spiders run by sites like Yahoo!\n# and Google. By telling these \"robots\" where not to go on your site,\n# you save bandwidth and server resources.\n#\n# This file will be ignored unless it is at the root of your host:\n# Used:    http://example.com/robots.txt\n# Ignored: http://example.com/site/robots.txt\n#\n# For more information about the robots.txt standard, see:\n# http://www.robotstxt.org/robotstxt.html\n\n# Slow down the crawl rate of certain low value robots for govCMS.\n# Note: Baidu does not obey this setting.\nUser-agent: bingbot\nCrawl-delay: 30\n\nUser-agent: Slurp\nCrawl-delay: 60\n\nUser-agent: *\nCrawl-delay: 10\n# CSS, JS, Images\nAllow: /misc/*.css$\nAllow: /misc/*.css?\nAllow: /misc/*.js$\nAllow: /misc/*.js?\nAllow: /misc/*.gif\nAllow: /misc/*.jpg\nAllow: /misc/*.jpeg\nAllow: /misc/*.png\nAllow: /modules/*.css$\nAllow: /modules/*.css?\nAllow: /modules/*.js$\nAllow: /modules/*.js?\nAllow: /modules/*.gif\nAllow: /modules/*.jpg\nAllow: /modules/*.jpeg\nAllow: /modules/*.png\nAllow: /profiles/*.css$\nAllow: /profiles/*.css?\nAllow: /profiles/*.js$\nAllow: /profiles/*.js?\nAllow: /profiles/*.gif\nAllow: /profiles/*.jpg\nAllow: /profiles/*.jpeg\nAllow: /profiles/*.png\nAllow: /themes/*.css$\nAllow: /themes/*.css?\nAllow: /themes/*.js$\nAllow: /themes/*.js?\nAllow: /themes/*.gif\nAllow: /themes/*.jpg\nAllow: /themes/*.jpeg\nAllow: /themes/*.png\n# Directories\nDisallow: /includes/\nDisallow: /misc/\nDisallow: /modules/\nDisallow: /profiles/\nDisallow: /scripts/\nDisallow: /themes/\n# Files\nDisallow: /CHANGELOG.txt\nDisallow: /cron.php\nDisallow: /INSTALL.mysql.txt\nDisallow: /INSTALL.pgsql.txt\nDisallow: /INSTALL.sqlite.txt\nDisallow: /install.php\nDisallow: /INSTALL.txt\nDisallow: /LICENSE.txt\nDisallow: /MAINTAINERS.txt\nDisallow: /update.php\nDisallow: /UPGRADE.txt\nDisallow: /xmlrpc.php\n# Paths (clean URLs)\nDisallow: /admin/\nDisallow: /comment/reply/\nDisallow: /filter/tips/\nDisallow: /node/add/\nDisallow: /search/\nDisallow: /user/register/\nDisallow: /user/password/\nDisallow: /user/login/\nDisallow: /user/logout/\n# Paths (no clean URLs)\nDisallow: /?q=admin/\nDisallow: /?q=comment/reply/\nDisallow: /?q=filter/tips/\nDisallow: /?q=node/add/\nDisallow: /?q=search/\nDisallow: /?q=user/password/\nDisallow: /?q=user/register/\nDisallow: /?q=user/login/\nDisallow: /?q=user/logout/"
-  \Drutiny\Check\D7\Search404: {}
-  \Drutiny\Check\D7\CronHasRun: {}
-  \Drutiny\Check\D7\CronPoorMans: {}
+    robotstxt : "#\n# robots.txt\n#\n# This file is to prevent the crawling and indexing of certain parts\n# of your site by web crawlers and spiders run by sites like Yahoo!\n# and Google. By telling these \"robots\" where not to go on your site,\n# you save bandwidth and server resources.\n#\n# This file will be ignored unless it is at the root of your host:\n# Used:    http://example.com/robots.txt\n# Ignored: http://example.com/site/robots.txt\n#\n# For more information about the robots.txt standard, see:\n# http://www.robotstxt.org/robotstxt.html\n\n# Slow down the crawl rate of certain low value robots for govCMS.\n# Note: Baidu does not obey this setting.\nUser-agent: bingbot\nCrawl-delay: 30\n\nUser-agent: Slurp\nCrawl-delay: 60\n\nUser-agent: *\nCrawl-delay: 10\n# CSS, JS, Images\nAllow: /misc/*.css$\nAllow: /misc/*.css?\nAllow: /misc/*.js$\nAllow: /misc/*.js?\nAllow: /misc/*.gif\nAllow: /misc/*.jpg\nAllow: /misc/*.jpeg\nAllow: /misc/*.png\nAllow: /modules/*.css$\nAllow: /modules/*.css?\nAllow: /modules/*.js$\nAllow: /modules/*.js?\nAllow: /modules/*.gif\nAllow: /modules/*.jpg\nAllow: /modules/*.jpeg\nAllow: /modules/*.png\nAllow: /profiles/*.css$\nAllow: /profiles/*.css?\nAllow: /profiles/*.js$\nAllow: /profiles/*.js?\nAllow: /profiles/*.gif\nAllow: /profiles/*.jpg\nAllow: /profiles/*.jpeg\nAllow: /profiles/*.png\nAllow: /themes/*.css$\nAllow: /themes/*.css?\nAllow: /themes/*.js$\nAllow: /themes/*.js?\nAllow: /themes/*.gif\nAllow: /themes/*.jpg\nAllow: /themes/*.jpeg\nAllow: /themes/*.png\n# Directories\nDisallow: /includes/\nDisallow: /misc/\nDisallow: /modules/\nDisallow: /profiles/\nDisallow: /scripts/\nDisallow: /themes/\n# Files\nDisallow: /CHANGELOG.txt\nDisallow: /cron.php\nDisallow: /INSTALL.mysql.txt\nDisallow: /INSTALL.pgsql.txt\nDisallow: /INSTALL.sqlite.txt\nDisallow: /install.php\nDisallow: /INSTALL.txt\nDisallow: /LICENSE.txt\nDisallow: /MAINTAINERS.txt\nDisallow: /update.php\nDisallow: /UPGRADE.txt\nDisallow: /xmlrpc.php\n# Paths (clean URLs)\nDisallow: /admin/\nDisallow: /comment/reply/\nDisallow: /filter/tips/\nDisallow: /node/add/\nDisallow: /search/\nDisallow: /user/register/\nDisallow: /user/password/\nDisallow: /user/login/\nDisallow: /user/logout/\n# Paths (no clean URLs)\nDisallow: /?q=admin/\nDisallow: /?q=comment/reply/\nDisallow: /?q=filter/tips/\nDisallow: /?q=node/add/\nDisallow: /?q=search/\nDisallow: /?q=user/password/\nDisallow: /?q=user/register/\nDisallow: /?q=user/login/\nDisallow: /?q=user/logout/"
+  \Drutiny\Check\D7\Search404 : {}
+  \Drutiny\Check\D7\CronHasRun : {}
+  \Drutiny\Check\D7\CronPoorMans : {}
   \Drutiny\Check\D7\DateDefaultTimezone :
     timezone_whitelist :
       - 'Australia/Adelaide'
@@ -78,16 +81,16 @@ checks :
       - 'Australia/Melbourne'
       - 'Australia/Perth'
       - 'Australia/Sydney'
-  \Drutiny\Check\D7\PageCompression: {}
-  \Drutiny\Check\D7\ZenRebuildRegistry: {}
-  \Drutiny\Check\D7\SearchDB:
+  \Drutiny\Check\D7\PageCompression : {}
+  \Drutiny\Check\D7\ZenRebuildRegistry : {}
+  \Drutiny\Check\D7\SearchDB :
     max_size : 50
-  \Drutiny\Check\D7\XMLSiteMapBaseUrl:
+  \Drutiny\Check\D7\XMLSiteMapBaseUrl :
     pattern : '^https://(www|ministerial|agency|blog|docs|annualreport|innovation|soe)\.[-a-z]{1,63}(\.[-a-z]{1,63})?\.gov\.au$'
 
   # Field specific checks.
-  \Drutiny\Check\D7\EntityReferenceAutocomplete:
-    threshold: 100
+  \Drutiny\Check\D7\EntityReferenceAutocomplete :
+    threshold : 100
 
   # ACSF specific checks.
   \Drutiny\Check\Acsf\ThemeSize :
@@ -106,9 +109,9 @@ checks :
 # Module configuration checks.
 settings :
   login_security:
-    label: 'Login Security'
-    settings:
-      \Drutiny\Settings\VariablesIteratorD7:
+    label : 'Login Security'
+    settings :
+      \Drutiny\Settings\VariablesIteratorD7 :
         login_security_track_time: 24
         login_security_user_wrong_count: 5
         login_security_host_wrong_count: 0
