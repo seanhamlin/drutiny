@@ -296,7 +296,7 @@ class SiteAudit extends Command {
   protected function writeHTMLReport($template, $reports_dir, SymfonyStyle $io, Profile $profile, array $site, array $sites = []) {
     $loader = new \Twig_Loader_Filesystem(__DIR__ . '/../../templates');
     $twig = new \Twig_Environment($loader, array(
-      'cache' => sys_get_temp_dir() . '/cache',
+      'cache' => sys_get_temp_dir() . '/drutiny/cache',
       'auto_reload' => TRUE,
     ));
     $filter = new \Twig_SimpleFilter('filterXssAdmin', [$this, 'filterXssAdmin'], [
