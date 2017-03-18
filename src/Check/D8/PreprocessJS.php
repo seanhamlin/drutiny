@@ -15,7 +15,7 @@ use Drutiny\Check\Check;
  *  supports_remediation = TRUE,
  * )
  */
-class PreprocessJs extends Check {
+class PreprocessJS extends Check {
 
   /**
    * @inheritDoc
