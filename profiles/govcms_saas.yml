@@ -86,7 +86,7 @@ checks :
   \Drutiny\Check\D7\SearchDB :
     max_size : 50
   \Drutiny\Check\D7\XMLSiteMapBaseUrl :
-    pattern : '^https://(www|ministerial|agency|blog|docs|annualreport|innovation|soe)\.[-a-z]{1,63}(\.[-a-z]{1,63})?\.gov\.au$'
+    pattern : '^https://(www|ministerial|agency|blog|docs|annualreport|innovation|soe|news)\.[-a-z]{1,63}(\.[-a-z]{1,63})?\.gov\.au$'
 
   # Field specific checks.
   \Drutiny\Check\D7\EntityReferenceAutocomplete :
