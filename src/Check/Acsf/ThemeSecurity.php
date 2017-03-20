@@ -40,6 +40,7 @@ class ThemeSecurity extends Check {
       "passthru",
       "proc_open",
       "system(",
+      "sleep(",
     ];
 
     // This command is probably more complex then it should be due to wanting to
