@@ -83,6 +83,8 @@ checks :
       - 'Australia/Sydney'
   \Drutiny\Check\D7\PageCompression : {}
   \Drutiny\Check\D7\ZenRebuildRegistry : {}
+  \Drutiny\Check\D7\GovcmsCkan :
+    endpoint : 'https://data.gov.au'
   \Drutiny\Check\D7\SearchDB :
     max_size : 50
   \Drutiny\Check\D7\XMLSiteMapBaseUrl :
