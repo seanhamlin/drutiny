@@ -3,6 +3,7 @@
 namespace Drutiny\Check\D7;
 
 use Drutiny\Check\Check;
+use Drutiny\AuditResponse\AuditResponse;
 
 /**
  * @Drutiny\Annotation\CheckInfo(
@@ -29,7 +30,7 @@ class RobotsTxt extends Check {
    */
   public function check() {
     if (!$this->context->drush->moduleEnabled('robotstxt')) {
-      throw new DoesNotApplyException();
+      return AuditResponse::AUDIT_NA;
     }
 
     $current = $this->context->drush->getVariable('robotstxt', '');
