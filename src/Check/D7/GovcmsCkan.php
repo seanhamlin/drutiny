@@ -27,11 +27,11 @@ class GovcmsCkan extends Check {
     }
 
     $current = $this->context->drush->getVariable('govcms_ckan_endpoint_url', '');
-    $this->desired = $this->getOption('endpoint', 'https://data.gov.au');
+    $desired = $this->getOption('endpoint', 'https://data.gov.au');
     $this->setToken('current', $current);
-    $this->setToken('desired', $this->desired);
+    $this->setToken('desired', $desired);
 
-    return $current === $this->desired;
+    return $current === $desired;
   }
 
 }
