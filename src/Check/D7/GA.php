@@ -50,7 +50,9 @@ class GA extends Check {
     $codesnippet_after = trim($this->getOption('codesnippet_after', ''));
     if (!empty($codesnippet_after)) {
       if ($codesnippet_after !== $googleanalytics_codesnippet_after) {
-        $errors[] = 'Code snippet after is not correct - <code>googleanalytics_codesnippet_after</code> is set to <code>' . $googleanalytics_codesnippet_after . '</code>';
+        $errors[] = 'Code snippet after is not correct - want ';
+        $errors[] = '"' . $codesnippet_after . '" but got ';
+        $errors[] = '"' . $googleanalytics_codesnippet_after . '"';
       }
     }
 
