@@ -51,8 +51,8 @@ class GA extends Check {
     if (!empty($codesnippet_after)) {
       if ($codesnippet_after !== $googleanalytics_codesnippet_after) {
         $errors[] = 'Code snippet after is not correct - want ';
-        $errors[] = '"<code>' . $codesnippet_after . '<code>" but got ';
-        $errors[] = '"<code>' . $googleanalytics_codesnippet_after . '<code>"';
+        $errors[] = '<code>' . $codesnippet_after . '</code> but got ';
+        $errors[] = '<code>' . $googleanalytics_codesnippet_after . '</code>';
       }
     }
 
