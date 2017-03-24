@@ -12,18 +12,27 @@ use Drutiny\Check\Check;
  *  success = "Internal cache is disabled.",
  *  failure = "Internal cache is enabled. Currently set to <code>:cache_lifetime</code> seconds.",
  *  exception = "Could not determine internal cache settings.",
+ *  supports_remediation = TRUE,
  * )
  */
 class CacheLifetime extends Check {
 
   /**
-   *
+   * @inheritDoc
+   * @see https://github.com/drupal/drupal/blob/7.x/modules/system/system.admin.inc#L1716
    */
   public function check() {
-    // @see https://github.com/drupal/drupal/blob/7.x/modules/system/system.admin.inc#L1716
     $cache_lifetime = (int) $this->context->drush->getVariable('cache_lifetime', 0);
     $this->setToken('cache_lifetime', $cache_lifetime);
     return $cache_lifetime === 0;
+  }
+
+  /**
+   * @inheritDoc
+   */
+  public function remediate() {
+    $res = $this->context->drush->setVariable('cache_lifetime', 0);
+    return $res->isSuccessful();
   }
 
 }
