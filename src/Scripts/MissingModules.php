@@ -2,7 +2,7 @@
 
 // @see http://cgit.drupalcode.org/module_missing_message_fixer/tree/includes/module_missing_message_fixer.drush.inc
 
-$rows = array();
+$rows = [];
 
 // Grab all the modules in the system table.
 $query = db_query("SELECT filename, type, name FROM {system}");

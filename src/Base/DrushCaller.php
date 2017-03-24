@@ -2,6 +2,7 @@
 
 namespace Drutiny\Base;
 
+use Drutiny\Base\String;
 use Drutiny\Executor\ExecutorInterface;
 
 /**
@@ -95,35 +96,6 @@ class DrushCaller {
   }
 
   /**
-   * Strip comments from a file.
-   *
-   * @param string $contents
-   *   The contents of a PHP file.
-   * @return string
-   */
-  private function stripComments($contents) {
-    $trimmed = [];
-    $lines = explode("\n", $contents);
-    foreach($lines as $index => $line) {
-      // Exclude '<?php'
-      if (strpos($line, '<?php') === 0) {
-        continue;
-      }
-      // Exclude '//'.
-      if (preg_match('/\s*\/\/.*/', $line)) {
-        continue;
-      }
-
-      $trimmed[] = $line;
-    }
-
-    // Remove empty lines;
-    $trimmed = array_filter($trimmed);
-
-    return implode("\n", $trimmed);
-  }
-
-  /**
    * Wraps around php-eval to provide escpaing of quotes.
    *
    * @param string $command
@@ -162,7 +134,7 @@ class DrushCaller {
 
     $contents = file_get_contents($location);
     // We strip the comments to reduce the size of the base64 payload.
-    $contents = $this->stripComments($contents);
+    $contents = String::stripComments($contents);
 
     $output = $this->executePhp("eval(base64_decode('" . base64_encode($contents) . "'));");
     return $output->parseJson();
