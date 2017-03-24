@@ -7,7 +7,7 @@ namespace Drutiny\Base;
  *
  * Useful functions on strings.
  */
-class String {
+class StringLib {
 
   /**
    * Strip comments from a file.

@@ -2,10 +2,10 @@
 
 use PHPUnit\Framework\TestCase;
 
-use Drutiny\Base\String;
+use Drutiny\Base\StringLib;
 
 /**
- * @coversDefaultClass \Drutiny\Base\String
+ * @coversDefaultClass \Drutiny\Base\StringLib
  */
 class StripCommentTest extends TestCase {
 
@@ -15,7 +15,7 @@ class StripCommentTest extends TestCase {
    * @group base
    */
   public function testStripComments($input, $expected) {
-    $this->assertEquals(String::stripComments($input), $expected);
+    $this->assertEquals(StringLib::stripComments($input), $expected);
   }
 
   /**

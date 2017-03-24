@@ -2,7 +2,7 @@
 
 namespace Drutiny\Base;
 
-use Drutiny\Base\String;
+use Drutiny\Base\StringLib;
 use Drutiny\Executor\ExecutorInterface;
 
 /**
@@ -134,7 +134,7 @@ class DrushCaller {
 
     $contents = file_get_contents($location);
     // We strip the comments to reduce the size of the base64 payload.
-    $contents = String::stripComments($contents);
+    $contents = StringLib::stripComments($contents);
 
     $output = $this->executePhp("eval(base64_decode('" . base64_encode($contents) . "'));");
     return $output->parseJson();
