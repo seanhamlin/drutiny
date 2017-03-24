@@ -1,3 +1,5 @@
+<?php
+
 $views = [];
 foreach (views_get_all_views() as $name => $view) {
   $views[] = $name;
