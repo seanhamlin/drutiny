@@ -9,7 +9,7 @@ use Drutiny\Check\Check;
  *
  * @package Drutiny\AuditResponse
  */
-class AuditResponse {
+class AuditResponse implements \JsonSerializable {
 
   const AUDIT_NA = -1;
   const AUDIT_SUCCESS = 0;
@@ -54,6 +54,73 @@ class AuditResponse {
         case self::AUDIT_ERROR:
         default:
           return '<error>' . $this->getMessage('exception') . '</error>';
+      }
+    }
+    catch (\Exception $e) {
+      var_dump($e->getMessage());
+    }
+    return 'doh';
+  }
+
+  /**
+   * Used when dumping results of a site audit to JSON.
+   *
+   * @return array
+   *   The check information, and it's associated response from the site.
+   */
+  public function jsonSerialize() {
+    try {
+      switch ($this->status) {
+        case self::AUDIT_SUCCESS:
+          return [
+            'check' => [
+              'title' => $this->getTitle(),
+              'description' => strip_tags($this->getDescription()),
+            ],
+            'status' => 'success',
+            'message' => strip_tags($this->getMessage('success')),
+          ];
+
+        case self::AUDIT_NA:
+          return [
+            'check' => [
+              'title' => $this->getTitle(),
+              'description' => strip_tags($this->getDescription()),
+            ],
+            'status' => 'na',
+            'message' => strip_tags($this->getMessage('na')),
+          ];
+
+        case self::AUDIT_WARNING:
+          return [
+            'check' => [
+              'title' => $this->getTitle(),
+              'description' => strip_tags($this->getDescription()),
+            ],
+            'status' => 'warning',
+            'message' => strip_tags($this->getMessage('warning')),
+          ];
+
+        case self::AUDIT_FAILURE:
+          return [
+            'check' => [
+              'title' => $this->getTitle(),
+              'description' => strip_tags($this->getDescription()),
+            ],
+            'status' => 'failure',
+            'message' => strip_tags($this->getMessage('failure')),
+          ];
+
+        case self::AUDIT_ERROR:
+        default:
+          return [
+            'check' => [
+              'title' => $this->getTitle(),
+              'description' => strip_tags($this->getDescription()),
+            ],
+            'status' => 'exception',
+            'message' => strip_tags($this->getMessage('exception')),
+          ];
       }
     }
     catch (\Exception $e) {

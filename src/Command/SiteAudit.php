@@ -28,6 +28,12 @@ class SiteAudit extends Command {
   protected $end = NULL;
 
   /**
+   * Where the report will be written to.
+   * @var string
+   */
+  protected $reportsDir = './reports';
+
+  /**
    * Keeps track on whether this is a local or remote site audit.
    */
   protected $isRemote = FALSE;
@@ -58,7 +64,14 @@ class SiteAudit extends Command {
         'd',
         InputOption::VALUE_REQUIRED,
         'Set the location where the reports should be written to.',
-        sys_get_temp_dir()
+        './reports'
+      )
+      ->addOption(
+        'format',
+        'o',
+        InputOption::VALUE_IS_ARRAY | InputOption::VALUE_REQUIRED,
+        "Desired output format. Supported formats are 'html' and 'json'.",
+        ['html']
       )
       ->addOption(
         'drush-bin',
@@ -93,9 +106,9 @@ class SiteAudit extends Command {
     $drush_alias = str_replace('@', '', $input->getArgument('drush-alias'));
 
     // Validate the reports directory.
-    $reports_dir = $input->getOption('report-dir');
-    if (!is_dir($reports_dir) || !is_writable($reports_dir)) {
-      throw new \RuntimeException("Cannot write to $reports_dir");
+    $this->reportsDir = $input->getOption('report-dir');
+    if (!is_dir($this->reportsDir) || !is_writable($this->reportsDir)) {
+      throw new \RuntimeException("Cannot write to {$this->reportsDir}.");
     }
 
     // Validate the drush binary.
@@ -126,7 +139,7 @@ class SiteAudit extends Command {
     $context->set('input', $input)
       ->set('output', $output)
       ->set('io', $io)
-      ->set('reportsDir', $reports_dir)
+      ->set('reportsDir', $this->reportsDir)
       ->set('profile', $profile)
       ->set('executor', $executor)
       ->set('remoteExecutor', $executor)
@@ -179,13 +192,29 @@ class SiteAudit extends Command {
     $site['warn'] = count($warnings);
     $site['fail'] = count($failures);
 
-    // Optional HTML report.
-    if ($input->getOption('report-dir')) {
-      $this->ensureTimezoneSet();
-      $this->writeHTMLReport('site', $reports_dir, $io, $profile, $site);
+    // Output the report in the desired format, can be multiple.
+    foreach ($input->getOption('format') as $format) {
+      $filepath = $this->getReportFilepath($profile, $format, $site);
+      switch ($format) {
+        case 'json':
+          $json = json_encode($site, JSON_PRETTY_PRINT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
+          file_put_contents($filepath, $json);
+          $io->success("JSON report written to {$filepath}");
+          break;
+
+        case 'html':
+          $this->ensureTimezoneSet();
+          $html = $this->getHTMLReport('site', $io, $profile, $site);
+          file_put_contents($filepath, $html);
+          $io->success("HTML report written to {$filepath}");
+          break;
+
+        default:
+          throw new \Exception("Invalid output format {$format}. Supported formats are 'html' and 'json'.");
+      }
     }
 
-    $io->text('Execution time: ' . $this->timerEnd() . ' seconds');
+    $io->text("Execution time: {$this->timerEnd()} seconds.");
   }
 
   /**
@@ -278,12 +307,43 @@ class SiteAudit extends Command {
   }
 
   /**
+   * The path to the report file. Takes into account whether this is a single
+   * site audit, or multiple sites, and also the users preference on what
+   * folder to locate the reports in.
+   *
+   * @param Profile $profile
+   *   All the information about the checks.
+   * @param string $format
+   *   The extension of the report.
+   * @param array $site
+   *   Information for a single site.
+   * @param array $sites
+   *   Information for multiple single sites.
+   * @return string
+   *   The full path to the report including folder and filename.
+   */
+  protected function getReportFilepath(Profile $profile, $format, array $site = [], array $sites = []) {
+    $filename = "drutiny.$format";
+    if (!empty($site)) {
+      $filename = implode('.', [$site['domain'], $format]);
+    }
+    elseif (!empty($sites)) {
+      $filename = implode('.', [$profile->getMachineName(), $format]);
+    }
+    $filepath = $this->reportsDir . '/' . $filename;
+
+    if (is_file($filepath) && !is_writable($filepath)) {
+      throw new \RuntimeException("Cannot overwrite file: {$filepath}.");
+    }
+
+    return $filepath;
+  }
+
+  /**
    * Convert the results into HTML.
    *
    * @param string $template
    *   The name of the twig template (without the .html.twig extension).
-   * @param string $reports_dir
-   *   Where the report will be written to.
    * @param \Symfony\Component\Console\Style\SymfonyStyle $io
    *   The output style.
    * @param Profile $profile
@@ -293,7 +353,7 @@ class SiteAudit extends Command {
    * @param array $sites
    *   Information for multiple single sites.
    */
-  protected function writeHTMLReport($template, $reports_dir, SymfonyStyle $io, Profile $profile, array $site, array $sites = []) {
+  protected function getHTMLReport($template, SymfonyStyle $io, Profile $profile, array $site = [], array $sites = []) {
     $loader = new \Twig_Loader_Filesystem(__DIR__ . '/../../templates');
     $twig = new \Twig_Environment($loader, array(
       'cache' => sys_get_temp_dir() . '/drutiny/cache',
@@ -310,21 +370,7 @@ class SiteAudit extends Command {
       'sites' => $sites,
     ]);
 
-    $filename = 'drutiny.html';
-    if (!empty($site)) {
-      $filename = implode('.', [$site['domain'], 'html']);
-    }
-    elseif (!empty($sites)) {
-      $filename = implode('.', [$profile->getMachineName(), 'html']);
-    }
-    $filepath = $reports_dir . '/' . $filename;
-
-    if (is_file($filepath) && !is_writable($filepath)) {
-      throw new \RuntimeException("Cannot overwrite file: $filepath");
-    }
-
-    file_put_contents($filepath, $contents);
-    $io->success("Report written to {$filepath}");
+    return $contents;
   }
 
   /**

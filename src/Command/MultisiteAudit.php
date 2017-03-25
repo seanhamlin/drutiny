@@ -51,9 +51,9 @@ class MultisiteAudit extends SiteAudit {
     $drush_alias = str_replace('@', '', $input->getArgument('drush-alias'));
 
     // Validate the reports directory.
-    $reports_dir = $input->getOption('report-dir');
-    if (!is_dir($reports_dir) || !is_writable($reports_dir)) {
-      throw new \RuntimeException("Cannot write to $reports_dir");
+    $this->reportsDir = $input->getOption('report-dir');
+    if (!is_dir($this->reportsDir) || !is_writable($this->reportsDir)) {
+      throw new \RuntimeException("Cannot write to {$this->reportsDir}.");
     }
 
     // Validate the drush binary.
@@ -92,7 +92,7 @@ class MultisiteAudit extends SiteAudit {
     $context->set('input', $input)
       ->set('output', $output)
       ->set('io', $io)
-      ->set('reportsDir', $reports_dir)
+      ->set('reportsDir', $this->reportsDir)
       ->set('executor', $executor)
       ->set('profile', $profile)
       ->set('remoteExecutor', $executor)
@@ -159,23 +159,41 @@ class MultisiteAudit extends SiteAudit {
       $io->writeln('----');
     }
 
-    // Optional HTML report.
-    if ($input->getOption('report-dir')) {
-      // @TODO make this a function.
-      uasort($unique_sites, function ($a, $b) {
-        if ($a['pass'] == $b['pass']) {
-          if ($a['warn'] == $b['warn']) {
-            return 0;
-          }
-          return ($a['warn'] < $b['warn']) ? -1 : 1;
+    // Sort the sites by worst offending at the top.
+    // @TODO make this a function.
+    uasort($unique_sites, function ($a, $b) {
+      if ($a['pass'] == $b['pass']) {
+        if ($a['warn'] == $b['warn']) {
+          return 0;
         }
-        return ($a['pass'] < $b['pass']) ? -1 : 1;
-      });
-      $this->ensureTimezoneSet();
-      $this->writeHTMLReport('multisite', $reports_dir, $io, $profile, [], $unique_sites);
+        return ($a['warn'] < $b['warn']) ? -1 : 1;
+      }
+      return ($a['pass'] < $b['pass']) ? -1 : 1;
+    });
+
+    // Output the report in the desired format, can be multiple.
+    foreach ($input->getOption('format') as $format) {
+      $filepath = $this->getReportFilepath($profile, $format, [], $unique_sites);
+      switch ($format) {
+        case 'json':
+          $json = json_encode($unique_sites, JSON_PRETTY_PRINT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
+          file_put_contents($filepath, $json);
+          $io->success("JSON report written to {$filepath}");
+          break;
+
+        case 'html':
+          $this->ensureTimezoneSet();
+          $html = $this->getHTMLReport('multisite', $io, $profile, [], $unique_sites);
+          file_put_contents($filepath, $html);
+          $io->success("HTML report written to {$filepath}");
+          break;
+
+        default:
+          throw new \Exception("Invalid output format {$format}. Supported formats are 'html' and 'json'.");
+      }
     }
 
-    $io->text('Execution time: ' . $this->timerEnd() . ' seconds');
+    $io->text("Execution time: {$this->timerEnd()} seconds.");
   }
 
 }
