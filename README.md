@@ -76,47 +76,27 @@ npm install --global --no-optional phantomas phantomjs-prebuilt@^2.1.5
 
 ## How to run against a single Drupal site
 
-Run using the `default` profile (replace [alias] with your drush alias):
+Run using the `default` profile (replace `[ALIAS]` with your drush alias):
 
 ```
-./bin/drutiny audit:site [alias]
+./bin/drutiny audit:site [ALIAS]
 ```
 
-Run a side audit using the `govcms_saas` profile:
+Run a side audit using a custom profile (replace `[YOUR_PROFILE]` with your profile name):
 
 ```
-./bin/drutiny audit:site [alias] --profile=govcms_saas
+./bin/drutiny audit:site [ALIAS] --profile=[YOUR_PROFILE]
 ```
-
-Because this is Symfony console, you have some other familiar commands:
-
-```
-./bin/drutiny help audit:site
-```
-
-In particular, if you use the `-v` argument, then you will see all the drush commands, and SSH commands printed to the screen.
 
 
 ## How to run against an entire Acquia Cloud Site Factory
 
 This will lookup a list of all Site Factory sites currently running, and will loop around them all. This is much like the multisite audit, except there is no need to supply a list of domains.
 
-Run using the `default` profile (replace [alias] with your drush alias):
+Example on how to run a side audit using a custom profile:
 
 ```
-./bin/drutiny audit:acsf [alias]
-```
-
-Run a side audit using the `govcms_saas` profile:
-
-```
-./bin/drutiny audit:acsf [alias] --profile=govcms_saas
-```
-
-You can also write the output to a file:
-
-```
-./bin/drutiny audit:acsf [alias] --profile=govcms_saas --report-dir=/tmp
+./bin/drutiny audit:acsf [ALIAS] --profile=[YOUR_PROFILE]
 ```
 
 
@@ -128,13 +108,24 @@ You first need to create a domains file that lists all domains you want to run a
 cp domains{-example,}.yml
 ```
 
-Run using the `govcms_saas` profile (replace [alias] with your drush alias):
+Example on how to run using a custom profile:
 
 ```
-./bin/drutiny audit:multisite [alias] --profile=govcms_saas --report-dir=/tmp --domain-file=domains.yml
+./bin/drutiny audit:multisite [ALIAS] --profile=[YOUR_PROFILE] --domain-file=domains.yml
 ```
 
-You do not have to run the site audit against all sites, you can elect to run it against a subset, or even just one.
+You do not have to run the site audit against all sites, you can elect to run it against a subset, or even just one. The domains you place in the YAML file dictate this.
+
+
+## Getting help
+
+Because this is a Symfony Console application, you have some other familiar commands:
+
+```
+./bin/drutiny help audit:site
+```
+
+In particular, if you use the `-v` argument, then you will see all the drush commands, and SSH commands printed to the screen.
 
 
 ## Bash aliases
@@ -153,13 +144,13 @@ alias am='/path/to/drutiny audit:multisite'
 Report formats be controlled with the `--format` option, and you can chain them together to get the same report in multiple formats. For example:
 
 ```
-./bin/drutiny audit:site [alias] --format=html --format=json
+./bin/drutiny audit:site [ALIAS] --format=html --format=json
 ```
 
 Reports by default will appear in the `reports` directory, but can be altered with another argument
 
 ```
-./bin/drutiny audit:site [alias] --format=html --format=json --report-dir=/tmp
+./bin/drutiny audit:site [ALIAS] --format=html --format=json --report-dir=/tmp
 ```
 
 
