@@ -13,6 +13,11 @@ use PHPUnit\Framework\TestCase;
  */
 class JsonReportTest extends TestCase {
 
+  /**
+   * Check context.
+   *
+   * @var \Drutiny\Context
+   */
   protected $context = NULL;
 
   /**

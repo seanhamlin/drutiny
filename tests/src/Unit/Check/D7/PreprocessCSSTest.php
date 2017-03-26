@@ -10,6 +10,11 @@ use PHPUnit\Framework\TestCase;
  */
 class PreprocessCSSTest extends TestCase {
 
+  /**
+   * Check context.
+   *
+   * @var \Drutiny\Context
+   */
   protected $context = NULL;
 
   /**

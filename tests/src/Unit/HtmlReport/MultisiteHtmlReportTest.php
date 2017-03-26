@@ -12,6 +12,12 @@ class MultisiteHtmlReportTest extends TestCase {
   protected $profile;
   protected $site = [];
   protected $sites = [];
+
+  /**
+   * Check context.
+   *
+   * @var \Drutiny\Context
+   */
   protected $context;
 
   /**

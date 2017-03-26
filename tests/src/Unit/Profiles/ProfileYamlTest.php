@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @coversDefaultClass \Drutiny\Profile\ProfileController
  */
-class profileYamlTest extends TestCase {
+class ProfileYamlTest extends TestCase {
 
   /**
    * @covers ::load
