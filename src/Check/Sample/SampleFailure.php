@@ -20,7 +20,7 @@ use Drutiny\AuditResponse\AuditResponse;
 class SampleFailure extends Check {
 
   /**
-   *
+   * @inheritDoc
    */
   public function check() {
     return AuditResponse::AUDIT_FAILURE;

@@ -19,7 +19,7 @@ class StripCommentTest extends TestCase {
   }
 
   /**
-   * dataProvider for testStripComments().
+   * DataProvider for testStripComments().
    */
   public function contentsProvider() {
     return [
@@ -27,12 +27,14 @@ class StripCommentTest extends TestCase {
       ['<?php   ', ''],
       ['<?php
 // @see http://cgit.drupalcode.org/module_missing_message_fixer/tree/includes/module_missing_message_fixer.drush.inc
-$rows = [];', '$rows = [];'],
+$rows = [];', '$rows = [];',
+      ],
       ['<?php
 
 // @see http://cgit.drupalcode.org/module_missing_message_fixer/tree/includes/module_missing_message_fixer.drush.inc
 
-$rows = [];', '$rows = [];'],
+$rows = [];', '$rows = [];',
+      ],
 
       // Comment after code should stay.
       ['$var = "blah"; // comment on the end.', '$var = "blah"; // comment on the end.'],
@@ -56,7 +58,8 @@ $rows = [];', '$rows = [];'],
 
                 // comment.
 
-                // comment.', ''],
+                // comment.', '',
+      ],
 
       // URLs have double slashes in them.
       ['$var = "http://www.google.com".', '$var = "http://www.google.com".'],

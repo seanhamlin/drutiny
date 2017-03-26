@@ -5,8 +5,6 @@ use Drutiny\Check\Sample\SampleWarning;
 use Drutiny\Check\Sample\SampleFailure;
 use Drutiny\Check\Sample\SampleException;
 use Drutiny\Base\DrushCaller;
-use Drutiny\Executor\Result;
-use Drutiny\AuditResponse\AuditResponse;
 use Drutiny\Context;
 use PHPUnit\Framework\TestCase;
 
@@ -66,4 +64,5 @@ class JsonReportTest extends TestCase {
     $response = $check->execute();
     $this->assertEquals(json_encode($response), '{"check":{"title":"Sample exception","description":"Sample exception descripion."},"status":"exception","message":"Sample exception exception."}');
   }
+
 }

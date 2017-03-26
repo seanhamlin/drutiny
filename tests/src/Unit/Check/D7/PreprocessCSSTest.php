@@ -8,34 +8,50 @@ use PHPUnit\Framework\TestCase;
 /**
  * @coversDefaultClass \Drutiny\Check\D7\PreprocessCSS
  */
-class PreprocessCSSTest extends TestCase
-{
+class PreprocessCSSTest extends TestCase {
+
+  protected $context = NULL;
+
+  /**
+   * @inheritDoc
+   */
+  protected function setUp() {
+    // Create a stub for the DrushCaller class.
+    $drushStub = $this->createMock(DrushCaller::class);
+    $drushStub->method('getVariable')
+      ->will($this->onConsecutiveCalls(0, 1, '0', '1', TRUE, FALSE, NULL, 'banana', ''));
+
+    // Create a new class, passing in the mock.
+    $this->context = new Context();
+    $this->context->set('drush', $drushStub)
+      ->set('autoRemediate', FALSE);
+  }
+
   /**
    * @covers ::check
    * @group check
    */
-  public function testCheck()
-  {
-    // Create a stub for the DrushCaller class.
-    $drushStub = $this->createMock(DrushCaller::class);
-    $drushStub->method('getVariable')
-              ->will($this->onConsecutiveCalls(0, 1, '0', '1', TRUE, FALSE, NULL, 'banana', ''));
+  public function testCheck() {
+    $check = new PreprocessCSS($this->context);
 
-    // Create a new class, passing in the mock.
-    $context = new Context();
-    $context->set('drush', $drushStub)
-            ->set('autoRemediate', FALSE);
-
-    $check = new PreprocessCSS($context);
-
-    $this->assertEquals(FALSE, $check->check()); // 0
-    $this->assertEquals(TRUE, $check->check());  // 1
-    $this->assertEquals(FALSE, $check->check()); // '0'
-    $this->assertEquals(TRUE, $check->check());  // '1'
-    $this->assertEquals(TRUE, $check->check());  // TRUE
-    $this->assertEquals(FALSE, $check->check()); // FALSE
-    $this->assertEquals(FALSE, $check->check()); // NULL
-    $this->assertEquals(FALSE, $check->check()); // 'banana'
-    $this->assertEquals(FALSE, $check->check()); // ''
+    // 0.
+    $this->assertEquals(FALSE, $check->check());
+    // 1.
+    $this->assertEquals(TRUE, $check->check());
+    // '0'.
+    $this->assertEquals(FALSE, $check->check());
+    // '1'.
+    $this->assertEquals(TRUE, $check->check());
+    // TRUE.
+    $this->assertEquals(TRUE, $check->check());
+    // FALSE.
+    $this->assertEquals(FALSE, $check->check());
+    // NULL.
+    $this->assertEquals(FALSE, $check->check());
+    // 'banana'.
+    $this->assertEquals(FALSE, $check->check());
+    // ''.
+    $this->assertEquals(FALSE, $check->check());
   }
+
 }

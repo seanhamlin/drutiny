@@ -20,7 +20,7 @@ use Drutiny\AuditResponse\AuditResponse;
 class SamplePass extends Check {
 
   /**
-   *
+   * @inheritDoc
    */
   public function check() {
     return AuditResponse::AUDIT_SUCCESS;

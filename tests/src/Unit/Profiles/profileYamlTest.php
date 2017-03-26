@@ -1,7 +1,6 @@
 <?php
 
 use Drutiny\Check\Registry;
-use Drutiny\Profile\ProfileController;
 use Symfony\Component\Yaml\Yaml;
 use PHPUnit\Framework\TestCase;
 

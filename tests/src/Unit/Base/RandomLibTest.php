@@ -6,8 +6,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @coversDefaultClass \Drutiny\Base\RandomLib
  */
-class RandomLibTest extends TestCase
-{
+class RandomLibTest extends TestCase {
 
   const ITERATIONS = 100;
 
@@ -15,12 +14,11 @@ class RandomLibTest extends TestCase
    * @covers ::generateRandomString
    * @group base
    */
-  public function testGenerateRandomString()
-  {
+  public function testGenerateRandomString() {
     $previous = [];
 
     // Ensure the generated string is alphanumeric only.
-    for ($i = 0 ; $i < self::ITERATIONS ; $i++) {
+    for ($i = 0; $i < self::ITERATIONS; $i++) {
       $random = RandomLib::generateRandomString();
       $this->assertRegExp('/^[a-zA-Z0-9]{32}$/', $random);
       $previous[] = $random;
