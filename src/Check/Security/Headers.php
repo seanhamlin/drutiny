@@ -7,6 +7,7 @@
 namespace Drutiny\Check\Security;
 
 use Drutiny\AuditResponse\AuditResponse;
+use Drutiny\Base\PhantomasCaller;
 use Drutiny\Check\Check;
 use Drutiny\Annotation\CheckInfo;
 use Drutiny\Helpers\Text;
@@ -26,31 +27,56 @@ use GuzzleHttp\Client;
 class Headers extends Check {
 
   /**
+   * Build a new Guzzle client.
+   *
+   * @return \GuzzleHttp\Client
+   */
+  public function getClient() {
+    return new Client();
+  }
+
+  /**
+   * Access the Phantom runner.
+   *
+   * @return Drutiny\Base\PhantomasCaller;
+   */
+  public function getPhantom() {
+    return $this->context->phantomas;
+  }
+
+  /**
    * Determine if the site response headers are configured correctly.
    */
   public function check() {
 
-    $client = new Client();
-    $headers = [];
+    $client = $this->getClient();
+    $request_headers = [];
     $errors = [];
 
     // If Shield is enabled - add the credentials to the headers.
-    if ($auth = $this->context->phantomas->getAuth()) {
-      $headers['auth'] = $auth;
+    if ($auth = $this->getPhantom()->getAuth()) {
+      $request_headers['auth'] = $auth;
     }
 
-    $response = $client->request('GET', $this->context->phantomas->getDomain(), $headers);
+    $headers = $this->getOption('expected_headers', []);
 
-    $expected = [
-      'x-content-options' => 'Should be set to <code>nosniff</code> to prevent clickjacking',
-      'x-frame-options' => 'Should be set to <code>SAMEORIGIN</code> to prevent clickjacking',
-      'x-xss-protection' => 'Should be set to prevent clickjacking',
-      'content-security-policy' => 'Should be set to prevent XSS vulnerabilities',
-    ];
+    if ($this->getOption('defaults', TRUE)) {
+      $headers = array_merge([
+        'x-content-options' => 'Should be set to <code>nosniff</code> to prevent clickjacking',
+        'x-frame-options' => 'Should be set to <code>SAMEORIGIN</code> to prevent clickjacking',
+        'x-xss-protection' => 'Should be set to prevent clickjacking',
+        'content-security-policy' => 'Should be set to prevent XSS vulnerabilities',
+      ], $headers);
+    }
 
-    $expected = $this->getOption('expected_headers', $expected);
+    if (empty($headers)) {
+      return AuditResponse::AUDIT_NA;
+    }
 
-    foreach ($expected as $header => $suggested) {
+    // Build the request.
+    $response = $client->request('GET', $this->getPhantom()->getDomain(), $request_headers);
+
+    foreach ($headers as $header => $suggested) {
       if (empty($response->getHeader($header))) {
         $errors[] = Text::translate('<strong>:header</strong> :message', [
           ':header' => $header,

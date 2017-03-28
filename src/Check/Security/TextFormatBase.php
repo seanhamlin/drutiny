@@ -8,7 +8,7 @@ namespace Drutiny\Check\Security;
 
 use Drutiny\AuditResponse\AuditResponse;
 use Drutiny\Check\Check;
-use Drutiny\Base\Text;
+use Drutiny\Helpers\Text;
 
 
 abstract class TextFormatBase extends Check {

@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Class TextFormatBaseTest.
  *
- * @coversDefaultClass \Drutiny\Check\Security\TextFormatBase;
+ * @coversDefaultClass \Drutiny\Check\Security\TextFormatBase
  */
 class TextFormatBaseTest extends TestCase {
 
