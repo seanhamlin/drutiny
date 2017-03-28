@@ -1,17 +1,12 @@
 <?php
-/**
- * @file
- * Contains Drutiny\Check\D7\LoginSecurity
- */
 
 namespace Drutiny\Settings;
 
 use Drutiny\AuditResponse\AuditResponse;
 use Drutiny\Check\Check;
-use Drutiny\Annotation\CheckInfo;
 
 /**
- * @CheckInfo(
+ * @Drutiny\Annotation\CheckInfo(
  *   title = "Module (:module) settings",
  *   description = "Ensure :module is configured correctly",
  *   remediation = "Ensure that the :module has the following settings <ul><li>:settings</li></ul>",
@@ -73,7 +68,7 @@ class SettingsCheck extends Check {
         if (!$setting->valid()) {
           $errors[] = "<code>{$setting->key()}</code> should be <b>{$setting->current()}</b>";
         }
-      } while($setting->next());
+      } while ($setting->next());
     }
 
     $this->setToken('module', $this->getLabel());
@@ -83,4 +78,5 @@ class SettingsCheck extends Check {
 
     return empty($errors) ? AuditResponse::AUDIT_SUCCESS : AuditResponse::AUDIT_FAILURE;
   }
+
 }

@@ -5,26 +5,37 @@ namespace Drutiny\Command;
 use Drutiny\AuditResponse\AuditResponse;
 use Drutiny\Base\DrushCaller;
 use Drutiny\Base\PhantomasCaller;
-use Drutiny\Base\RandomLib;
 use Drutiny\Settings\SettingsCheck;
 use Drutiny\Context;
 use Drutiny\Executor\Executor;
 use Drutiny\Executor\ExecutorRemote;
+use Drutiny\Profile\Profile;
 use Drutiny\Profile\ProfileController;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Yaml\Parser;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 
+/**
+ *
+ */
 class SiteAudit extends Command {
 
   protected $start = NULL;
   protected $end = NULL;
 
-  // Keeps track on whether this is a local or remote site audit.
+  /**
+   * Where the report will be written to.
+   * @var string
+   */
+  protected $reportsDir = './reports';
+
+  /**
+   * Keeps track on whether this is a local or remote site audit.
+   */
   protected $isRemote = FALSE;
 
   /**
@@ -43,7 +54,7 @@ class SiteAudit extends Command {
       )
       ->addOption(
         'ssh_options',
-        null,
+        NULL,
         InputOption::VALUE_REQUIRED,
         'Passthrough any SSH options directly to SSH.',
         ''
@@ -53,7 +64,14 @@ class SiteAudit extends Command {
         'd',
         InputOption::VALUE_REQUIRED,
         'Set the location where the reports should be written to.',
-        sys_get_temp_dir()
+        './reports'
+      )
+      ->addOption(
+        'format',
+        'o',
+        InputOption::VALUE_IS_ARRAY | InputOption::VALUE_REQUIRED,
+        "Desired output format. Supported formats are 'html' and 'json'.",
+        ['html']
       )
       ->addOption(
         'drush-bin',
@@ -72,8 +90,7 @@ class SiteAudit extends Command {
         'drush-alias',
         InputArgument::REQUIRED,
         'The drush alias for the site you wish to audit.'
-      )
-    ;
+      );
   }
 
   /**
@@ -82,26 +99,28 @@ class SiteAudit extends Command {
   protected function execute(InputInterface $input, OutputInterface $output) {
     $this->timerStart();
 
+    $io = new SymfonyStyle($input, $output);
+    $io->title('Drutiny site audit');
+
     // Normalise the @ in the alias. Remove it to be safe.
     $drush_alias = str_replace('@', '', $input->getArgument('drush-alias'));
 
     // Validate the reports directory.
-    $reports_dir = $input->getOption('report-dir');
-    if (!is_dir($reports_dir) || !is_writeable($reports_dir)) {
-      throw new \RuntimeException("Cannot write to $reports_dir");
+    $this->reportsDir = $input->getOption('report-dir');
+    if (!is_dir($this->reportsDir) || !is_writable($this->reportsDir)) {
+      throw new \RuntimeException("Cannot write to {$this->reportsDir}.");
     }
 
     // Validate the drush binary.
     $drush_bin = $input->getOption('drush-bin');
-    if (!$this->command_exist($drush_bin)) {
+    if (!$this->commandExists($drush_bin)) {
       throw new \RuntimeException("No drush binary available called '$drush_bin'.");
     }
 
     // Load the Drush alias which will contain more information we'll need.
-    $executor = new Executor($output);
+    $executor = new Executor($io);
     $drush = new DrushCaller($executor, $input->getOption('drush-bin'));
     $phantomas = new PhantomasCaller($executor, $drush);
-    $random_lib = new RandomLib();
     $response = $drush->siteAlias('@' . $drush_alias, '--format=json')->parseJson(TRUE);
 
     // Check for made up aliases.
@@ -118,31 +137,32 @@ class SiteAudit extends Command {
 
     $context = new Context();
     $context->set('input', $input)
-            ->set('output', $output)
-            ->set('reportsDir', $reports_dir)
-            ->set('profile', $profile)
-            ->set('executor', $executor)
-            ->set('remoteExecutor', $executor)
-            ->set('drush', $drush)
-            ->set('phantomas', $phantomas)
-            ->set('randomLib', $random_lib)
-            ->set('alias', $drush_alias)
-            ->set('config', $alias)
-            ->set('autoRemediate', $input->getOption('auto-remediate'));
+      ->set('output', $output)
+      ->set('io', $io)
+      ->set('reportsDir', $this->reportsDir)
+      ->set('profile', $profile)
+      ->set('executor', $executor)
+      ->set('remoteExecutor', $executor)
+      ->set('drush', $drush)
+      ->set('phantomas', $phantomas)
+      ->set('alias', $drush_alias)
+      ->set('config', $alias)
+      ->set('autoRemediate', $input->getOption('auto-remediate'));
 
     // Some checks don't use drush and connect to the server directly so we need
     // a remote executor available as well.
     if (isset($alias['remote-host'], $alias['remote-user'])) {
-      $executor = new ExecutorRemote($output);
+      $executor = new ExecutorRemote($io);
       $executor->setRemoteUser($alias['remote-user'])
-               ->setRemoteHost($alias['remote-host']);
+        ->setRemoteHost($alias['remote-host']);
       if (isset($alias['ssh-options'])) {
         $executor->setArgument($alias['ssh-options']);
       }
       try {
         $executor->setArgument($input->getOption('ssh_options'));
       }
-      catch (InvalidArgumentException $e) {}
+      catch (InvalidArgumentException $e) {
+      }
       $context->set('remoteExecutor', $executor);
       $this->isRemote = TRUE;
       $drush->setIsRemote($this->isRemote);
@@ -161,7 +181,7 @@ class SiteAudit extends Command {
       if (in_array($result->getStatus(), [AuditResponse::AUDIT_SUCCESS, AuditResponse::AUDIT_NA], TRUE)) {
         $passes[] = (string) $result;
       }
-      else if ($result->getStatus() === AuditResponse::AUDIT_WARNING) {
+      elseif ($result->getStatus() === AuditResponse::AUDIT_WARNING) {
         $warnings[] = (string) $result;
       }
       else {
@@ -172,35 +192,57 @@ class SiteAudit extends Command {
     $site['warn'] = count($warnings);
     $site['fail'] = count($failures);
 
-    // Optional HTML report.
-    if ($input->getOption('report-dir')) {
-      $this->ensureTimezoneSet();
-      $this->writeHTMLReport('site', $reports_dir, $output, $profile, $site);
+    // Output the report in the desired format, can be multiple.
+    foreach ($input->getOption('format') as $format) {
+      $filepath = $this->getReportFilepath($profile, $format, $site);
+      switch ($format) {
+        case 'json':
+          $json = json_encode($site, JSON_PRETTY_PRINT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
+          file_put_contents($filepath, $json);
+          $io->success("JSON report written to {$filepath}");
+          break;
+
+        case 'html':
+          $this->ensureTimezoneSet();
+          $html = $this->getHTMLReport('site', $io, $profile, $site);
+          file_put_contents($filepath, $html);
+          $io->success("HTML report written to {$filepath}");
+          break;
+
+        default:
+          throw new \Exception("Invalid output format {$format}. Supported formats are 'html' and 'json'.");
+      }
     }
 
-    $seconds = $this->timerEnd();
-    $output->writeln('<info>Execution time: ' . $seconds . ' seconds</info>');
+    $io->text("Execution time: {$this->timerEnd()} seconds.");
   }
 
   /**
    * Check to see if a given command exists in the source system.
    *
-   * @param  String $cmd
+   * @param string $cmd
    *   The command you want to see if it exists.
+   *
    * @return bool
    *   Whether or not a particular command exists.
    */
-  function command_exist($cmd) {
+  protected function commandExists($cmd) {
     $return_val = shell_exec(sprintf("which %s", escapeshellarg($cmd)));
     return !empty($return_val);
   }
 
+  /**
+   * Start the execution timer.
+   */
   protected function timerStart() {
-    $this->start = microtime(true);
+    $this->start = microtime(TRUE);
   }
 
+  /**
+   * Stop the execution timer.
+   */
   protected function timerEnd() {
-    $this->end = microtime(true);
+    $this->end = microtime(TRUE);
     return (int) ($this->end - $this->start);
   }
 
@@ -211,6 +253,7 @@ class SiteAudit extends Command {
    *   The context of the check.
    * @param $print
    *   Whether the check should print to the CLI.
+   *
    * @return array
    *   Array of results.
    */
@@ -234,6 +277,7 @@ class SiteAudit extends Command {
    *   The context of the check.
    * @param $print
    *   Whether the check should print to the CLI.
+   *
    * @return array
    *   Array of results.
    */
@@ -263,19 +307,57 @@ class SiteAudit extends Command {
   }
 
   /**
+   * The path to the report file. Takes into account whether this is a single
+   * site audit, or multiple sites, and also the users preference on what
+   * folder to locate the reports in.
+   *
+   * @param Profile $profile
+   *   All the information about the checks.
+   * @param string $format
+   *   The extension of the report.
+   * @param array $site
+   *   Information for a single site.
+   * @param array $sites
+   *   Information for multiple single sites.
+   * @return string
+   *   The full path to the report including folder and filename.
+   */
+  protected function getReportFilepath(Profile $profile, $format, array $site = [], array $sites = []) {
+    $filename = "drutiny.$format";
+    if (!empty($site)) {
+      $filename = implode('.', [$site['domain'], $format]);
+    }
+    elseif (!empty($sites)) {
+      $filename = implode('.', [$profile->getMachineName(), $format]);
+    }
+    $filepath = $this->reportsDir . '/' . $filename;
+
+    if (is_file($filepath) && !is_writable($filepath)) {
+      throw new \RuntimeException("Cannot overwrite file: {$filepath}.");
+    }
+
+    return $filepath;
+  }
+
+  /**
    * Convert the results into HTML.
    *
    * @param string $template
-   * @param [type]          $reports_dir [description]
-   * @param OutputInterface $output      [description]
-   * @param Profile         $profile     [description]
-   * @param Array           $site        [description]
+   *   The name of the twig template (without the .html.twig extension).
+   * @param \Symfony\Component\Console\Style\SymfonyStyle $io
+   *   The output style.
+   * @param Profile $profile
+   *   All the information about the checks.
+   * @param array $site
+   *   Information for a single site.
+   * @param array $sites
+   *   Information for multiple single sites.
    */
-  protected function writeHTMLReport($template, $reports_dir, OutputInterface $output, $profile, Array $site, Array $sites = []) {
+  protected function getHTMLReport($template, SymfonyStyle $io, Profile $profile, array $site = [], array $sites = []) {
     $loader = new \Twig_Loader_Filesystem(__DIR__ . '/../../templates');
     $twig = new \Twig_Environment($loader, array(
-      'cache' => sys_get_temp_dir() . '/cache',
-      'auto_reload' => true,
+      'cache' => sys_get_temp_dir() . '/drutiny/cache',
+      'auto_reload' => TRUE,
     ));
     $filter = new \Twig_SimpleFilter('filterXssAdmin', [$this, 'filterXssAdmin'], [
       'is_safe' => ['html'],
@@ -288,21 +370,7 @@ class SiteAudit extends Command {
       'sites' => $sites,
     ]);
 
-    $filename = 'drutiny.html';
-    if (!empty($site)) {
-      $filename = implode('.', [$site['domain'], 'html']);
-    }
-    elseif (!empty($sites)) {
-      $filename = implode('.', [$profile->getMachineName(), 'html']);
-    }
-    $filepath = $reports_dir . '/' . $filename;
-
-    if (is_file($filepath) && !is_writeable($filepath)) {
-      throw new \RuntimeException("Cannot overwrite file: $filepath");
-    }
-
-    file_put_contents($filepath, $contents);
-    $output->writeln("<info>Report written to $filepath</info>");
+    return $contents;
   }
 
   /**
@@ -310,6 +378,7 @@ class SiteAudit extends Command {
    *
    * @param string $string
    *   The string to strip.
+   *
    * @return string
    *   The stripped string.
    */

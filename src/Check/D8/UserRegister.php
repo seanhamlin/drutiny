@@ -3,10 +3,9 @@
 namespace Drutiny\Check\D8;
 
 use Drutiny\Check\Check;
-use Drutiny\Annotation\CheckInfo;
 
 /**
- * @CheckInfo(
+ * @Drutiny\Annotation\CheckInfo(
  *  title = "User registration",
  *  description = "Anonymous sites should have user registration set to off to prevent spam registrations.",
  *  remediation = "Set the configuration object <code>user.settings</code> key <code>register</code> to be <code>admin_only</code>.",
@@ -16,9 +15,13 @@ use Drutiny\Annotation\CheckInfo;
  * )
  */
 class UserRegister extends Check {
-  public function check()
-  {
+
+  /**
+   *
+   */
+  public function check() {
     $user_register = $this->context->drush->getConfig('user.settings', 'register', 'admin_only');
     return $user_register === 'admin_only';
   }
+
 }

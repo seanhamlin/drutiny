@@ -1,12 +1,10 @@
 <?php
-/**
- * @file
- * Contains Drutiny\Settings\VariableIterator
- */
 
 namespace Drutiny\Settings;
 
-
+/**
+ *
+ */
 class VariablesIteratorD7 extends SettingsIterator {
 
   /**

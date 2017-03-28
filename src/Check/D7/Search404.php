@@ -4,10 +4,9 @@ namespace Drutiny\Check\D7;
 
 use Drutiny\Check\Check;
 use Drutiny\Executor\DoesNotApplyException;
-use Drutiny\Annotation\CheckInfo;
 
 /**
- * @CheckInfo(
+ * @Drutiny\Annotation\CheckInfo(
  *  title = "Search 404",
  *  description = "Search 404 can cause performance impacts to your site if it is enabled and set to automatically search upon encountering a 404. Also, when search404 issues a HTTP 302, and not a 404, this can confuse search engines.",
  *  remediation = "Set the variable <code>search404_skip_auto_search</code> to be <code>TRUE</code>, and the variable <code>search404_do_custom_search</code> to be <code>FALSE</code>.",
@@ -18,8 +17,11 @@ use Drutiny\Annotation\CheckInfo;
  * )
  */
 class Search404 extends Check {
-  public function check()
-  {
+
+  /**
+   *
+   */
+  public function check() {
     // If the module is disabled, then no search404.
     if ($this->context->drush->moduleEnabled('search404')) {
 
@@ -51,4 +53,5 @@ class Search404 extends Check {
 
     return TRUE;
   }
+
 }

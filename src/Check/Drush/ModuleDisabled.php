@@ -3,10 +3,9 @@
 namespace Drutiny\Check\Drush;
 
 use Drutiny\Check\Check;
-use Drutiny\Annotation\CheckInfo;
 
 /**
- * @CheckInfo(
+ * @Drutiny\Annotation\CheckInfo(
  *  title = "Module disabled",
  *  description = "Check that a set of modules are disabled.",
  *  remediation = "Disable the modules through the Drupal admin UI or drush dis command.",
@@ -16,6 +15,10 @@ use Drutiny\Annotation\CheckInfo;
  * )
  */
 class ModuleDisabled extends Check {
+
+  /**
+   *
+   */
   public function check() {
     $modules = $this->getOption('modules');
     if (empty($modules)) {
@@ -42,4 +45,5 @@ class ModuleDisabled extends Check {
 
     return TRUE;
   }
+
 }

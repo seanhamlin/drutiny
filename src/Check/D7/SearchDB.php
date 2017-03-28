@@ -5,10 +5,9 @@ namespace Drutiny\Check\D7;
 use Drutiny\AuditResponse\AuditResponse;
 use Drutiny\Check\Check;
 use Drutiny\Executor\DoesNotApplyException;
-use Drutiny\Annotation\CheckInfo;
 
 /**
- * @CheckInfo(
+ * @Drutiny\Annotation\CheckInfo(
  *  title = "Search database",
  *  description = "Search backed with the database (and not Solr) can cause performance impacts to your site. Often the SQL queries caused but using the database are slow.",
  *  remediation = "Disable <code>search_api_db</code> and then configure search to use Solr.",
@@ -20,6 +19,10 @@ use Drutiny\Annotation\CheckInfo;
  * )
  */
 class SearchDB extends Check {
+
+  /**
+   *
+   */
   public function check() {
     if (!$this->context->drush->moduleEnabled('search')) {
       throw new DoesNotApplyException();
@@ -33,7 +36,7 @@ class SearchDB extends Check {
       if (empty($output)) {
         $number_of_db_indexes = 0;
       }
-      else if (count($output) == 1) {
+      elseif (count($output) == 1) {
         $number_of_db_indexes = (int) $output[0];
       }
       else {
@@ -69,4 +72,5 @@ class SearchDB extends Check {
     return TRUE;
 
   }
+
 }

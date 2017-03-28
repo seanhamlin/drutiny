@@ -2,9 +2,11 @@
 
 namespace Drutiny\Base;
 
-use Drutiny\Base\DrushCaller;
 use Drutiny\Executor\ExecutorInterface;
 
+/**
+ *
+ */
 class PhantomasCaller {
   protected $executor;
   protected $drush;
@@ -13,6 +15,9 @@ class PhantomasCaller {
   protected $metrics = NULL;
   protected $urls = [];
 
+  /**
+   *
+   */
   public function __construct(ExecutorInterface $executor, DrushCaller $drush) {
     $this->executor = $executor;
     $this->drush = $drush;
@@ -46,11 +51,17 @@ class PhantomasCaller {
     return $this->domain;
   }
 
+  /**
+   *
+   */
   public function setUrls($urls) {
     $this->urls = $urls;
     return $this;
   }
 
+  /**
+   *
+   */
   public function setDrush(DrushCaller $drush) {
     $this->drush = $drush;
     return $this;
@@ -60,6 +71,7 @@ class PhantomasCaller {
    * Get authentication details for the request.
    */
   public function getAuth() {
+
     // Check for the presence of shield as this will potentially block
     // phantomas.
     if ($this->drush->isShieldEnabled()) {
@@ -71,6 +83,7 @@ class PhantomasCaller {
     // authentication is hard coded in settings.php for example. You can set
     // these by:
     //
+
     // export SITE_AUDIT_HTTP_AUTH_USER=[USERNAME]
     // export SITE_AUDIT_HTTP_AUTH_PASS=[PASSWORD]
     else if (!empty(getenv('SITE_AUDIT_HTTP_AUTH_USER'))) {
@@ -155,7 +168,5 @@ class PhantomasCaller {
       return $default;
     }
   }
-
-
 
 }

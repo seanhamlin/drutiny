@@ -3,10 +3,9 @@
 namespace Drutiny\Check\D7;
 
 use Drutiny\Check\Check;
-use Drutiny\Annotation\CheckInfo;
 
 /**
- * @CheckInfo(
+ * @Drutiny\Annotation\CheckInfo(
  *  title = "BlackList Permissions",
  *  description = "Checks to ensure roles do not contain blacklisted permissions.",
  *  remediation = "Remove blacklisted permissions from roles.",
@@ -16,6 +15,10 @@ use Drutiny\Annotation\CheckInfo;
  * )
  */
 class BlacklistPermissions extends Check {
+
+  /**
+   *
+   */
   public function check() {
     $perms = $this->getOption('permissions');
     if (empty($perms)) {
@@ -48,7 +51,7 @@ class BlacklistPermissions extends Check {
     }
 
     foreach ($black_roles as $role => &$perms) {
-      if($role == 'name' && $perms[0] == 'permission') {
+      if ($role == 'name' && $perms[0] == 'permission') {
         unset($black_roles[$role]);
         continue;
       }
@@ -59,4 +62,5 @@ class BlacklistPermissions extends Check {
 
     return FALSE;
   }
+
 }

@@ -1,32 +1,39 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Drutiny\Profile\ProfileController;
 use Drutiny\Profile\Profile;
 use Drutiny\Context;
-use Drutiny\Annotation\CheckInfo;
 
 /**
  * @coversDefaultClass \Drutiny\Command\SiteAudit
  */
-class SiteHtmlReportTest extends TestCase
-{
+class SiteHtmlReportTest extends TestCase {
 
   protected $profile;
   protected $site = [];
   protected $sites = [];
+
+  /**
+   * Check context.
+   *
+   * @var \Drutiny\Context
+   */
   protected $context;
 
-  protected function setUp()
-  {
+  /**
+   * @inheritDoc
+   */
+  protected function setUp() {
     $this->profile = new Profile('Sample title', 'sample', [
       '\Drutiny\Check\Sample\SamplePass' => [],
       '\Drutiny\Check\Sample\SampleWarning' => [],
       '\Drutiny\Check\Sample\SampleFailure' => [],
+      '\Drutiny\Check\Sample\SampleException' => [],
     ]);
 
     $results = [];
     $this->context = new Context();
+    $this->context->set('autoRemediate', FALSE);
     foreach ($this->profile->getChecks() as $check => $options) {
       $test = new $check($this->context, $options);
       $result = $test->execute();
@@ -41,12 +48,11 @@ class SiteHtmlReportTest extends TestCase
    * @covers ::writeHTMLReport
    * @group report
    */
-  public function testSiteHtmlReport()
-  {
+  public function testSiteHtmlReport() {
     $loader = new \Twig_Loader_Filesystem(__DIR__ . '/../../../../templates');
     $twig = new \Twig_Environment($loader, array(
       'cache' => sys_get_temp_dir() . '/cache',
-      'auto_reload' => true,
+      'auto_reload' => TRUE,
     ));
     $filter = new \Twig_SimpleFilter('filterXssAdmin', ['\Drutiny\Command\SiteAudit', 'filterXssAdmin'], [
       'is_safe' => ['html'],
@@ -60,8 +66,7 @@ class SiteHtmlReportTest extends TestCase
     ]);
 
     // Debug.
-    //file_put_contents('/tmp/sample.html', $contents);
-
+    // file_put_contents('/tmp/sample.html', $contents);
     // Global report tests.
     $this->assertRegExp('/<h1>Sample title<\/h1>/', $contents);
     $this->assertRegExp('/Report run across www\.sample\.com/', $contents);
@@ -88,9 +93,19 @@ class SiteHtmlReportTest extends TestCase
     $this->assertRegExp('/Sample failure descripion\./', $contents);
     $this->assertRegExp('/Sample failure remediation\./', $contents);
 
+    // Exception should be caught, and the appropriate text shown. The
+    // exception text should not be shown.
+    $this->assertRegExp('/Sample exception exception\./', $contents);
+    $this->assertNotRegExp('/Sample exception success\./', $contents);
+    $this->assertNotRegExp('/Sample exception warning\./', $contents);
+    $this->assertRegExp('/Sample exception descripion\./', $contents);
+    $this->assertRegExp('/Sample exception remediation\./', $contents);
+    $this->assertNotRegExp('/Sample exception text\./', $contents);
+
     // Ensure no Symfony console HTML is in the report.
     $this->assertNotRegExp('/<info>/', $contents);
     $this->assertNotRegExp('/<comment>/', $contents);
     $this->assertNotRegExp('/<error>/', $contents);
   }
+
 }

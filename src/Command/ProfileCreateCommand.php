@@ -11,7 +11,9 @@ use Drutiny\Profile\Profile;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
-
+/**
+ *
+ */
 class ProfileCreateCommand extends Command {
 
   /**
@@ -26,16 +28,15 @@ class ProfileCreateCommand extends Command {
   /**
    * @inheritdoc
    */
-  protected function execute(InputInterface $input, OutputInterface $output)
-  {
+  protected function execute(InputInterface $input, OutputInterface $output) {
     $profile = new Profile();
 
     $helper = $this->getHelper('question');
     $question = new Question('Title: ', $profile->getTitle());
     $question->setValidator(function ($value) {
-        if (trim($value) == '') {
-            throw new \Exception('Title cannot be empty');
-        }
+      if (trim($value) == '') {
+        throw new \Exception('Title cannot be empty');
+      }
         return $value;
     });
 
@@ -43,9 +44,9 @@ class ProfileCreateCommand extends Command {
 
     $question = new Question('Machine name: ', $profile->getTitle());
     $question->setValidator(function ($value) {
-        if (trim($value) == '') {
-            throw new \Exception('Machine name cannot be empty');
-        }
+      if (trim($value) == '') {
+        throw new \Exception('Machine name cannot be empty');
+      }
         return $value;
     });
 

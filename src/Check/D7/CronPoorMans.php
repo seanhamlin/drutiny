@@ -3,10 +3,9 @@
 namespace Drutiny\Check\D7;
 
 use Drutiny\Check\Check;
-use Drutiny\Annotation\CheckInfo;
 
 /**
- * @CheckInfo(
+ * @Drutiny\Annotation\CheckInfo(
  *  title = "Poor mans cron",
  *  description = "Checks that poor mans cron is disabled and will never run with a web thread.",
  *  remediation = "Set the variable <code>cron_safe_threshold</code> to <code>0</code>.",
@@ -16,8 +15,11 @@ use Drutiny\Annotation\CheckInfo;
  * )
  */
 class CronPoorMans extends Check {
-  public function check()
-  {
+
+  /**
+   *
+   */
+  public function check() {
     // @see DRUPAL_CRON_DEFAULT_THRESHOLD which defaults to 10800. You also
     // cannot get this variable via drush as it gets overridden, so do a manual
     // database query instead.
@@ -29,4 +31,5 @@ class CronPoorMans extends Check {
     }
     return TRUE;
   }
+
 }

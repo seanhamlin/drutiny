@@ -3,10 +3,9 @@
 namespace Drutiny\Check\Drush;
 
 use Drutiny\Check\Check;
-use Drutiny\Annotation\CheckInfo;
 
 /**
- * @CheckInfo(
+ * @Drutiny\Annotation\CheckInfo(
  *  title = "Module enabled",
  *  description = "Check that a set of modules are enabled.",
  *  remediation = "Enable the modules through the Drupal admin UI or drush en command.",
@@ -16,8 +15,11 @@ use Drutiny\Annotation\CheckInfo;
  * )
  */
 class ModuleEnabled extends Check {
-  public function check()
-  {
+
+  /**
+   *
+   */
+  public function check() {
     $modules = $this->getOption('modules');
     if (empty($modules)) {
       return TRUE;
@@ -43,4 +45,5 @@ class ModuleEnabled extends Check {
 
     return TRUE;
   }
+
 }

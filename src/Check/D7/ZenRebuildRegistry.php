@@ -3,10 +3,9 @@
 namespace Drutiny\Check\D7;
 
 use Drutiny\Check\Check;
-use Drutiny\Annotation\CheckInfo;
 
 /**
- * @CheckInfo(
+ * @Drutiny\Annotation\CheckInfo(
  *  title = "Zen rebuild registry",
  *  description = "The rebuild registry feature is enabled for your theme. This setting is only used during theme development, and can negatively impact site performance.",
  *  remediation = "To disable the rebuild theme registry feature, on your website, open the Themes page at <code>/admin/appearance/settings/[THEMENAME]</code>, and then deselect Rebuild theme registry for each enabled Zen-based theme. Also note that this setting is often hardcoded in theme info file.",
@@ -16,6 +15,10 @@ use Drutiny\Annotation\CheckInfo;
  * )
  */
 class ZenRebuildRegistry extends Check {
+
+  /**
+   *
+   */
   public function check() {
 
     $output = $this->context->drush->sqlQuery("SELECT * FROM {variable} WHERE name LIKE 'theme_%';");
@@ -45,4 +48,5 @@ class ZenRebuildRegistry extends Check {
 
     return TRUE;
   }
+
 }

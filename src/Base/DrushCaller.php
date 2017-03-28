@@ -2,8 +2,12 @@
 
 namespace Drutiny\Base;
 
+use Drutiny\Base\StringLib;
 use Drutiny\Executor\ExecutorInterface;
 
+/**
+ * Drush integration.
+ */
 class DrushCaller {
   protected $executor;
   protected $drushAlias;
@@ -18,6 +22,9 @@ class DrushCaller {
   protected $isRemote = FALSE;
   protected $singleSite = TRUE;
 
+  /**
+   *
+   */
   public function __construct(ExecutorInterface $executor, $drushAlias = 'drush') {
     $this->executor = $executor;
 
@@ -26,30 +33,45 @@ class DrushCaller {
     $this->configurationList = new \stdClass();
   }
 
+  /**
+   *
+   */
   public function setAlias($alias) {
     $this->alias = $alias;
     return $this;
   }
 
+  /**
+   *
+   */
   public function setArgument($arg) {
     $this->args[] = $arg;
     return $this;
   }
 
+  /**
+   * Is the site being audited being executed through a SSH wrapper.
+   */
   public function setIsRemote($isRemote) {
     $this->isRemote = $isRemote;
     return $this;
   }
 
+  /**
+   *
+   */
   public function setSingleSite($singleSite) {
     $this->singleSite = $singleSite;
     return $this;
   }
 
+  /**
+   * Converts into method into a Drush command.
+   */
   public function __call($method, $args) {
     // Convert method from camelCase to Drush hyphen based method naming.
     // E.g. PmInfo will become pm-info.
-    preg_match_all('/((?:^|[A-Z])[a-z]+)/',$method,$matches);
+    preg_match_all('/((?:^|[A-Z])[a-z]+)/', $method, $matches);
     $method = implode('-', array_map('strtolower', $matches[0]));
 
     $command = [$this->drushAlias];
@@ -62,18 +84,34 @@ class DrushCaller {
     }
 
     foreach ($args as &$arg) {
-      // no need to quote drush arguments.
+      // No need to quote drush arguments.
       if (strpos($arg, '--') === 0) {
         $arg = addcslashes($arg, '"');
       }
-      /*else {
-        $arg = "'" . addcslashes($arg, '"') . "'";
-      }*/
     }
 
     $command[] = $method;
     $command = array_merge($command, $args);
     return $this->executor->execute(implode(' ', $command));
+  }
+
+  /**
+   * Wraps around php-eval to provide escpaing of quotes.
+   *
+   * @param string $command
+   *   The command to execute.
+   * @return mixed
+   */
+  public function executePhp($command) {
+    // Remote execution on multiple sites requires more escaping.
+    if ($this->isRemote && !$this->singleSite) {
+      $output = $this->phpEval('\"' . $command . '\"');
+    }
+    else {
+      $output = $this->phpEval('"' . $command . '"');
+    }
+
+    return $output;
   }
 
   /**
@@ -84,6 +122,7 @@ class DrushCaller {
    *   The filename of the script in the './src/Scripts/' folder. The .php
    *   extens is not required. The script in question should return JSON for
    *   all of it's results.
+   *
    * @return [String]
    *   The result of the Drush command.
    */
@@ -92,17 +131,13 @@ class DrushCaller {
     if (!file_exists($location)) {
       throw new \Exception("No script found at $location.");
     }
-    $base64 = base64_encode(file_get_contents($location));
 
-    // Remote execution on multiple sites requires more escaping.
-    if ($this->isRemote && !$this->singleSite) {
-      $output = $this->phpEval('\"' . "eval(base64_decode('" . $base64 . "'));" . '\"')->parseJson();
-    }
-    else {
-      $output = $this->phpEval('"' . "eval(base64_decode('" . $base64 . "'));" . '"')->parseJson();
-    }
+    $contents = file_get_contents($location);
+    // We strip the comments to reduce the size of the base64 payload.
+    $contents = StringLib::stripComments($contents);
 
-    return $output;
+    $output = $this->executePhp("eval(base64_decode('" . base64_encode($contents) . "'));");
+    return $output->parseJson();
   }
 
   /**
@@ -133,14 +168,16 @@ class DrushCaller {
       $result = $this->sqlq('"' . $sql . '"');
     }
 
+    // @TODO return the object, not just the output.
     return $result->getOutput();
   }
-
 
   /**
    * Get a drush core status from the site.
    *
-   * @param $key [string]
+   * @param [string] $key
+   *   Filters the core status array by a key if present.
+   *
    * @return a drush core status object.
    */
   public function getCoreStatus($key = NULL) {
@@ -166,6 +203,8 @@ class DrushCaller {
    * Try to find out if a module is enabled or not.
    *
    * @param $name
+   *   The module machine name.
+   *
    * @return bool
    *   TRUE if the module is enabled, FALSE otherwise (including if the module
    *   was not found).
@@ -191,12 +230,14 @@ class DrushCaller {
   }
 
   /**
-   * Try to return a variable value.
+   * Try to return a variable value. There is caching in the variable get to
+   * avoid expensive round trips to the Drupal site.
    *
    * @param $name
    *   The name of the variable (exact).
    * @param int $default
    *   The value to return if the variable is not set.
+   *
    * @return mixed
    */
   public function getVariable($name, $default = 0) {
@@ -220,6 +261,36 @@ class DrushCaller {
   }
 
   /**
+   * Try to set a variable value. This updates both the local cache (in case a
+   * subsequent checks requests it) and the remote Drupal site.
+   *
+   * @param $name
+   *   The name of the variable (exact).
+   * @param int $default
+   *   The value to return if the variable is not set.
+   *
+   * @return mixed
+   */
+  public function setVariable($name, $value) {
+    $this->variablesList->{$name} = $value;
+    return $this->variableSet($name, $value);
+  }
+
+  /**
+   * Try to delete a variable value. This updates both the local cache (in case
+   * a subsequent checks requests it) and the remote Drupal site.
+   *
+   * @param $name
+   *   The name of the variable (exact).
+   *
+   * @return mixed
+   */
+  public function deleteVariable($name) {
+    unset($this->variablesList->{$name});
+    return $this->variableDelete($name, '--exact', '--yes');
+  }
+
+  /**
    * Try to return a configuration value.
    *
    * @param $configName
@@ -228,6 +299,7 @@ class DrushCaller {
    *   The config key, for example "page.front".
    * @param int $default
    *   The value to return if the configuration key is not set.
+   *
    * @return mixed
    */
   public function getConfig($configName, $key, $default = 0) {
@@ -257,9 +329,10 @@ class DrushCaller {
   }
 
   /**
-   * Determine if shield module is active, and is also enabled.
+   * Determine if shield module is enabled, and is also active.
    *
-   * @return boolean
+   * @return bool
+   *   Whether or no sheild is enabled and active.
    */
   public function isShieldEnabled() {
     // If the module is disabled, then no shield.
@@ -286,6 +359,7 @@ class DrushCaller {
    *   The name of the variable (exact).
    * @param int $default
    *   The value to return if the variable is not set.
+   *
    * @return mixed
    */
   public function getVariableFromDB($name, $default = 0) {
@@ -294,7 +368,7 @@ class DrushCaller {
       if (empty($output)) {
         $value = $default;
       }
-      else if (count($output) == 1) {
+      elseif (count($output) == 1) {
         if (empty($output[0])) {
           $value = $default;
         }
@@ -315,22 +389,28 @@ class DrushCaller {
     }
   }
 
+  /**
+   * List all role assignments to users who are not user #1.
+   */
   public function getAllUserRoles() {
     return $this->sqlQuery('SELECT rid FROM {users_roles} WHERE uid > 1;');
   }
 
+  /**
+   * List all roles.
+   */
   public function getAllRoles() {
     return $this->roleList('--format=json')->parseJson(TRUE);
   }
 
   /**
-   * Try to return a list of roles assigned to a permission
+   * Try to return a list of roles assigned to a permission.
    *
    * @param $permission
-   *  The permission name,e.g. 'administer nodes'
+   *   The permission name,e.g. 'administer nodes'.
    *
    * @return list
-   *  Return a list of roles assigned to the permission
+   *   Return a list of roles assigned to the permission.
    */
   public function getRolesForPermission($permission) {
     try {
@@ -339,6 +419,7 @@ class DrushCaller {
       return NULL;
     }
   }
+
 
   /**
    * Try to return a list of module implementation hooks.

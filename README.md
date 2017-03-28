@@ -1,6 +1,6 @@
 # Drutiny (Drupal Scrutiny)
 
-[![Build Status](https://travis-ci.org/seanhamlin/drutiny.svg?branch=master)](https://travis-ci.org/seanhamlin/drutiny)
+[![Build Status](https://travis-ci.org/seanhamlin/drutiny.svg?branch=master)](https://travis-ci.org/seanhamlin/drutiny) [![Latest Stable Version](https://poser.pugx.org/seanhamlin/drutiny/v/stable)](https://packagist.org/packages/seanhamlin/drutiny) [![Total Downloads](https://poser.pugx.org/seanhamlin/drutiny/downloads)](https://packagist.org/packages/seanhamlin/drutiny) [![Latest Unstable Version](https://poser.pugx.org/seanhamlin/drutiny/v/unstable)](https://packagist.org/packages/seanhamlin/drutiny) [![License](https://poser.pugx.org/seanhamlin/drutiny/license)](https://packagist.org/packages/seanhamlin/drutiny)
 
 This is a generic Drupal 7 and Drupal 8 site auditing and optional remediation tool.
 
@@ -73,56 +73,34 @@ And then use NPM to install phantomas:
 npm install --global --no-optional phantomas phantomjs-prebuilt@^2.1.5
 ```
 
-## How to run against a single site
 
-Run using the `default` profile (replace [alias] with your drush alias):
+## How to run against a single Drupal site
 
-```
-php bin/drutiny audit:site [alias]
-```
-
-Run a side audit using the `govcms_saas` profile:
+Run using the `default` profile (replace `[ALIAS]` with your drush alias):
 
 ```
-php bin/drutiny audit:site [alias] --profile=govcms_saas
+./bin/drutiny audit:site [ALIAS]
 ```
 
-Because this is Symfony console, you have some other familiar commands:
+Run a side audit using a custom profile (replace `[YOUR_PROFILE]` with your profile name):
 
 ```
-php bin/drutiny help audit:site
-```
-
-In particular, if you use the `-v` argument, then you will see all the drush commands, and SSH commands printed to the screen.
-
-You can also write the output to a file:
-
-```
-php bin/drutiny audit:site [alias] --profile=govcms_saas --report-dir=/tmp
-```
-
-## How to run against an entire Site Factory
-
-Run using the `default` profile (replace [alias] with your drush alias):
-
-```
-php bin/drutiny audit:acsf [alias]
-```
-
-Run a side audit using the `govcms_saas` profile:
-
-```
-php bin/drutiny audit:acsf [alias] --profile=govcms_saas
-```
-
-You can also write the output to a file:
-
-```
-php bin/drutiny audit:acsf [alias] --profile=govcms_saas --report-dir=/tmp
+./bin/drutiny audit:site [ALIAS] --profile=[YOUR_PROFILE]
 ```
 
 
-## How to run against sites in a multisite
+## How to run against an entire Acquia Cloud Site Factory
+
+This will lookup a list of all Site Factory sites currently running, and will loop around them all. This is much like the multisite audit, except there is no need to supply a list of domains.
+
+Example on how to run a side audit using a custom profile:
+
+```
+./bin/drutiny audit:acsf [ALIAS] --profile=[YOUR_PROFILE]
+```
+
+
+## How to run against sites in a Drupal multisite
 
 You first need to create a domains file that lists all domains you want to run an audit against. An example is provided with `domains-example.yml` to which you can copy and make you own version:
 
@@ -130,24 +108,52 @@ You first need to create a domains file that lists all domains you want to run a
 cp domains{-example,}.yml
 ```
 
-Run using the `govcms_saas` profile (replace [alias] with your drush alias):
+Example on how to run using a custom profile:
 
 ```
-php bin/drutiny audit:multisite [alias] --profile=govcms_saas --report-dir=/tmp --domain-file=domains.yml
+./bin/drutiny audit:multisite [ALIAS] --profile=[YOUR_PROFILE] --domain-file=domains.yml
 ```
 
-You do not have to run the site audit against all sites, you can elect to run it against a subset, or even just one.
+You do not have to run the site audit against all sites, you can elect to run it against a subset, or even just one. The domains you place in the YAML file dictate this.
+
+
+## Getting help
+
+Because this is a Symfony Console application, you have some other familiar commands:
+
+```
+./bin/drutiny help audit:site
+```
+
+In particular, if you use the `-v` argument, then you will see all the drush commands, and SSH commands printed to the screen.
+
 
 ## Bash aliases
 
 This could be helpful if you want to be able to run the command from anywhere:
 
 ```
-alias as='php /path/to/drutiny audit:site'
-alias aa='php /path/to/drutiny audit:acsf'
-alias am='php /path/to/drutiny audit:multisite'
+alias as='/path/to/drutiny audit:site'
+alias aa='/path/to/drutiny audit:acsf'
+alias am='/path/to/drutiny audit:multisite'
 ```
+
+
+## Report formats and locations
+
+Report formats be controlled with the `--format` option, and you can chain them together to get the same report in multiple formats. For example:
+
+```
+./bin/drutiny audit:site [ALIAS] --format=html --format=json
+```
+
+Reports by default will appear in the `reports` directory, but can be altered with another argument
+
+```
+./bin/drutiny audit:site [ALIAS] --format=html --format=json --report-dir=/tmp
+```
+
 
 ## Auto remediation
 
-Certain checks have an autoremediation feature, in order to use this you will need to pass in `--auto-remediate` as a parameter on the command line.
+Certain checks have an auto-remediation feature, in order to use this you will need to pass in `--auto-remediate` as a parameter on the command line. In general auto-remediation is only ever added into checks where the remediation is unlikely to break the site, e.g. it will never disable modules (as this could break the site) but it will set certain variables.

@@ -3,10 +3,9 @@
 namespace Drutiny\Check\D8;
 
 use Drutiny\Check\Check;
-use Drutiny\Annotation\CheckInfo;
 
 /**
- * @CheckInfo(
+ * @Drutiny\Annotation\CheckInfo(
  *  title = "CSS aggregation",
  *  description = "With CSS optimization disabled, your website visitors are experiencing slower page performance and the server load is increased.",
  *  remediation = "Set the configuration object <code>system.performance</code> key <code>css.preprocess</code> to be <code>TRUE</code>.",
@@ -17,18 +16,20 @@ use Drutiny\Annotation\CheckInfo;
  * )
  */
 class PreprocessCSS extends Check {
-  public function check()
-  {
-    $fixups = [];
-    $preprocess_css = $this->context->drush->getConfig('system.performance', 'css.preprocess', TRUE);
 
-    if (!$preprocess_css && $this->context->autoRemediate) {
-      $this->context->drush->configSet('system.performance', 'css.preprocess', TRUE);
-      $fixups[] = 'This was auto remediated.';
-      $preprocess_css = TRUE;
-    }
-
-    $this->setToken('fixups', ' ' . implode(', ', $fixups));
-    return $preprocess_css;
+  /**
+   * @inheritDoc
+   */
+  public function check() {
+    return $this->context->drush->getConfig('system.performance', 'css.preprocess', TRUE);
   }
+
+  /**
+   * @inheritDoc
+   */
+  public function remediate() {
+    $res = $this->context->drush->configSet('system.performance', 'css.preprocess', TRUE);
+    return $res->isSuccessful();
+  }
+
 }

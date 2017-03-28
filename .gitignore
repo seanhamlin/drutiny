@@ -1,9 +1,12 @@
 .idea
 vendor
-composer.lock
 *.iml
 
 # Allow users to create custom domains files that are not tracked here.
 domains.yml
 domains-*.yml
 !domains-example.yml
+
+# Add the reports directory, but none of the reports.
+reports/*
+!reports/README.md

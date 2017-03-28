@@ -3,11 +3,10 @@
 namespace Drutiny\Check\D7;
 
 use Drutiny\Check\Check;
-use Drutiny\Annotation\CheckInfo;
 use Drutiny\Executor\DoesNotApplyException;
 
 /**
- * @CheckInfo(
+ * @Drutiny\Annotation\CheckInfo(
  *  title = "Webform upload",
  *  description = "Spammers are known to want to uplaod files to webforms that allow anonymous user users access.",
  *  remediation = "Restrict upload types, enforce a max upload size, use a random folder underneath <code>/webform/</code> to store the uploads.",
@@ -18,6 +17,10 @@ use Drutiny\Executor\DoesNotApplyException;
  * )
  */
 class WebformUpload extends Check {
+
+  /**
+   *
+   */
   public function check() {
 
     if (!$this->context->drush->moduleEnabled('webform')) {
@@ -33,7 +36,7 @@ class WebformUpload extends Check {
     }
     else {
       $number_of_silly_uploads = count($output);
-      $this->setToken('files', '<br><br><code>' .  implode('</code>, <code>' , $output) . '</code>');
+      $this->setToken('files', '<br><br><code>' . implode('</code>, <code>', $output) . '</code>');
     }
     $this->setToken('number_of_silly_uploads', $number_of_silly_uploads);
     $this->setToken('plural', $number_of_silly_uploads > 1 ? 's' : '');
@@ -41,4 +44,5 @@ class WebformUpload extends Check {
 
     return $number_of_silly_uploads === 0;
   }
+
 }

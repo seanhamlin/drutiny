@@ -5,10 +5,9 @@ namespace Drutiny\Check\Acsf;
 use Drutiny\Check\Check;
 use Drutiny\AuditResponse\AuditResponse;
 use Drutiny\Executor\DoesNotApplyException;
-use Drutiny\Annotation\CheckInfo;
 
 /**
- * @CheckInfo(
+ * @Drutiny\Annotation\CheckInfo(
  *  title = "ACSF default theme path",
  *  description = "Ensure there are no hard coded references to the default theme path in the deployed theme as this can and will cause a lot of HTTP 404s.",
  *  remediation = "Use a preprocess hook, and inject the path to the asset, using a function such as <code>drupal_get_path()</code>.",
@@ -20,8 +19,10 @@ use Drutiny\Annotation\CheckInfo;
  */
 class DefaultThemePath extends Check {
 
-  public function check()
-  {
+  /**
+   *
+   */
+  public function check() {
     $root = $this->context->drush->getCoreStatus('root');
     $site = $this->context->drush->getCoreStatus('site');
 
@@ -35,7 +36,7 @@ class DefaultThemePath extends Check {
     // Yields something like:
     //
     // ./zen/template.php:159:    $path = drupal_get_path_alias($_GET['q']);
-    // ./zen/template.php:162:    $arg = explode('/', $_GET['q']);
+    // ./zen/template.php:162:    $arg = explode('/', $_GET['q']);.
     $command = "if [ -d '{$root}/{$site}/themes/site/' ]; then cd {$root}/{$site}/themes/site/ ; grep -nrI --exclude=*.txt --exclude=*.md '" . implode('\|', $look_out_for) . "' . || echo 'nothemeissues' ; else echo 'nope'; fi";
     $output = (string) $this->context->remoteExecutor->execute($command);
 
@@ -63,4 +64,5 @@ class DefaultThemePath extends Check {
 
     return count($rows) === 0;
   }
+
 }

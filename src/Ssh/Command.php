@@ -2,6 +2,9 @@
 
 namespace Drutiny\Ssh;
 
+/**
+ *
+ */
 class Command {
   protected $hostname;
   protected $user;
@@ -11,16 +14,25 @@ class Command {
     '-o LogLevel=ERROR',
   ];
 
+  /**
+   *
+   */
   public function __construct($user, $hostname) {
     $this->user = $user;
     $this->hostname = $hostname;
   }
 
+  /**
+   *
+   */
   public function setArgument($value) {
     $this->sshArgs[] = $value;
     return $this;
   }
 
+  /**
+   *
+   */
   protected function prepareSshCommand($command) {
     return sprintf("ssh %s %s@%s \"%s\"",
       implode(' ', $this->sshArgs),
@@ -30,7 +42,11 @@ class Command {
     );
   }
 
+  /**
+   *
+   */
   public function execute($command) {
     return $this->prepareSshCommand($command);
   }
+
 }

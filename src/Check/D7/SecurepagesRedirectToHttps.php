@@ -3,11 +3,10 @@
 namespace Drutiny\Check\D7;
 
 use Drutiny\Check\Check;
-use Drutiny\Annotation\CheckInfo;
 use Drutiny\Executor\DoesNotApplyException;
 
 /**
- * @CheckInfo(
+ * @Drutiny\Annotation\CheckInfo(
  *  title = "Securepages redirect to HTTPS",
  *  description = "The securepages module redirects the user to HTTPS given certain conditions. This check ensures that all traffic is sent to HTTPS.",
  *  remediation = "Set <code>securepages_enable</code> to <code>1</code>, <code>securepages_switch</code> to <code>0</code>, <code>securepages_secure</code> to <code>1</code>, <code>securepages_pages</code> to <code>*</code>.",
@@ -17,8 +16,11 @@ use Drutiny\Executor\DoesNotApplyException;
  * )
  */
 class SecurepagesRedirectToHttps extends Check {
-  public function check()
-  {
+
+  /**
+   *
+   */
+  public function check() {
     if ($this->context->drush->moduleEnabled('securepages')) {
       $securepages_enable = (bool) $this->context->drush->getVariable('securepages_enable', 0);
       $securepages_switch = (bool) $this->context->drush->getVariable('securepages_switch', 0);
@@ -40,4 +42,5 @@ class SecurepagesRedirectToHttps extends Check {
 
     throw new DoesNotApplyException('securepages is not enabled.');
   }
+
 }

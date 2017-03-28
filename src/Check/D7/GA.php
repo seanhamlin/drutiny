@@ -2,13 +2,11 @@
 
 namespace Drutiny\Check\D7;
 
-use Drutiny\AuditResponse\AuditResponse;
 use Drutiny\Check\Check;
 use Drutiny\Executor\DoesNotApplyException;
-use Drutiny\Annotation\CheckInfo;
 
 /**
- * @CheckInfo(
+ * @Drutiny\Annotation\CheckInfo(
  *  title = "Google analytics",
  *  description = "Tests to ensure the site is correctly configured google analytics.",
  *  remediation = "Fix the failures.",
@@ -19,6 +17,10 @@ use Drutiny\Annotation\CheckInfo;
  * )
  */
 class GA extends Check {
+
+  /**
+   *
+   */
   public function check() {
     if (!$this->context->drush->moduleEnabled('googleanalytics')) {
       throw new DoesNotApplyException();
@@ -48,7 +50,9 @@ class GA extends Check {
     $codesnippet_after = trim($this->getOption('codesnippet_after', ''));
     if (!empty($codesnippet_after)) {
       if ($codesnippet_after !== $googleanalytics_codesnippet_after) {
-        $errors[] = 'Code snippet after is not correct - <code>googleanalytics_codesnippet_after</code> is set to <code>' . $googleanalytics_codesnippet_after . '</code>';
+        $errors[] = 'Code snippet after is not correct - want ';
+        $errors[] = '<code>' . $codesnippet_after . '</code> but got ';
+        $errors[] = '<code>' . $googleanalytics_codesnippet_after . '</code>';
       }
     }
 
@@ -56,4 +60,5 @@ class GA extends Check {
 
     return empty($errors);
   }
+
 }
