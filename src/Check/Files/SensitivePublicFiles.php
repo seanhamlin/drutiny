@@ -47,7 +47,7 @@ class SensitivePublicFiles extends Check {
     // Note, the size is in KB in the response, we convert to MB later on in
     // this check.
     $command = "-name '*." . implode("' -o -name '*.", $extensions) . "'";
-    $command = "cd {$root}/{$files}/ ; find . -type f \( {$command} \) -printf '%k\\t%p\\n' | grep -v -E './js/js_|./css/css_' | sort -nr";
+    $command = "cd {$root}/{$files}/ ; find . -type f \( {$command} \) -printf '%k\\t%p\\n' | grep -v -E '\./js/js_|\./css/css_' | sort -nr";
     $output = (string) $this->context->remoteExecutor->execute($command);
 
     if (empty($output)) {
