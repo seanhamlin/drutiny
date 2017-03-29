@@ -31,7 +31,7 @@ class User1 extends Check {
 
     // Username.
     $pattern = $this->getOption('name_blacklist', '(admin|root|drupal|god)');
-    if (preg_match("#${pattern}#", $user->name)) {
+    if (preg_match("#${pattern}#i", $user->name)) {
       if ($this->context->autoRemediate) {
         $user->name = RandomLib::generateRandomString();
         $this->context->drush->sqlQuery("UPDATE {users} SET name = '$user->name' WHERE uid = 1;");
@@ -72,7 +72,7 @@ class User1 extends Check {
     if ($this->context->autoRemediate) {
       if (!empty($fixups)) {
         $password = RandomLib::generateRandomString();
-        $this->context->drush->userPassword("$user->name", "--password='$password'");
+        $this->context->drush->userPassword("'$user->name'", "--password='$password'");
         $fixups[] = 'Password is now secure';
       }
     }
