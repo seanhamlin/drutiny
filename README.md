@@ -1,6 +1,6 @@
 # Drutiny (Drupal Scrutiny)
 
-<img src="logo.png" alt="logo" align="right"/>
+<img src="assets/logo.png" alt="Drutiny logo" align="right"/>
 
 [![Build Status](https://travis-ci.org/seanhamlin/drutiny.svg?branch=master)](https://travis-ci.org/seanhamlin/drutiny) [![Latest Stable Version](https://poser.pugx.org/seanhamlin/drutiny/v/stable)](https://packagist.org/packages/seanhamlin/drutiny) [![Total Downloads](https://poser.pugx.org/seanhamlin/drutiny/downloads)](https://packagist.org/packages/seanhamlin/drutiny) [![Latest Unstable Version](https://poser.pugx.org/seanhamlin/drutiny/v/unstable)](https://packagist.org/packages/seanhamlin/drutiny) [![License](https://poser.pugx.org/seanhamlin/drutiny/license)](https://packagist.org/packages/seanhamlin/drutiny)
 
@@ -159,3 +159,8 @@ Reports by default will appear in the `reports` directory, but can be altered wi
 ## Auto remediation
 
 Certain checks have an auto-remediation feature, in order to use this you will need to pass in `--auto-remediate` as a parameter on the command line. In general auto-remediation is only ever added into checks where the remediation is unlikely to break the site, e.g. it will never disable modules (as this could break the site) but it will set certain variables.
+
+
+# Credits
+
+* [Theodoros Ploumis](https://github.com/theodorosploumis) for [creating the logo](https://github.com/seanhamlin/drutiny/issues/79) for Drutiny.
