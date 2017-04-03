@@ -5,11 +5,11 @@ checks :
   \Drutiny\Check\Drush\ModuleEnabled:
     modules:
       - syslog
-      - acquia_spi
-      - acquia_agent
+      - acquia_connector
   \Drutiny\Check\Drush\ModuleDisabled:
     modules:
       - backup_migrate
+      - config_devel
       - dblog
       - devel
       - kint
@@ -25,7 +25,20 @@ checks :
       - webprofiler
   \Drutiny\Check\Drush\UpdateDBStatus: {}
   \Drutiny\Check\Drush\SessionsAnon: {}
+  \Drutiny\Check\Drush\User1 :
+    name_blacklist : '(admin|root|drupal|god)'
+    mail : 'no_reply@example.gcom'
+    status: 1
   \Drutiny\Check\D8\PreprocessCSS : {}
   \Drutiny\Check\D8\PreprocessJS : {}
   \Drutiny\Check\D8\UserRegister : {}
   \Drutiny\Check\D8\ShieldDisabled : {}
+  \Drutiny\Check\Drush\DatabaseSize :
+    max_size : 1000
+    warning_size : 250
+
+  # Browser specific checks.
+  \Drutiny\Check\Phantomas\PageWeight :
+    max_size : 5
+    warning_size : 2
+  \Drutiny\Check\Phantomas\InPage404s : {}
