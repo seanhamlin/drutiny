@@ -51,7 +51,7 @@ class User1 extends Check {
         $fixups[] = 'Email address is now secure';
       }
       else {
-        $errors[] = 'Email address is not set correctly - <code>' . $user->mail . '</code>';
+        $errors[] = 'Email address is not set correctly, currently <code>' . $user->mail . '</code> when it should be <code>' . $email . '</code>.';
       }
     }
 
