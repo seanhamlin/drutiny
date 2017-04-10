@@ -33,6 +33,7 @@ checks :
   \Drutiny\Check\D8\PreprocessJS : {}
   \Drutiny\Check\D8\UserRegister : {}
   \Drutiny\Check\D8\ShieldDisabled : {}
+  \Drutiny\Check\D8\PageCache : {}
   \Drutiny\Check\Drush\DatabaseSize :
     max_size : 1000
     warning_size : 250
