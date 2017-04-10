@@ -23,6 +23,8 @@ checks :
       - update
   \Drutiny\Check\D7\PreprocessCSS : {}
   \Drutiny\Check\D7\PreprocessJS : {}
+  \Drutiny\Check\D7\ErrorLevel : {}
+  \Drutiny\Check\D7\ImageDerivatives : {}
   \Drutiny\Check\D7\UserRegister : {}
   \Drutiny\Check\D7\PageCacheMaximumAge :
     cache : 300
@@ -36,5 +38,6 @@ checks :
   \Drutiny\Check\D7\CronPoorMans: {}
   \Drutiny\Check\D7\PageCompression: {}
   \Drutiny\Check\D7\ZenRebuildRegistry: {}
+  \Drutiny\Check\D7\MissingModules : {}
   \Drutiny\Check\D7\XMLSiteMapBaseUrl:
     pattern : '^https?://[-a-z]{1,63}\.[-a-z]{1,63}\.com\.au$'
