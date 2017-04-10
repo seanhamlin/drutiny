@@ -23,6 +23,7 @@ checks :
       - textsize
       - update
       - webprofiler
+      - automated_cron
   \Drutiny\Check\Drush\UpdateDBStatus: {}
   \Drutiny\Check\Drush\SessionsAnon: {}
   \Drutiny\Check\Drush\User1 :
