@@ -90,6 +90,9 @@ Run a side audit using a custom profile (replace `[YOUR_PROFILE]` with your prof
 ./bin/drutiny audit:site [ALIAS] --profile=[YOUR_PROFILE]
 ```
 
+Example video that shows this in action:
+
+[![Example Drutiny run against a local Drupal 8 site](https://img.youtube.com/vi/o2zBokC1V7s/0.jpg)](https://www.youtube.com/watch?v=o2zBokC1V7s)
 
 ## How to run against an entire Acquia Cloud Site Factory
 
