@@ -15,7 +15,9 @@ checks :
       - clamav
       - googleanalytics
       - govcms_account_security
+      - govcms_password_policy
       - govcms_tweaks
+      - password_policy
       - robotstxt
       - shield
       - syslog

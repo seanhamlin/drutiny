@@ -390,13 +390,6 @@ class DrushCaller {
   }
 
   /**
-   * List all role assignments to users who are not user #1.
-   */
-  public function getAllUserRoles() {
-    return $this->sqlQuery('SELECT rid FROM {users_roles} WHERE uid > 1;');
-  }
-
-  /**
    * List all roles.
    */
   public function getAllRoles() {
