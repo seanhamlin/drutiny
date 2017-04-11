@@ -28,7 +28,7 @@ checks :
   \Drutiny\Check\Drush\SessionsAnon: {}
   \Drutiny\Check\Drush\User1 :
     name_blacklist : '(admin|root|drupal|god)'
-    mail : 'no_reply@example.gcom'
+    mail : 'no_reply@example.com'
     status: 1
   \Drutiny\Check\D8\PreprocessCSS : {}
   \Drutiny\Check\D8\PreprocessJS : {}
