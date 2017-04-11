@@ -17,7 +17,6 @@
         "symfony/yaml": "^3.1",
         "symfony/class-loader": "^3.1",
         "doctrine/annotations": "^1.2",
-        "ircmaxell/random-lib": "^1.2",
         "twig/twig": "~1.0",
         "guzzlehttp/guzzle": "^6.2",
         "paragonie/random_compat": "^2.0"

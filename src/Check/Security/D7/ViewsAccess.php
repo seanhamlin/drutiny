@@ -6,10 +6,8 @@
 
 namespace Drutiny\Check\Security\D7;
 
-
 use Drutiny\Check\Security\ViewsAccessBase;
 use Drutiny\Annotation\CheckInfo;
-use Drutiny\Helpers\Serializer;
 
 /**
  * @CheckInfo(
@@ -31,38 +29,17 @@ class ViewsAccess extends ViewsAccessBase {
    *   All available views.
    */
   protected function getViews() {
+    /** @var \Drutiny\Base\DrushCaller $drush */
+    $drush = $this->context->drush;
 
-    // We assume that permissions will not be set on other types of views and
-    // their permissions will be controlled via the embed method (blocks, panes
-    // etc.).
-    $sql = "SELECT vv.vid, vv.name, vv.description, vv.human_name, vd.id, vd.display_title, vd.display_options, vd.display_plugin
-    FROM {views_view} vv
-    LEFT JOIN {views_display} vd
-    ON vd.vid = vv.vid
-    WHERE vd.display_plugin = 'page'";
+    $views = $drush->runScript('ViewsGetAllViews');
 
-    $results = $this->context->drush->sqlQuery($sql);
-    $views = [];
+    if (empty($views)) {
+      return [];
+    }
 
-    foreach ($results as $row) {
-      list($vid, $name, $description, $human_name, $display_id, $display_title, $display_options, $display_plugin) = explode("\t", $row);
-
-      // Build a loose object that looks similar to views_get_all_views().
-      $view = isset($views[$name]) ? $views[$name] : (object) [
-        'vid' => $vid,
-        'machine_name' => $name,
-        'name' => $human_name,
-        'display' => [],
-      ];
-
-      $view->display[$display_id] = (object) [
-        'display_id' => $display_id,
-        'title' => $display_title,
-        'display_plugin' => $display_plugin,
-        'display_options' => Serializer::unserialize($display_options),
-      ];
-
-      $views[$vid] = $view;
+    foreach ($views as $name => &$view) {
+      $view = json_decode($view);
     }
 
     return $views;

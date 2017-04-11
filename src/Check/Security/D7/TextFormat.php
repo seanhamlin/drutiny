@@ -51,7 +51,7 @@ class TextFormat extends TextFormatBase {
    * {@inheritdoc}
    */
   protected function getFormats() {
-    $sql = "SELECT format, name, cache, status, weight FROM filter_format ff;";
+    $sql = "SELECT format, name, cache, status, weight FROM {filter_format} ff;";
     $formats = [];
 
     foreach ($this->context->drush->sqlQuery($sql) as $format) {

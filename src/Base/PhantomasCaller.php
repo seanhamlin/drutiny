@@ -84,11 +84,11 @@ class PhantomasCaller {
     // these by:
     //
 
-    // export SITE_AUDIT_HTTP_AUTH_USER=[USERNAME]
-    // export SITE_AUDIT_HTTP_AUTH_PASS=[PASSWORD]
-    else if (!empty(getenv('SITE_AUDIT_HTTP_AUTH_USER'))) {
-      $username = getenv('SITE_AUDIT_HTTP_AUTH_USER');
-      $password = getenv('SITE_AUDIT_HTTP_AUTH_PASS');
+    // export DRUTINY_HTTP_AUTH_USER=[USERNAME]
+    // export DRUTINY_HTTP_AUTH_USER=[PASSWORD]
+    else if (!empty(getenv('DRUTINY_HTTP_AUTH_USER'))) {
+      $username = getenv('DRUTINY_HTTP_AUTH_USER');
+      $password = getenv('DRUTINY_HTTP_AUTH_PASS');
     }
 
     return !empty($username) && !empty($password) ? [$username, $password] : FALSE;

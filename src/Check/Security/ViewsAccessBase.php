@@ -54,6 +54,10 @@ abstract class ViewsAccessBase extends Check {
         $count++;
         $perms = array_keys($permissions);
 
+        // This will convert nested objects to an array and is done so we can ensure
+        // that the display options are homogeneous regardless of how the view is returned.
+        $info->display_options = json_decode(json_encode($info->display_options), TRUE);
+
         $tokens = [
           ':view' => $view->name,
           ':display' => $display_id,
