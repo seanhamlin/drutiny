@@ -2,13 +2,13 @@
 
 namespace Drutiny;
 
-use Assert\NotNull;
-use Assert\Collection;
-use Assert\All;
-use Assert\Optional;
-use Assert\NotBlank;
-use Assert\Callback;
-use Assert\Type;
+use Symfony\Component\Validator\Constraints\NotNull;
+use Symfony\Component\Validator\Constraints\Collection;
+use Symfony\Component\Validator\Constraints\All;
+use Symfony\Component\Validator\Constraints\Optional;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Callback;
+use Symfony\Component\Validator\Constraints\Type;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
