@@ -12,7 +12,7 @@ use Symfony\Component\Yaml\Yaml;
  */
 class Registry {
 
-  const CHECK_DIRECTORY = 'src/Check';
+  const CHECK_DIRECTORY = __DIR__ . '/Check';
 
   /**
    * Retrieve a list of Check classes.
@@ -47,7 +47,7 @@ class Registry {
    *
    */
   public static function targets() {
-    return self::load('src/Target', 'Drutiny\Target\Target', 'name');
+    return self::load(__DIR__ . '/Target', 'Drutiny\Target\Target', 'name');
   }
 
   /**
@@ -72,7 +72,7 @@ class Registry {
    *
    */
   public static function commands() {
-    return self::load('src/Command', 'Symfony\Component\Console\Command\Command');
+    return self::load(__DIR__ . '/Command', 'Symfony\Component\Console\Command\Command');
   }
 
   /**
@@ -81,7 +81,7 @@ class Registry {
   public static function profiles() {
     $finder = new Finder();
     $finder->files()
-      ->in('profiles')
+      ->in(realpath(__DIR__ . '/../profiles'))
       ->name('*.profile.yml');
 
     $registry = [];

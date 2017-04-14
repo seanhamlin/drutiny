@@ -2,7 +2,7 @@
 
 namespace Drutiny;
 
-use Assert\Type;
+use Symfony\Component\Validator\Constraints\Type;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 
