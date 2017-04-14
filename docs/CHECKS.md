@@ -91,3 +91,51 @@ public function remediate(Sandbox $sandbox) {
   return $this->check($sandbox);
 }
 ```
+
+## Parameters
+Parameters allow you to configure the check based on the runtime environment.
+For example, the page cache check contains parameters to allow you to audit
+what the page cache `max_age` setting should be.
+
+Parameters are defined in the check's yaml and can be used in the `check` and `remediation` methods.
+
+```yaml
+parameters:
+  foo:
+    type: string
+    description: "A measure of foo to apply to denied lamas"
+    default: bar
+```
+
+```php
+/**
+ * @inheritDoc
+ */
+public function check(Sandbox $sandbox) {
+  $foo = $sandbox->getParameter('foo');
+
+  $config = $sandbox->drush(['format' => 'json'])
+                    ->configGet('lamas.settings', 'foo');
+  $this->setParameter('actual_foo', $config['lamas.settings:foo']);
+  return $foo == $config['lamas.settings:foo'];
+}
+```
+
+Parameters can be used to render the output of the success, failure and
+remediation messages returned for the check.
+
+```yaml
+success: |
+  Lama settings ensure no lamas will have access with a foo measure of {{actual_foo}}
+failure: |
+  Lamas have free reign on the site! foo measure set to {{actual_foo}}
+remediation: |
+  Set `lamas.settings:foo` to "bar" to better manage lamas.
+```
+
+When rendered, the success message would say something like this:
+
+> Lama settings ensure no lamas will have access with a foo measure of bar
+
+**Note**: message parameters in yaml support markdown syntax which is rendered
+into HTML for the HTML reports.
