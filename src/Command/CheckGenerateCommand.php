@@ -7,12 +7,10 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
-use Drutiny\Registry;
-use Drutiny\ProfileInformation;
 use Symfony\Component\Yaml\Yaml;
 
 /**
- * Helper for building checks
+ * Helper for building checks.
  */
 class CheckGenerateCommand extends Command {
 
@@ -65,8 +63,10 @@ class CheckGenerateCommand extends Command {
     $output->writeln("<info>Created $check_php_filepath</info>");
   }
 
-  public function getRemediableCheckTemplate($title, $class)
-  {
+  /**
+   *
+   */
+  public function getRemediableCheckTemplate($title, $class) {
     return '<?php
 
     namespace Drutiny\Check;
@@ -97,8 +97,10 @@ class CheckGenerateCommand extends Command {
     ';
   }
 
-  public function getCheckTemplate($title, $class)
-  {
+  /**
+   *
+   */
+  public function getCheckTemplate($title, $class) {
     return '<?php
 
     namespace Drutiny\Check;
@@ -120,4 +122,5 @@ class CheckGenerateCommand extends Command {
     }
     ';
   }
+
 }
