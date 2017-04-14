@@ -4,7 +4,7 @@ In general the Drutiny team will be looking to find ways to help people contribu
 
 ## Small changes that will be accepted
 
-* New checks that others can utlise. Ideally checks will have arguments where needed to make this as easy as possible to adapt for other sites.
+* New checks that others can utilise. Ideally checks will have arguments where needed to make this as easy as possible to adapt for other sites.
 * Spelling typos, grammar changes etc
 * Better comments and code style
 * Tests
@@ -22,10 +22,11 @@ In general the Drutiny team will be looking to find ways to help people contribu
 * Anything that requires special sauce in order to run
 * Vendor specific checks that cannot be re-used
 
+These types of changes are better off in third-party libraries.
 
 # Coding standards
 
-This project adhears to the same coding standards as the Drupal project.
+This project adheres to the same coding standards as the Drupal project.
 
 ## How to check code style
 

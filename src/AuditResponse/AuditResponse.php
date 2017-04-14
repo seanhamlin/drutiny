@@ -2,231 +2,155 @@
 
 namespace Drutiny\AuditResponse;
 
-use Drutiny\Check\Check;
+use Drutiny\CheckInformation;
 
 /**
  * Class AuditResponse.
  *
  * @package Drutiny\AuditResponse
  */
-class AuditResponse implements \JsonSerializable {
+class AuditResponse {
 
-  const AUDIT_NA = -1;
-  const AUDIT_SUCCESS = 0;
-  const AUDIT_WARNING = 1;
-  const AUDIT_FAILURE = 2;
-  const AUDIT_ERROR = 3;
+  const NA = -1;
+  const SUCCESS = 0;
+  const WARNING = 1;
+  const FAILURE = 2;
+  const ERROR = 3;
+  const REMEDIATED = 4;
 
-  protected $check;
+  protected $info;
 
-  protected $status;
+  protected $state = AuditResponse::NA;
 
-  public $exception;
+  protected $tokens = [];
 
   /**
    * AuditResponse constructor.
    *
-   * @param \Drutiny\Check\Check $check
-   *   The current check being performed.
+   * @param mixed $state
+   *   A bool|int|null indicating the outcome of a Drutiny\Check\Check.
    */
-  public function __construct(Check $check) {
-    $this->check = $check;
+  public function __construct(CheckInformation $info) {
+    $this->info = $info;
   }
 
   /**
-   * AuditResponse to string.
+   * Set the state of the response.
    */
-  public function __toString() {
-    try {
-      switch ($this->status) {
-        case self::AUDIT_SUCCESS:
-          return '<info>' . $this->getMessage('success') . '</info>';
-
-        case self::AUDIT_NA:
-          return '<info>' . $this->getMessage('na') . '</info>';
-
-        case self::AUDIT_WARNING:
-          return '<comment>' . $this->getMessage('warning') . '</comment>';
-
-        case self::AUDIT_FAILURE:
-          return '<error>' . $this->getMessage('failure') . '</error>';
-
-        case self::AUDIT_ERROR:
-        default:
-          return '<error>' . $this->getMessage('exception') . '</error>';
-      }
+  public function set($state = NULL, array $tokens) {
+    if ($state === TRUE) {
+      $state = self::SUCCESS;
     }
-    catch (\Exception $e) {
-      var_dump($e->getMessage());
+    elseif ($state === FALSE) {
+      $state = self::FAILURE;
     }
-    return 'doh';
-  }
-
-  /**
-   * Used when dumping results of a site audit to JSON.
-   *
-   * @return array
-   *   The check information, and it's associated response from the site.
-   */
-  public function jsonSerialize() {
-    try {
-      switch ($this->status) {
-        case self::AUDIT_SUCCESS:
-          return [
-            'check' => [
-              'title' => $this->getTitle(),
-              'description' => strip_tags($this->getDescription()),
-            ],
-            'status' => 'success',
-            'message' => strip_tags($this->getMessage('success')),
-          ];
-
-        case self::AUDIT_NA:
-          return [
-            'check' => [
-              'title' => $this->getTitle(),
-              'description' => strip_tags($this->getDescription()),
-            ],
-            'status' => 'na',
-            'message' => strip_tags($this->getMessage('na')),
-          ];
-
-        case self::AUDIT_WARNING:
-          return [
-            'check' => [
-              'title' => $this->getTitle(),
-              'description' => strip_tags($this->getDescription()),
-            ],
-            'status' => 'warning',
-            'message' => strip_tags($this->getMessage('warning')),
-          ];
-
-        case self::AUDIT_FAILURE:
-          return [
-            'check' => [
-              'title' => $this->getTitle(),
-              'description' => strip_tags($this->getDescription()),
-            ],
-            'status' => 'failure',
-            'message' => strip_tags($this->getMessage('failure')),
-          ];
-
-        case self::AUDIT_ERROR:
-        default:
-          return [
-            'check' => [
-              'title' => $this->getTitle(),
-              'description' => strip_tags($this->getDescription()),
-            ],
-            'status' => 'exception',
-            'message' => strip_tags($this->getMessage('exception')),
-          ];
-      }
+    elseif (is_null($state)) {
+      $state = self::NA;
     }
-    catch (\Exception $e) {
-      var_dump($e->getMessage());
+    elseif (!is_int($state) || $state > self::REMEDIATED) {
+      $state = self::SUCCESS;
     }
-    return 'doh';
+    $this->state = $state;
+    $this->tokens = $tokens;
   }
 
   /**
-   * Translate a message with configured tokens.
-   *
-   * @param $message
-   *   The message to display.
-   *
-   * @return string
-   *   The translated string.
-   */
-  private function translate($message, $tokens = []) {
-    $tokens = empty($tokens) ? $this->check->getTokens() : $tokens;
-    return strtr($message, $tokens);
-  }
-
-  /**
-   * Get a message based on the type of response.
-   *
-   * @param string $type
-   *   The type of response.
-   *
-   * @return string
-   *   A checks configured response.
-   *
-   * @throws \Exception
-   */
-  protected function getMessage($type = 'success') {
-    switch ($type) {
-      case 'success':
-      case 'not_available':
-      case 'warning':
-      case 'failure':
-      case 'exception':
-      case 'notice':
-        $message = $this->check->getInfo()->{$type};
-        break;
-
-      case 'na':
-        return $this->getMessage('not_available');
-
-      default:
-        throw new \Exception("Cannot format message. Unknown type $type.");
-    }
-
-    $tokens = $this->check->getTokens();
-    if ($type == 'exception') {
-      $tokens[':exception'] = $this->exception->getMessage();
-    }
-
-    return $this->translate($message, $tokens);
-  }
-
-  /**
-   * Get a translated version of the description for the check performed.
-   *
-   * @return string
-   *   Translated description.
-   */
-  public function getDescription() {
-    return $this->translate($this->check->getInfo()->description);
-  }
-
-  /**
-   * Get a translated version of the remediation.
-   *
-   * @return string
-   *   Translated remediation.
-   */
-  public function getRemediation() {
-    return $this->translate($this->check->getInfo()->remediation);
-  }
-
-  /**
-   * Mutator for response status.
-   *
-   * @param int $status
-   *   Should be one of the defined constants.
-   */
-  public function setStatus($status) {
-    $this->status = $status;
-  }
-
-  /**
-   * Accessor for the response status.
-   *
-   * @return int
-   */
-  public function getStatus() {
-    return $this->status;
-  }
-
-  /**
-   * Get a translated version of the title.
+   * Get the title.
    *
    * @return string
    *   The checks title.
    */
   public function getTitle() {
-    return $this->translate($this->check->getInfo()->title);
+    return $this->info->get('title', $this->tokens);
+  }
+
+  /**
+   * Get the description for the check performed.
+   *
+   * @return string
+   *   Translated description.
+   */
+  public function getDescription() {
+    return $this->info->get('description', $this->tokens);
+  }
+
+  /**
+   * Get the remediation for the check performed.
+   *
+   * @return string
+   *   Translated description.
+   */
+  public function getRemediation() {
+    return $this->info->get('remediation', $this->tokens);
+  }
+
+  /**
+   * Get the failure message for the check performed.
+   *
+   * @return string
+   *   Translated description.
+   */
+  public function getfailure() {
+    return $this->info->get('failure', $this->tokens);
+  }
+
+  /**
+   * Get the success message for the check performed.
+   *
+   * @return string
+   *   Translated description.
+   */
+  public function getSuccess() {
+    return $this->info->get('success', $this->tokens);
+  }
+
+  /**
+   *
+   */
+  public function isSuccessful() {
+    return $this->state === AuditResponse::SUCCESS || $this->state == AuditResponse::REMEDIATED;
+  }
+
+  /**
+   * Get the response based on the state outcome.
+   *
+   * @return string
+   *   Translated description.
+   */
+  public function getSummary() {
+    $response = [
+      'summary' => '',
+      'type' => 'info',
+    ];
+    switch ($this->state) {
+      case AuditResponse::ERROR:
+      case AuditResponse::NA:
+        return strtr('Could not determine the state of @title due to an error:
+```
+@exception
+```', $this->tokens);
+
+      break;
+
+      case AuditResponse::SUCCESS:
+      case AuditResponse::REMEDIATED:
+        return $this->info->get('success', $this->tokens);
+
+      break;
+
+      case AuditResponse::FAILURE:
+      case AuditResponse::WARNING:
+        $summary = $this->info->get('failure', $this->tokens);
+        if ($this->info->get('remediable')) {
+          $summary .= PHP_EOL . $this->info->get('remediation', $this->tokens);
+        }
+        return $summary;
+
+      break;
+
+      default:
+        throw new \InvalidArgumentException("Unknown AuditResponse state. Cannot generate summary.");
+    }
   }
 
 }

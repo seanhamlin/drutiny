@@ -3,6 +3,7 @@
 namespace Drutiny\Check\D8;
 
 use Drutiny\Check\Check;
+use Drutiny\Sandbox\Sandbox;
 
 /**
  * @Drutiny\Annotation\CheckInfo(
@@ -17,11 +18,11 @@ use Drutiny\Check\Check;
 class UserRegister extends Check {
 
   /**
-   *
+   * @inheritdoc
    */
-  public function check() {
-    $user_register = $this->context->drush->getConfig('user.settings', 'register', 'admin_only');
-    return $user_register === 'admin_only';
+  public function check(Sandbox $sandbox) {
+    $config = $sandbox->drush(['format' => 'json'])->configGet('user.settings', 'register');
+    return $config['user.settings:register'] == 'admin_only';
   }
 
 }

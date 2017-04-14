@@ -1,0 +1,18 @@
+title: Page cache expiry
+class: \Drutiny\Check\D8\PageCache
+description: |
+  Page cache expiry informs upstream proxies such as Varnish and CDNs how long
+  they may cache a page response before it should be considered stale and refetched
+  from Drupal.
+remediation: Set the configuration object `system.performance` key `cache.page.max_age` to {{max_age}}.
+success: |
+  Page cache expiry is set to {{max_age}} seconds which meets performance
+  requirments.
+failure: |
+  Page cache expiry of {{max_age_reading}} seconds does not meet the minimum
+  requirement of {{max_age}} seconds.
+parameters:
+  max_age:
+    type: integer
+    description: The number of seconds page cache should be considered valid for.
+    default: 3600

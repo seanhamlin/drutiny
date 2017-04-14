@@ -3,33 +3,32 @@
 namespace Drutiny\Check\D8;
 
 use Drutiny\Check\Check;
+use Drutiny\Check\RemediableInterface;
+use Drutiny\Sandbox\Sandbox;
 
 /**
- * @Drutiny\Annotation\CheckInfo(
- *  title = "JS aggregation",
- *  description = "With JS optimization disabled, your website visitors are experiencing slower page performance and the server load is increased.",
- *  remediation = "Set the configuration object <code>system.performance</code> key <code>js.preprocess</code> to be <code>TRUE</code>.",
- *  success = "JS aggregation is enabled.:fixups",
- *  failure = "JS aggregation is not enabled.",
- *  exception = "Could not determine JS aggregation setting.",
- *  supports_remediation = TRUE,
- * )
+ * CSS aggregation.
  */
-class PreprocessJS extends Check {
+class PreprocessJS extends Check implements RemediableInterface {
 
   /**
    * @inheritDoc
    */
-  public function check() {
-    return $this->context->drush->getConfig('system.performance', 'js.preprocess', TRUE);
+  public function check(Sandbox $sandbox) {
+    $config = $sandbox->drush(['format' => 'json'])
+      ->configGet('system.performance', 'js.preprocess');
+
+    return (bool) $config['system.performance:js.preprocess'];
   }
 
   /**
    * @inheritDoc
    */
-  public function remediate() {
-    $res = $this->context->drush->configSet('system.performance', 'js.preprocess', TRUE);
-    return $res->isSuccessful();
+  public function remediate(Sandbox $sandbox) {
+    $sandbox->drush()
+      ->configSet('-y', 'system.performance', 'js.preprocess', 1);
+
+    return $this->check($sandbox);
   }
 
 }

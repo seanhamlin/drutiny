@@ -3,24 +3,43 @@
 namespace Drutiny\Check\D8;
 
 use Drutiny\Check\Check;
+use Drutiny\Check\RemediableInterface;
+use Drutiny\Sandbox\Sandbox;
 
 /**
- * @Drutiny\Annotation\CheckInfo(
- *  title = "Shield disabled",
- *  description = "The shield module protects Drupal sites from prying eyes, often it is used to protect sites that are not yet live, but should never be enabled for live sites.",
- *  remediation = "Disable shield through the shield user interface, set the config <code>shield.settings:user</code> to '' (blank), or uninstall the shield module.",
- *  success = "Shield is disabled.",
- *  failure = "Shield is enabled.",
- *  exception = "Could not determine shield setting.",
- * )
+ * Shield disabled.
  */
-class ShieldDisabled extends Check {
+class ShieldDisabled extends Check implements RemediableInterface {
 
   /**
-   *
+   * @inheritdoc
    */
-  public function check() {
-    return !$this->context->drush->getConfig('shield.settings', 'user', FALSE);
+  public function check(Sandbox $sandbox) {
+
+    try {
+      $info = $sandbox->drush(['format' => 'json'])
+        ->pmInfo('shield');
+      if ($info['shield']['status'] == "not installed") {
+        return TRUE;
+      }
+
+      $config = $sandbox->drush(['format' => 'json'])
+        ->configGet('shield.settings', 'user');
+      return (bool) $config['shield.settings:user'];
+    }
+    // If the module is not present in the code base, an error will be thrown.
+    catch (\Exception $e) {
+      return TRUE;
+    }
+  }
+
+  /**
+   * @inheritdoc
+   */
+  public function remediate(Sandbox $sandbox) {
+    $sandbox->drush()
+      ->pmUninstall('-y', 'shield');
+    return $this->check($sandbox);
   }
 
 }

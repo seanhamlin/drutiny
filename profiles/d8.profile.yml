@@ -1,0 +1,8 @@
+title: 'Drupal 8 Site Audit'
+checks:
+  d8.css.preprocess: {}
+  d8.js.preprocess: {}
+  d8.page.cache:
+    max_age: 3600
+  d8.shield.disabled: {}
+  d8.user.registation: {}
