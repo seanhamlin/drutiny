@@ -1,6 +1,6 @@
 <?php
 
-namespace Drutiny\Check\D8;
+namespace Drutiny\Check\Drupal;
 
 use Drutiny\Check\Check;
 use Drutiny\Sandbox\Sandbox;

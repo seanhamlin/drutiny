@@ -1,5 +1,5 @@
 title: Syslog
-class: \Drutiny\Check\D8\ModuleEnabled
+class: \Drutiny\Check\Drupal\ModuleEnabled
 description: |
   Syslog module writes Drupal watchdog logs to the syslog.
 remediation: "Disable the module: `drush pm-uninstall syslog -y`"
