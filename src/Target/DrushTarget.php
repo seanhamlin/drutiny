@@ -65,6 +65,7 @@ class DrushTarget extends Target implements DrushInterface, ExecInterface {
     $process = new Exec($this->sandbox());
 
     if (isset($this->options['remote-host'])) {
+      $args['%docroot%'] = $this->options['root'];
 
       $command = base64_encode(strtr($command, $args));
       $command = "echo $command | base64 --decode | sh";

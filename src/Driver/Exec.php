@@ -11,9 +11,10 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 class Exec extends Driver implements ExecInterface {
 
   /**
-   *
+   * @inheritdoc
    */
   public function exec($command, $args = []) {
+    $args['%docroot'] = '';
     $command = strtr($command, $args);
     $process = new Process($command);
 
