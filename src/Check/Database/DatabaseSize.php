@@ -4,7 +4,6 @@ namespace Drutiny\Check\Database;
 
 use Drutiny\Check\Check;
 use Drutiny\Sandbox\Sandbox;
-use Symfony\Component\Yaml\Yaml;
 use Drutiny\AuditResponse\AuditResponse;
 
 /**

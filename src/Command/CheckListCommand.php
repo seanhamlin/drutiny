@@ -39,8 +39,8 @@ class CheckListCommand extends Command {
         'name' => $name,
         'description' => implode(PHP_EOL, [
           '<options=bold>' . wordwrap($info->get('title'), 50) . '</>',
-          $this->formatDescription($info->get('description')),
-          NULL,
+        //  $this->formatDescription($info->get('description')),
+        //  NULL,
         ]),
         'supports_remediation' => $info->get('remediable') ? 'Yes' : 'No',
       );
@@ -49,7 +49,7 @@ class CheckListCommand extends Command {
 
     $table = new Table($output);
     $table
-      ->setHeaders(array('Name', 'Description', 'Self-heal'))
+      ->setHeaders(array('Name', 'Title', 'Self-heal'))
       ->setRows($rows)
       ->getStyle()
       ->setVerticalBorderChar(' ')
