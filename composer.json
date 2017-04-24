@@ -1,5 +1,5 @@
 {
-    "name": "seanhamlin/drutiny",
+    "name": "drutiny/drutiny",
     "type": "library",
     "description": "This is a generic Drupal 7 and Drupal 8 site auditing and optional remediation tool.",
     "keywords": ["drupal", "audit", "drush", "ssh", "report"],
