@@ -105,6 +105,13 @@ class Sandbox {
   /**
    *
    */
+  public function getCheckInfo() {
+    return $this->checkInfo;
+  }
+
+  /**
+   *
+   */
   public function getTarget() {
     return $this->target;
   }

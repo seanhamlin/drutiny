@@ -31,6 +31,11 @@ trait DrushTrait {
     return $output;
   }
 
+  public function sqlq($sql) {
+    $args = ['"' . $sql . '"'];
+    return trim($this->__call('sqlq', $args));
+  }
+
   /**
    *
    */
