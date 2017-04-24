@@ -109,4 +109,11 @@ class Sandbox {
     return $this->target;
   }
 
+  /**
+   * A wrapper function for traits to use.
+   */
+  public function sandbox()
+  {
+    return $this;
+  }
 }

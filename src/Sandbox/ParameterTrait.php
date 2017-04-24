@@ -19,6 +19,15 @@ trait ParameterTrait {
     if (isset($this->params[$key])) {
       return $this->params[$key];
     }
+
+    $defaults = $this->sandbox()
+      ->getCheckInfo()
+      ->getParameterDefaults();
+
+    if (is_null($default_value) && isset($defaults[$key])) {
+      $default_value = $defaults[$key];
+    }
+
     // Ensure default values are recorded for use as tokens.
     $this->setParameter($key, $default_value);
     return $default_value;

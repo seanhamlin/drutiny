@@ -118,4 +118,13 @@ class CheckInformation {
     )));
   }
 
+  public function getParameterDefaults()
+  {
+      $defaults = [];
+      foreach ($this->parameters as $name => $info) {
+        $defaults[$name] = isset($info['default']) ? $info['default'] : null;
+      }
+      return $defaults;
+  }
+
 }
