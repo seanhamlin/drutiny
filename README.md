@@ -4,7 +4,7 @@
 
 [![Build Status](https://travis-ci.org/seanhamlin/drutiny.svg?branch=master)](https://travis-ci.org/seanhamlin/drutiny) [![Latest Stable Version](https://poser.pugx.org/seanhamlin/drutiny/v/stable)](https://packagist.org/packages/seanhamlin/drutiny) [![Total Downloads](https://poser.pugx.org/seanhamlin/drutiny/downloads)](https://packagist.org/packages/seanhamlin/drutiny) [![Latest Unstable Version](https://poser.pugx.org/seanhamlin/drutiny/v/unstable)](https://packagist.org/packages/seanhamlin/drutiny) [![License](https://poser.pugx.org/seanhamlin/drutiny/license)](https://packagist.org/packages/seanhamlin/drutiny)
 
-This is a generic Drupal 7 and Drupal 8 site auditing and optional remediation tool.
+This is a generic Drupal site auditing and optional remediation tool.
 
 ## Why another site audit tool?
 
@@ -20,46 +20,72 @@ This tool is different, all checks are from the outside looking in, and require 
 
 If a particular check pertains to just Drupal 7 or Drupal 8 then it will be namespaced as such. In this fashion you are able to run site audits against either Drupal 7 or Drupal 8 sites using the same Drutiny codebase.
 
-## What is a site audit comprised of?
+## Installation
+It is recommended to install Drutiny into your project with [composer](https://getcomposer.org). Drutiny is a require-dev type dependency.
 
-A site audit is comprised of a profile, and a profile can contain 1 or more checks, and those checks can have optional arguments supplied. This means that you can create a profile that is specific to your own internal guidelines, and not some generic report that someone else made that may or may not be of any use to you.
+```
+composer require --dev drutiny/drutiny 2.x
+```
+
+[Drush](http://www.drush.org/en/master/) is also required. Its not specifically marked as a dependency as the version of drush to use will depend on the site you're auditing.
+
+## Usage
+Drutiny is a command line tool that can be called from the composer vendor bin directory
+
+```
+./vendor/bin/drutiny
+```
+
+### Finding checks available to run
+Drutiny comes with a `check:list` command that lists all the checks available to you.
+
+```
+./vendor/bin/drutiny check:list
+```
+
+Checks provided by other packages such as [drutiny/acquia](https://github.com/fiasco/drutiny-acquia) will also appear here if they are installed.
+
+### Running a check
+A check can be run against a site by using `check:run` and passing the check name and site target:
+
+```
+./vendor/bin/drutiny check:run d8.page.cache drush:@drupalvm.dev
+```
+
+The command above would run the `d8.page.cache` check against the drush alias `@drupalvm.dev` which should point to an active site. 
+
+Some checks have parameters you can specify which can be passed in at calltime. Use `check:info` to find out more about the parameters available for a check.
+
+```
+./vendor/bin/drutiny check:run -p max_age=600 d8.page.cache drush:@drupalvm.dev
+```
 
 Checks are simple self contained classes that are simple to read and understand. Drutiny can be extended very easily to check for your own unique requirements. Pull requests are welcome as well, please see the [contributing guide](./CONTRIBUTING.md).
 
-## Requirements
-
-**1. Drush installed**
-
-Drush is required to be installed locally and be available on your path. Drush 8 is recommended. Having a remote-host attribute in the drush alias file is required if you want to run any of the SSH checks.
-
-**2. A Drush alias for the site**
-
-For every site you want to run the report against, you require a complete drush alias:
+### Remediation
+Some checks have remedative capability. Passing the `--remediate` flag into the call with "auto-heal" the site if the check fails on first pass.
 
 ```
-<?php
-$aliases['www.example.com'] = array(
-  'uri' => 'www.example.com',
-  'root' => '/var/www/html/docroot',
-  'remote-host' => 'server.example.com',
-  'remote-user' => 'example',
-  'ssh-options' => '-F /dev/null',
-  'path-aliases' => array(
-    '%drush-script' => 'drush6',
-    '%dump-dir' => '/mnt/tmp/',
-  )
-);
+./vendor/bin/drutiny check:run -p max_age=600 --remediate d8.page.cache drush:@drupalvm.dev
 ```
 
-**3. Composer**
-
-Needed to install Symfony Console and other PHP libraries.
+### Running a profile of checks
+A site audit is running a collection of checks that make up a profile. This allows you to audit against a specific standard, policy or best practice. Drutiny comes with some base profiles which you can find using `profile:list`. You can run a profile with `profile:run` in a simlar format to `check:run`.
 
 ```
-composer install
+./vendor/bin/drutiny profile:run --remediate d8 drush:@drupalvm.dev
 ```
 
-**4. Phantomas**
+Parameters can not be passed in at runtime for profiles but are instead predefined by the profile itself.
+
+### Reporting
+By default, profile runs report to the console but reports can also be exported in html and json formats.
+
+```
+./vendor/bin/drutiny profile:run --remediate --format=html --report-filename=drupalvm-dev.html d8 drush:@drupalvm.dev
+```
+
+### Phantomas
 
 If you wish to run browser based checks (e.g. page weight check), then you will require [Phantomas](https://github.com/macbre/phantomas) to be installed on your local system. Note that these checks are optional.
 
@@ -76,34 +102,9 @@ npm install --global --no-optional phantomas phantomjs-prebuilt@^2.1.5
 ```
 
 
-## How to run against a single Drupal site
+## How to run against sites in a Drupal multisite (TODO)
 
-Run using the `default` profile (replace `[ALIAS]` with your drush alias):
-
-```
-./bin/drutiny audit:site [ALIAS]
-```
-
-Run a side audit using a custom profile (replace `[YOUR_PROFILE]` with your profile name):
-
-```
-./bin/drutiny audit:site [ALIAS] --profile=[YOUR_PROFILE]
-```
-
-
-## How to run against an entire Acquia Cloud Site Factory
-
-This will lookup a list of all Site Factory sites currently running, and will loop around them all. This is much like the multisite audit, except there is no need to supply a list of domains.
-
-Example on how to run a side audit using a custom profile:
-
-```
-./bin/drutiny audit:acsf [ALIAS] --profile=[YOUR_PROFILE]
-```
-
-
-## How to run against sites in a Drupal multisite
-
+**This is currently not supported in the 2.x branch**
 You first need to create a domains file that lists all domains you want to run an audit against. An example is provided with `domains-example.yml` to which you can copy and make you own version:
 
 ```
@@ -124,41 +125,10 @@ You do not have to run the site audit against all sites, you can elect to run it
 Because this is a Symfony Console application, you have some other familiar commands:
 
 ```
-./bin/drutiny help audit:site
+./bin/drutiny help profile:run
 ```
 
-In particular, if you use the `-v` argument, then you will see all the drush commands, and SSH commands printed to the screen.
-
-
-## Bash aliases
-
-This could be helpful if you want to be able to run the command from anywhere:
-
-```
-alias as='/path/to/drutiny audit:site'
-alias aa='/path/to/drutiny audit:acsf'
-alias am='/path/to/drutiny audit:multisite'
-```
-
-
-## Report formats and locations
-
-Report formats be controlled with the `--format` option, and you can chain them together to get the same report in multiple formats. For example:
-
-```
-./bin/drutiny audit:site [ALIAS] --format=html --format=json
-```
-
-Reports by default will appear in the `reports` directory, but can be altered with another argument
-
-```
-./bin/drutiny audit:site [ALIAS] --format=html --format=json --report-dir=/tmp
-```
-
-
-## Auto remediation
-
-Certain checks have an auto-remediation feature, in order to use this you will need to pass in `--auto-remediate` as a parameter on the command line. In general auto-remediation is only ever added into checks where the remediation is unlikely to break the site, e.g. it will never disable modules (as this could break the site) but it will set certain variables.
+In particular, if you use the `-vvv` argument, then you will see all the drush commands, and SSH commands printed to the screen.
 
 
 # Credits
