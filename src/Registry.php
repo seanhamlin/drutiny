@@ -54,10 +54,19 @@ class Registry {
    *
    */
   public static function checks() {
+    $dirs = new Finder();
+    $dirs->directories()
+           ->in('.')
+           ->name('Check');
+
     $finder = new Finder();
-    $finder->files()
-      ->in(self::CHECK_DIRECTORY)
-      ->name('*.yml');
+    $finder->files();
+
+    foreach ($dirs as $dir) {
+      $finder->in($dir->getRealPath());
+    }
+
+    $finder->name('*.yml');
 
     $registry = [];
     foreach ($finder as $file) {
