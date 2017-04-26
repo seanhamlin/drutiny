@@ -57,6 +57,9 @@ class ProfileGenerateCommand extends Command {
     try {
       $profile = new ProfileInformation($profile_data);
       $filepath = 'profiles/' . $name . '.profile.yml';
+      if (!is_dir('profiles')) {
+        mkdir('profiles');
+      }
       file_put_contents($filepath, Yaml::dump($profile_data));
       $output->writeln("<info>Written profile to $filepath</info>");
     }

@@ -88,10 +88,19 @@ class Registry {
    *
    */
   public static function profiles() {
+    $dirs = new Finder();
+    $dirs->directories()
+           ->in('.')
+           ->name('profiles');
+
     $finder = new Finder();
-    $finder->files()
-      ->in(realpath(__DIR__ . '/../profiles'))
-      ->name('*.profile.yml');
+    $finder->files();
+
+    foreach ($dirs as $dir) {
+      $finder->in($dir->getRealPath());
+    }
+
+    $finder->name('*.profile.yml');
 
     $registry = [];
     foreach ($finder as $file) {
