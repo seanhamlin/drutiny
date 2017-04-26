@@ -86,8 +86,6 @@ class User1 extends Check implements RemediableInterface {
       'username' => $this->generateRandomString()
     ]);
 
-    // $sandbox->drush()->sqlq("UPDATE users SET name = '$user->name', mail = '$email', init = '$email', status = $status WHERE uid = 1;");
-    // $sandbox->drush()->userPassword("'$user->name'", "--password='$password'");
     return $this->check($sandbox);
   }
 
