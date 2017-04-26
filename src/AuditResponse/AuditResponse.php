@@ -125,7 +125,7 @@ class AuditResponse {
     switch ($this->state) {
       case AuditResponse::ERROR:
       case AuditResponse::NA:
-        return strtr('Could not determine the state of @title due to an error:
+        return strtr('Could not determine the state of ' . $this->info->get('title') . ' due to an error:
 ```
 @exception
 ```', $this->tokens);
