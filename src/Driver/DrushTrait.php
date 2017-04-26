@@ -2,6 +2,8 @@
 
 namespace Drutiny\Driver;
 
+use Symfony\Component\Yaml\Yaml;
+
 /**
  *
  */
@@ -31,16 +33,48 @@ trait DrushTrait {
     return $json;
   }
 
+  /**
+   * Override config-set to allow better value setting.
+   */
+  public function configSet($collection, $key, $value) {
+    $value = base64_encode(Yaml::dump($value));
+
+    if ($index = array_search('--format=json', $this->drushOptions)) {
+      unset($this->drushOptions[$index]);
+    }
+    $this->drushOptions[] = '--format=yaml';
+    $this->drushOptions[] = '-y';
+
+    $pipe = "echo '$value' | base64 --decode |";
+
+    $output = $this->runCommand('config-set', [
+      $collection, $key, '-'
+    ], $pipe);
+
+    $this->drushOptions = [];
+    return TRUE;
+  }
+
+  /**
+   * Override for drush command 'sqlq'.
+   */
   public function sqlq($sql) {
     $args = ['"' . $sql . '"'];
     return trim($this->__call('sqlq', $args));
   }
 
   /**
+   * Override for drush command 'sql-query'.
+   */
+  public function sqlQuery($sql) {
+    return $this->sqlq($sql);
+  }
+
+  /**
    *
    */
-  public function runCommand($method, $args) {
-    return $this->sandbox()->exec('drush @options @method @args', [
+  public function runCommand($method, $args, $pipe = '') {
+    return $this->sandbox()->exec('@pipe drush @options @method @args', [
       '@method' => $method,
       '@args' => implode(' ', $args),
       '@options' => implode(' ', $this->drushOptions),

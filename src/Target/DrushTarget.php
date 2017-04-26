@@ -47,13 +47,14 @@ class DrushTarget extends Target implements DrushInterface, ExecInterface {
    * @inheritdoc
    * Overrides DrushTrait::runCommand().
    */
-  public function runCommand($method, $args) {
+  public function runCommand($method, $args, $pipe = '') {
     $process = new Exec($this->sandbox());
-    return $process->exec('drush @alias @options @method @args', [
+    return $process->exec('@pipe drush @alias @options @method @args', [
       '@method' => $method,
       '@args' => implode(' ', $args),
       '@options' => implode(' ', $this->drushOptions),
       '@alias' => $this->alias,
+      '@pipe' => $pipe,
     ]);
   }
 

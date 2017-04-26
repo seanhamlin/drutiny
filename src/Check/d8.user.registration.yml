@@ -1,5 +1,5 @@
 title: User registration
-class: \Drutiny\Check\D8\UserRegister
+class: \Drutiny\Check\D8\ConfigCheck
 description: |
   Anonymous sites should have user registration set to off to prevent spam
   registrations
@@ -7,3 +7,10 @@ remediation: |
   Set the configuration object `user.settings` key `register` to be `admin_only`.
 success: User registration is restricted to administrators only.
 failure: User registration is enabled for visitors.
+parameters:
+  collection:
+    default: user.settings
+  key:
+    default: register
+  value:
+    default: admin_only

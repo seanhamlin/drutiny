@@ -109,8 +109,8 @@ class CheckInformation {
       'constraints' => array(
         new Collection([
           'fields' => [
-            'type' => new Type("string"),
-            'description' => new Type("string"),
+            'type' => new Optional(new Type("string")),
+            'description' => new Optional(new Type("string")),
             'default' => new NotNull(),
           ],
         ]),

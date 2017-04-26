@@ -12,6 +12,7 @@ use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Drutiny\Registry;
 use Drutiny\Sandbox\Sandbox;
 use Drutiny\Logger\ConsoleLogger;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  *
@@ -73,7 +74,8 @@ class CheckRunCommand extends Command {
     $parameters = [];
     foreach ($input->getOption('set-parameter') as $option) {
       list($key, $value) = explode('=', $option, 2);
-      $parameters[$key] = $value;
+      // Using Yaml::parse to ensure datatype is correct.
+      $parameters[$key] = Yaml::parse($value);
     }
 
     // Generate the sandbox to execute the check.

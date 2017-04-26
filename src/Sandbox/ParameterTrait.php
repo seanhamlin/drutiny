@@ -24,7 +24,7 @@ trait ParameterTrait {
       ->getCheckInfo()
       ->getParameterDefaults();
 
-    if (is_null($default_value) && isset($defaults[$key])) {
+    if (isset($defaults[$key])) {
       $default_value = $defaults[$key];
     }
 
