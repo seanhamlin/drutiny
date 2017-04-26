@@ -20,15 +20,15 @@ trait DrushTrait {
     $output = $this->runCommand($method, $args);
 
     if (in_array('--format=json', $this->drushOptions)) {
-      if (!$output = json_decode($output, TRUE)) {
-        throw new \Exception("Cannot parse json output from drush: $output");
+      if (!$json = json_decode($output, TRUE)) {
+        throw new DrushFormatException("Cannot parse json output from drush: $output", $output);
       }
     }
 
     // Reset drush options.
     $this->drushOptions = [];
 
-    return $output;
+    return $json;
   }
 
   public function sqlq($sql) {
