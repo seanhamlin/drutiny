@@ -5,4 +5,4 @@ checks:
   d8.page.cache:
     max_age: 3600
   d8.shield.disabled: {}
-  d8.user.registation: {}
+  d8.user.registration: {}

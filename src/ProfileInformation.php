@@ -28,7 +28,7 @@ class ProfileInformation {
 
     foreach ($this->checks as $check => $args) {
       if (!$this->checkExists($check)) {
-        throw new \InvalidArgumentException("profile specifies check '$check' which does not exist.");
+        throw new \InvalidArgumentException("Profile '$this->title' specifies check '$check' which does not exist.");
       }
     }
 
