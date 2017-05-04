@@ -20,7 +20,10 @@ class ConfigCheck extends Check implements RemediableInterface {
     $key = $sandbox->getParameter('key');
     $value = $sandbox->getParameter('value');
 
-    $config = $sandbox->drush(['format' => 'json'])->configGet($collection, $key);
+    $config = $sandbox->drush([
+      'format' => 'json',
+      'include-overridden' => NULL,
+      ])->configGet($collection, $key);
     $reading = $config[$collection . ':' . $key];
 
     $sandbox->setParameter('reading', $reading);
