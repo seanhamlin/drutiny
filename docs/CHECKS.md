@@ -17,22 +17,22 @@ Drutiny comes with a scaffolding command to pre-generate these files for you:
 
 ```bash
 $ ./bin/drutiny check:generate
-What is the title of your check? No lamas allowed
-Please provide a machine name for your check? lamas.deny
+What is the title of your check? No llamas allowed
+Please provide a machine name for your check? llamas.deny
 Does this check support auto-remediation? (y/n) y
-Created src/Check/lamas.deny.yml
-Created src/Check/NoLamasAllowed.php
+Created src/Check/llamas.deny.yml
+Created src/Check/NoLlamasAllowed.php
 ```
 
-`lamas.deny` will now be listed in `./bin/drutiny check:list` and you can run it
-using `./bin/drutiny check:run lamas.deny <target>`.
+`llamas.deny` will now be listed in `./bin/drutiny check:list` and you can run it
+using `./bin/drutiny check:run llamas.deny <target>`.
 
 If you move your PHP file to a more appropriate sub-location, be sure to update
 its namespace in both the PHP file and in the yaml file.
 
 ## Writing the Check
 Checks are done by calling the `check` method within the check's PHP class. In
-the example above, this PHP class can be located at `src/Check/NoLamasAllowed.php`.
+the example above, this PHP class can be located at `src/Check/NoLlamasAllowed.php`.
 
 The check method should return `TRUE` if the check passes successfully or `FALSE`
 if the check fails. If the check encounters a failure or exception which does not
@@ -44,7 +44,7 @@ of any type can be thrown.
  * @inheritDoc
  */
 public function check(Sandbox $sandbox) {
-  throw new \Exception("How does one ensure lamas are denied?");
+  throw new \Exception("How does one ensure llamas are denied?");
 }
 ```
 
@@ -57,13 +57,13 @@ may use in your check such as `drush`.
  * @inheritDoc
  */
 public function check(Sandbox $sandbox) {
-  // Use drush to confirm Drupal settings deny lamas.
+  // Use drush to confirm Drupal settings deny llamas.
   $config = $sandbox->drush(['format' => 'json'])
-                    ->configGet('lamas.settings', 'allowed');
-  $denied = $config['lamas.settings:allowed'] == FALSE;
+                    ->configGet('llamas.settings', 'allowed');
+  $denied = $config['llamas.settings:allowed'] == FALSE;
 
-  // Confirm lamas have not accessed the site.
-  $lama_access = $sandbox->exec('grep lamas /var/log/apache/access.log | grep -v 403');
+  // Confirm llamas have not accessed the site.
+  $lama_access = $sandbox->exec('grep llamas /var/log/apache/access.log | grep -v 403');
 
   return $denied && empty($lama_access);
 }
@@ -84,8 +84,8 @@ method from within the remediation is the best approach.
  * @inheritDoc
  */
 public function remediate(Sandbox $sandbox) {
-  // This calls: drush config-set -y lamas.settings allowed 0
-  $sandbox->drush()->configSet('-y', 'lamas.settings', 'allowed', 0);
+  // This calls: drush config-set -y llamas.settings allowed 0
+  $sandbox->drush()->configSet('-y', 'llamas.settings', 'allowed', 0);
 
   // Re-check now the config should have changed.
   return $this->check($sandbox);
@@ -103,7 +103,7 @@ Parameters are defined in the check's yaml and can be used in the `check` and `r
 parameters:
   foo:
     type: string
-    description: "A measure of foo to apply to denied lamas"
+    description: "A measure of foo to apply to denied llamas"
     default: bar
 ```
 
@@ -115,9 +115,9 @@ public function check(Sandbox $sandbox) {
   $foo = $sandbox->getParameter('foo');
 
   $config = $sandbox->drush(['format' => 'json'])
-                    ->configGet('lamas.settings', 'foo');
-  $this->setParameter('actual_foo', $config['lamas.settings:foo']);
-  return $foo == $config['lamas.settings:foo'];
+                    ->configGet('llamas.settings', 'foo');
+  $this->setParameter('actual_foo', $config['llamas.settings:foo']);
+  return $foo == $config['llamas.settings:foo'];
 }
 ```
 
@@ -126,16 +126,16 @@ remediation messages returned for the check.
 
 ```yaml
 success: |
-  Lama settings ensure no lamas will have access with a foo measure of {{actual_foo}}
+  Lama settings ensure no llamas will have access with a foo measure of {{actual_foo}}
 failure: |
-  Lamas have free reign on the site! foo measure set to {{actual_foo}}
+  Llamas have free reign on the site! foo measure set to {{actual_foo}}
 remediation: |
-  Set `lamas.settings:foo` to "bar" to better manage lamas.
+  Set `llamas.settings:foo` to "bar" to better manage llamas.
 ```
 
 When rendered, the success message would say something like this:
 
-> Lama settings ensure no lamas will have access with a foo measure of bar
+> Lama settings ensure no llamas will have access with a foo measure of bar
 
 **Note**: message parameters in yaml support markdown syntax which is rendered
 into HTML for the HTML reports.
