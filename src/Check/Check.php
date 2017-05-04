@@ -23,7 +23,7 @@ abstract class Check implements CheckInterface {
     return $this->check($sandbox);
   }
 
-  protected function validate(Sandbox $sandbox)
+  final protected function validate(Sandbox $sandbox)
   {
     $reflection = new \ReflectionClass($this);
 
