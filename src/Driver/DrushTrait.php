@@ -25,12 +25,13 @@ trait DrushTrait {
       if (!$json = json_decode($output, TRUE)) {
         throw new DrushFormatException("Cannot parse json output from drush: $output", $output);
       }
+      $output = $json;
     }
 
     // Reset drush options.
     $this->drushOptions = [];
 
-    return $json;
+    return $output;
   }
 
   /**
