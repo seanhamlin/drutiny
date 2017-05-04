@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
 class ProfileInformation {
 
   protected $title;
-  protected $checks;
+  protected $checks = [];
 
   /**
    *
@@ -24,6 +24,12 @@ class ProfileInformation {
         continue;
       }
       $this->{$key} = $value;
+    }
+
+    foreach ($this->checks as $check => $args) {
+      if (!$this->checkExists($check)) {
+        throw new \InvalidArgumentException("profile specifies check '$check' which does not exist.");
+      }
     }
 
     $validator = Validation::createValidatorBuilder()
@@ -57,6 +63,12 @@ class ProfileInformation {
    */
   public function getChecks() {
     return $this->checks;
+  }
+
+  protected function checkExists($name)
+  {
+    $registry = Registry::checks();
+    return array_key_exists($name, $registry);
   }
 
   /**

@@ -54,6 +54,12 @@ class Registry {
    *
    */
   public static function checks() {
+    static $registry;
+
+    if ($registry) {
+      return $registry;
+    }
+    
     $dirs = new Finder();
     $dirs->directories()
            ->in('.')
