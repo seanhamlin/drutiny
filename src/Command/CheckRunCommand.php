@@ -57,7 +57,12 @@ class CheckRunCommand extends Command {
   protected function execute(InputInterface $input, OutputInterface $output) {
 
     // Setup the target.
-    list($target_name, $target_data) = explode(':', $input->getArgument('target'), 2);
+    $target_data = $input->getArgument('target');
+    $target_name = 'drush';
+    if (strpos($target_data, ':') !== FALSE) {
+      list($target_name, $target_data) = explode(':', $input->getArgument('target'), 2);
+    }
+
     $targets = Registry::targets();
     if (!isset($targets[$target_name])) {
       throw new InvalidArgumentException("$target_name is not a valid target.");
