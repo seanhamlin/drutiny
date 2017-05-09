@@ -6,10 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ profile.title }} Report</title>
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/seanhamlin/drutiny/master/assets/favicon-32x32.png" sizes="32x32">
-  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/seanhamlin/drutiny/master/assets/favicon-16x16.png" sizes="16x16">
-  <link rel="manifest" href="https://raw.githubusercontent.com/seanhamlin/drutiny/master/assets/manifest.json">
-  <link rel="mask-icon" href="https://raw.githubusercontent.com/seanhamlin/drutiny/master/assets/safari-pinned-tab.svg" color="#00a9e3">
+  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/drutiny/drutiny/master/assets/favicon-32x32.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/drutiny/drutiny/master/assets/favicon-16x16.png" sizes="16x16">
+  <link rel="manifest" href="https://raw.githubusercontent.com/drutiny/drutiny/master/assets/manifest.json">
+  <link rel="mask-icon" href="https://raw.githubusercontent.com/drutiny/drutiny/master/assets/safari-pinned-tab.svg" color="#00a9e3">
   <meta name="theme-color" content="#ffffff">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/yeti/bootstrap.min.css">
   <style>
@@ -23,11 +23,20 @@
     .page-header {
       border-bottom: none;
     }
+    .alert-success, .alert-danger {
+      background-color: transparent;
+      color: #333333;
+    }
+    @media print {
+      .result-group {
+        page-break-inside: avoid;
+      }
+    }
     @media print {
       .display-filters {
         display: none !important;
       }
-      .table .danger td,
+      /*.table .danger td,
       .table td.danger,
       .table .danger th {
         background-color: #f2dede !important;
@@ -41,7 +50,7 @@
       .table td.success,
       .table .success th {
         background-color: #dff0d8 !important;
-      }
+      }*/
     }
   </style>
 </head>
