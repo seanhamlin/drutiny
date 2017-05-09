@@ -8,5 +8,5 @@ remediation: |
   Find out what modules are causing the sessions, and look to remove them.
 success: There are no anonymous sessions.
 failure: |
-  There {{prefix}} {{sessions}} anonymous session{{plural}}.
+  There **{{prefix}} {{sessions}}** anonymous session{{plural}}.
 exception: Could not determine the amount of anonymous sessions.

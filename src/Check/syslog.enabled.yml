@@ -2,11 +2,11 @@ title: Syslog
 class: \Drutiny\Check\Drupal\ModuleEnabled
 description: |
   Syslog module writes Drupal watchdog logs to the syslog.
-remediation: "Disable the module: `drush pm-uninstall syslog -y`"
-success: The Syslog module is not currently enabled.
-failure: The Syslog module is currently enabled.
+remediation: "Enable the module: `drush en syslog -y`"
+success: The Syslog module is currently enabled.
+failure: The Syslog module is not currently enabled.
 parameters:
   module:
     type: string
-    description: The name of the module to ensure is disabled.
+    description: The name of the module to ensure is enabled.
     default: syslog

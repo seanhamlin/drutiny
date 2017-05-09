@@ -35,7 +35,7 @@
               <tr class="danger">
                 <th>{{ result.title }}</th>
                 <td>
-                  <p>{{ result }}</p>
+                  <p>{{ result.failure | raw }}</p>
                   <p><em>{{ result.description | raw }}</em></p>
                   <div class="panel panel-default">
                     <div class="panel-heading">Remediation</div>

@@ -11,6 +11,7 @@ remediation: "Uninstall any experimental modules"
 success: No experimental modules are in use.
 failure: |
   The following experimental modules are enabled
+  
     {{# modules }}
       - {{ name }}
     {{/ modules }}
