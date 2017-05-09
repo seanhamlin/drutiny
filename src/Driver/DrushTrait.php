@@ -20,8 +20,7 @@ trait DrushTrait {
     preg_match_all('/((?:^|[A-Z])[a-z]+)/', $method, $matches);
     $method = implode('-', array_map('strtolower', $matches[0]));
     $output = $this->runCommand($method, $args);
-
-    if (in_array('--format=json', $this->drushOptions)) {
+    if (in_array("--format='json'", $this->drushOptions)) {
       if (!$json = json_decode($output, TRUE)) {
         throw new DrushFormatException("Cannot parse json output from drush: $output", $output);
       }
@@ -88,18 +87,18 @@ trait DrushTrait {
   public function setDrushOptions(array $options) {
     foreach ($options as $key => $value) {
       if (is_int($key)) {
-        continue;
+        $option  = '--' . $value;
       }
-      if (strlen($key) == 1) {
+      elseif (strlen($key) == 1) {
         $option = '-' . $key;
         if (!empty($value)) {
-          $option .= ' ' . $value;
+          $option .= ' ' . escapeshellarg($value);
         }
       }
       else {
         $option = '--' . $key;
         if (!empty($value)) {
-          $option .= '=' . $value;
+          $option .= '=' . escapeshellarg($value);
         }
       }
       $this->drushOptions[] = $option;
