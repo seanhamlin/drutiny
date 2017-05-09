@@ -36,4 +36,17 @@ abstract class Target {
    */
   abstract public function uri();
 
+  /**
+   * Parse a target argument into the target driver and data.
+   */
+  static public function parseTarget($target)
+  {
+    $target_name = 'drush';
+    $target_data = $target;
+    if (strpos($target, ':') !== FALSE) {
+      list($target_name, $target_data) = explode(':', $target, 2);
+    }
+    return [$target_name, $target_data];
+  }
+
 }

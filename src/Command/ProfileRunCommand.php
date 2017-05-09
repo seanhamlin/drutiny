@@ -14,6 +14,7 @@ use Drutiny\Logger\ConsoleLogger;
 use Drutiny\Report\ProfileRunReport;
 use Drutiny\Report\ProfileRunJsonReport;
 use Drutiny\Report\ProfileRunHtmlReport;
+use Drutiny\Target\Target;
 use Symfony\Component\Console\Helper\ProgressBar;
 
 /**
@@ -68,7 +69,7 @@ class ProfileRunCommand extends Command {
   protected function execute(InputInterface $input, OutputInterface $output) {
 
     // Setup the target.
-    list($target_name, $target_data) = explode(':', $input->getArgument('target'), 2);
+    list($target_name, $target_data) = Target::parseTarget($input->getArgument('target'));
     $targets = Registry::targets();
     if (!isset($targets[$target_name])) {
       throw new InvalidArgumentException("$target_name is not a valid target.");

@@ -11,10 +11,14 @@ trait DrushTrait {
 
   protected $drushOptions = [];
 
+  protected $globalDefaults = [];
+
   /**
    * Converts into method into a Drush command.
    */
   public function __call($method, $args) {
+    $this->setDrushOptions($this->getGlobalDefaults());
+
     // Convert method from camelCase to Drush hyphen based method naming.
     // E.g. PmInfo will become pm-info.
     preg_match_all('/((?:^|[A-Z])[a-z]+)/', $method, $matches);
@@ -101,9 +105,37 @@ trait DrushTrait {
           $option .= '=' . escapeshellarg($value);
         }
       }
-      $this->drushOptions[] = $option;
+      if (!in_array($option, $this->drushOptions)) {
+        $this->drushOptions[] = $option;
+      }
     }
     return $this;
+  }
+
+  /**
+   * Set an option that will be presented on every drush command.
+   */
+  public function setGlobalDefaultOption($key, $value)
+  {
+    $this->globalDefaults[$key] = $value;
+    return $this;
+  }
+
+  /**
+   * Remove global option.
+   */
+  public function removeGlobalDefaultOption($key)
+  {
+    unset($this->globalDefaults[$key]);
+    return $this;
+  }
+
+  /**
+   * Retrieve global defaults.
+   */
+  public function getGlobalDefaults()
+  {
+    return $this->globalDefaults;
   }
 
   /**

@@ -12,6 +12,7 @@ use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Drutiny\Registry;
 use Drutiny\Sandbox\Sandbox;
 use Drutiny\Logger\ConsoleLogger;
+use Drutiny\Target\Target;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -57,11 +58,7 @@ class CheckRunCommand extends Command {
   protected function execute(InputInterface $input, OutputInterface $output) {
 
     // Setup the target.
-    $target_data = $input->getArgument('target');
-    $target_name = 'drush';
-    if (strpos($target_data, ':') !== FALSE) {
-      list($target_name, $target_data) = explode(':', $input->getArgument('target'), 2);
-    }
+    list($target_name, $target_data) = Target::parseTarget($input->getArgument('target'));
 
     $targets = Registry::targets();
     if (!isset($targets[$target_name])) {
