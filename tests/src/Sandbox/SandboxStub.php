@@ -40,7 +40,23 @@ class SandboxStub extends Sandbox {
    }
 
    public function __call($method, $args) {
-     $method = 'stub' . ucwords($method);
+
+     $stacktrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+
+     while ($stack = array_shift($stacktrace)) {
+       if (isset($stack['class']) && (get_class($this->test) == $stack['class'])) {
+         $caller = $stack['function'];
+         break;
+       }
+     }
+
+     if (isset($caller) && strpos($caller, 'test') === 0) {
+       $method = 'stub' . substr($caller, 4) . ucwords($method);
+     }
+     else {
+       $method = 'stub' . ucwords($method);
+     }
+
      if (!method_exists($this->test, $method)) {
        throw new \Exception(get_class($this->test) . ' is missing stub method: ' . $method);
      }
