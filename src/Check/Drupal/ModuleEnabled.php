@@ -18,8 +18,13 @@ class ModuleEnabled extends Check implements RemediableInterface {
   {
 
     $module = $sandbox->getParameter('module');
-    $info = $sandbox->drush(['format' => 'json'])->pmInfo($module);
-    $status = $info[$module]['status'];
+    $info = $sandbox->drush(['format' => 'json'])->pmList();
+
+    if (!isset($info[$module])) {
+      return FALSE;
+    }
+
+    $status = strtolower($info[$module]['status']);
 
     return ($status == 'enabled');
   }

@@ -21,14 +21,17 @@ class ModuleDisabled extends Check implements RemediableInterface {
     $module = $sandbox->getParameter('module');
 
     try {
-      // Drush pm-info doesn't always return json for this function.
-      // For example if the module is not present.
-      $info = $sandbox->drush(['format' => 'json'])->pmInfo($module);
+      $info = $sandbox->drush(['format' => 'json'])->pmList();
     }
     catch (DrushFormatException $e) {
       return strpos($e->getOutput(), $module . ' was not found.') !== FALSE;
     }
-    $status = $info[$module]['status'];
+
+    if (!isset($info[$module])) {
+      return TRUE;
+    }
+
+    $status = strtolower($info[$module]['status']);
 
     return ($status == 'not installed');
   }
