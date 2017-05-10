@@ -4,6 +4,7 @@ namespace Drutiny\Sandbox;
 
 use Drutiny\Target\Target;
 use Drutiny\Check\CheckInterface;
+use Drutiny\Check\RemediableInterface;
 use Drutiny\AuditResponse\AuditResponse;
 use Drutiny\CheckInformation;
 use Drutiny\Cache;
@@ -82,6 +83,12 @@ class Sandbox {
   public function remediate() {
     $response = new AuditResponse($this->checkInfo);
     try {
+
+      // Do not attempt remediation on checks that don't support it.
+      if (!($this->getCheck() instanceof RemediableInterface)) {
+        throw new \Exception(get_class($this->getCheck()) . ' is not remediable.');
+      }
+
       // Make sure remediation does report false positives due to caching.
       Cache::purge();
       $outcome = $this->getCheck()->remediate($this);

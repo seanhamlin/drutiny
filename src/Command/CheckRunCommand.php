@@ -13,6 +13,7 @@ use Drutiny\Registry;
 use Drutiny\Sandbox\Sandbox;
 use Drutiny\Logger\ConsoleLogger;
 use Drutiny\Target\Target;
+use Drutiny\Check\RemediableInterface;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -100,7 +101,7 @@ class CheckRunCommand extends Command {
     $response = $sandbox->run();
 
     // Attempt remeidation.
-    if (!$response->isSuccessful() && $input->getOption('remediate')) {
+    if (!$response->isSuccessful() && $input->getOption('remediate') && ($sandbox->getCheck() instanceof RemediableInterface)) {
       $response = $sandbox->remediate();
     }
 
