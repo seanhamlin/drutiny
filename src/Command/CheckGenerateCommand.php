@@ -49,6 +49,7 @@ class CheckGenerateCommand extends Command {
       'description' => 'What the parameter is and why how it is used to configure the check.',
       'default' => 'bar',
     ];
+    $yaml['tags'] = ['Custom'];
 
     $question = new ConfirmationQuestion("Does this check support auto-remediation? (y/n) ");
     $remediable = $helper->ask($input, $output, $question);

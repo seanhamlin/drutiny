@@ -94,7 +94,6 @@ class CheckRunCommand extends Command {
       ->parse($target_data);
 
     if ($uri = $input->getOption('uri')) {
-      var_dump($uri);
       $sandbox->drush()->setGlobalDefaultOption('uri', $uri);
     }
 
