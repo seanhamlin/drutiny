@@ -44,13 +44,13 @@ class SandboxStub extends Sandbox {
      $stacktrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 
      while ($stack = array_shift($stacktrace)) {
-       if (isset($stack['class']) && (get_class($this->test) == $stack['class'])) {
+       if (isset($stack['class']) && (get_class($this->test) == $stack['class']) && strpos($stack['function'], 'test') === 0) {
          $caller = $stack['function'];
          break;
        }
      }
 
-     if (isset($caller) && strpos($caller, 'test') === 0) {
+     if (isset($caller)) {
        $method = 'stub' . substr($caller, 4) . ucwords($method);
      }
      else {

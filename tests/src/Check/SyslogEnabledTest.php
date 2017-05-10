@@ -10,18 +10,12 @@ class SyslogEnabledTest extends CheckTestCase {
 
   public function testSyslogEnabled()
   {
-    $info = $this->getCheckInfo('syslog.enabled');
-    $sandbox = $this->createSandbox($info);
-    $response = $sandbox->run();
-    $this->assertTrue($response->isSuccessful());
+    $this->assertCheckPasses('syslog.enabled');
   }
 
   public function testSyslogDisabled()
   {
-    $info = $this->getCheckInfo('syslog.enabled');
-    $sandbox = $this->createSandbox($info);
-    $response = $sandbox->run();
-    $this->assertFalse($response->isSuccessful());
+    $this->assertCheckFails('syslog.enabled');
   }
 
   public function stubSyslogEnabledPmList()

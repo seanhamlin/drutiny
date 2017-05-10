@@ -26,4 +26,36 @@ abstract class CheckTestCase extends TestCase {
     return $checks[$checkname];
   }
 
+  /**
+   * Asserts that a condition is true.
+   *
+   * @param  string $checkname
+   * @param  array  $parameters
+   * @throws PHPUnit_Framework_AssertionFailedError
+   */
+  public function assertCheckPasses($checkname, $parameters = [])
+  {
+    $info = $this->getCheckInfo($checkname);
+    $sandbox = $this->createSandbox($info);
+    $sandbox->setParameters($parameters);
+    $response = $sandbox->run();
+    self::assertTrue($response->isSuccessful(), "$checkname passed");
+  }
+
+  /**
+   * Asserts that a condition is true.
+   *
+   * @param  string $checkname
+   * @param  array  $parameters
+   * @throws PHPUnit_Framework_AssertionFailedError
+   */
+  public function assertCheckFails($checkname, $parameters = [])
+  {
+    $info = $this->getCheckInfo($checkname);
+    $sandbox = $this->createSandbox($info);
+    $sandbox->setParameters($parameters);
+    $response = $sandbox->run();
+    self::assertFalse($response->isSuccessful(), "$checkname failed");
+  }
+
 }
