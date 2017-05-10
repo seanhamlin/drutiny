@@ -29,5 +29,3 @@ checks:
     d8.experimental.disabled: {  }
     apache.htaccess.redirects: {  }
     anon.sessions: {  }
-    acquia.production.mode: {  }
-    acquia.connector: {  }
