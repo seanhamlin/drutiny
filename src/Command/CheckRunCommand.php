@@ -40,7 +40,7 @@ class CheckRunCommand extends Command {
       ->addOption(
         'set-parameter',
         'p',
-        InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
+        InputOption::VALUE_OPTIONAL,
         'Set parameters for the check.',
         []
       )
@@ -49,6 +49,12 @@ class CheckRunCommand extends Command {
         'r',
         InputOption::VALUE_NONE,
         'Allow failed checks to remediate themselves if available.'
+      )
+      ->addOption(
+        'uri',
+        'l',
+        InputOption::VALUE_OPTIONAL,
+        'Provide URLs to run against the target. Useful for multisite installs. Accepts multiple arguments.'
       );
   }
 
@@ -86,6 +92,11 @@ class CheckRunCommand extends Command {
       ->setLogger(new ConsoleLogger($output))
       ->getTarget()
       ->parse($target_data);
+
+    if ($uri = $input->getOption('uri')) {
+      var_dump($uri);
+      $sandbox->drush()->setGlobalDefaultOption('uri', $uri);
+    }
 
     $response = $sandbox->run();
 

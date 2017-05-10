@@ -6,6 +6,7 @@ use Drutiny\Target\Target;
 use Drutiny\Check\CheckInterface;
 use Drutiny\AuditResponse\AuditResponse;
 use Drutiny\CheckInformation;
+use Drutiny\Cache;
 
 /**
  * Run check in an isolated environment.
@@ -81,6 +82,8 @@ class Sandbox {
   public function remediate() {
     $response = new AuditResponse($this->checkInfo);
     try {
+      // Make sure remediation does report false positives due to caching.
+      Cache::purge();
       $outcome = $this->getCheck()->remediate($this);
       $response->set($outcome, $this->getParameterTokens());
       if ($response->isSuccessful()) {

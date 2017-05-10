@@ -1,5 +1,5 @@
 title: Statistics
-class: \Drutiny\Check\D7ModuleDisabled
+class: \Drutiny\Check\D7\ModuleDisabled
 tags:
   - Drupal 7
   - Best Practice

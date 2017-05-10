@@ -96,6 +96,9 @@ class ProfileRunCommand extends Command {
 
     // Get the URLs.
     $uris = $input->getOption('uri');
+    if (empty($uris)) {
+      $uris = ['default'];
+    }
 
     $checks = Registry::checks();
     $results = [];
@@ -112,30 +115,36 @@ class ProfileRunCommand extends Command {
     }
 
     // Establish a progress bar for reporting since this can take sometime.
-    $progress = new ProgressBar($output, count($profiles[$profile]->getChecks()));
+    $progress = new ProgressBar($output, count($profiles[$profile]->getChecks()) * count($uris));
     $progress->setFormatDefinition('custom', " <comment>%message%</comment>\n %current%/%max% <info>[%bar%]</info> %percent:3s%% %memory:6s%");
     $progress->setFormat('custom');
     $progress->setMessage("Starting...");
     $progress->setBarWidth(80);
     $progress_bar_enabled && $progress->start();
 
-    foreach ($profiles[$profile]->getChecks() as $name => $parameters) {
-      $progress_bar_enabled && $progress->setMessage("Checking " . $checks[$name]->get('title'));
-      $sandbox = new Sandbox($targets[$target_name]->class, $checks[$name]);
-      $sandbox->setParameters($parameters)
-        ->setLogger(new ConsoleLogger($output))
-        ->getTarget()
-        ->parse($target_data);
+    foreach ($uris as $uri) {
+      foreach ($profiles[$profile]->getChecks() as $name => $parameters) {
+        $progress_bar_enabled && $progress->setMessage("[$uri] Checking " . $checks[$name]->get('title'));
+        $sandbox = new Sandbox($targets[$target_name]->class, $checks[$name]);
+        $sandbox->setParameters($parameters)
+          ->setLogger(new ConsoleLogger($output))
+          ->getTarget()
+          ->parse($target_data);
 
-      $response = $sandbox->run();
+        if ($uri != 'default') {
+          $sandbox->drush()->setGlobalDefaultOption('uri', $uri);
+        }
 
-      // Attempt remeidation.
-      if (!$response->isSuccessful() && $input->getOption('remediate')) {
-        $progress_bar_enabled && $progress->setMessage(self::EMOJI_REMEDIATION . "   Remediating " . $checks[$name]->get('title'));
-        $response = $sandbox->remediate();
+        $response = $sandbox->run();
+
+        // Attempt remeidation.
+        if (!$response->isSuccessful() && $input->getOption('remediate')) {
+          $progress_bar_enabled && $progress->setMessage(self::EMOJI_REMEDIATION . "   Remediating " . $checks[$name]->get('title'));
+          $response = $sandbox->remediate();
+        }
+        $result[$uri][$name] = $response;
+        $progress_bar_enabled && $progress->advance();
       }
-      $result[] = $response;
-      $progress_bar_enabled && $progress->advance();
     }
 
     if ($progress_bar_enabled) {
@@ -144,21 +153,26 @@ class ProfileRunCommand extends Command {
       $output->writeln('');
     }
 
-    switch ($format) {
-      case 'json':
-        $report = new ProfileRunJsonReport($profiles[$profile], $sandbox->getTarget(), $result);
-        break;
+    if (count($uris) == 1) {
+      switch ($format) {
+        case 'json':
+          $report = new ProfileRunJsonReport($profiles[$profile], $sandbox->getTarget(), current($result));
+          break;
 
-      case 'html':
-        $report = new ProfileRunHtmlReport($profiles[$profile], $sandbox->getTarget(), $result);
-        break;
+        case 'html':
+          $report = new ProfileRunHtmlReport($profiles[$profile], $sandbox->getTarget(), current($result));
+          break;
 
-      case 'console':
-      default:
-        $report = new ProfileRunReport($profiles[$profile], $sandbox->getTarget(), $result);
-        break;
+        case 'console':
+        default:
+          $report = new ProfileRunReport($profiles[$profile], $sandbox->getTarget(), current($result));
+          break;
+      }
+      $report->render($input, $output);
     }
-    $report->render($input, $output);
+    else {
+      // TODO: Multisite reporting not yet supported.
+    }
   }
 
 }
