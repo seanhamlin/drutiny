@@ -1,5 +1,9 @@
 title: Knit
 class: \Drutiny\Check\D8\ModuleDisabled
+tags:
+  - Drupal 8
+  - Best Practice
+  - Security
 description: |
   Kint for PHP is a tool designed to present your debugging data in the
   absolutely best way possible.

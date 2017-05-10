@@ -55,6 +55,12 @@ class ProfileRunCommand extends Command {
         'console'
       )
       ->addOption(
+        'uri',
+        'l',
+        InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
+        'Provide URLs to run against the target. Useful for multisite installs. Accepts multiple arguments.'
+      )
+      ->addOption(
         'report-filename',
         'o',
         InputOption::VALUE_OPTIONAL,
@@ -87,6 +93,9 @@ class ProfileRunCommand extends Command {
     if (!in_array($format, ['console', 'json', 'html'])) {
       throw new InvalidArgumentException("Reporting format '$format' is not supported.");
     }
+
+    // Get the URLs.
+    $uris = $input->getOption('uri');
 
     $checks = Registry::checks();
     $results = [];

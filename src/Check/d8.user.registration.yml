@@ -1,5 +1,9 @@
 title: User registration
 class: \Drutiny\Check\D8\ConfigCheck
+tags:
+  - Drupal 8
+  - Best Practice
+  - Security
 description: |
   Anonymous sites should have user registration set to off to prevent spam
   registrations

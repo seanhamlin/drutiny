@@ -1,5 +1,9 @@
 title: Database logging disabled
 class: \Drutiny\Check\D8\ModuleDisabled
+tags:
+  - Drupal 8
+  - Best Practice
+  - Performance
 description: |
   The Drupal core databse logging module can cause database performance issues
   in production. It is recommended to disable and uninstall this module. Use the

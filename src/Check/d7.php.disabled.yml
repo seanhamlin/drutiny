@@ -1,7 +1,7 @@
 title: PHP
-class: \Drutiny\Check\D8\ModuleDisabled
+class: \Drutiny\Check\D7\ModuleDisabled
 tags:
-  - Drupal 8
+  - Drupal 7
   - Best Practice
   - Security
 description: |

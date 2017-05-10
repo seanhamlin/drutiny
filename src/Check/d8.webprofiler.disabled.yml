@@ -1,5 +1,9 @@
 title: Webprofiler
 class: \Drutiny\Check\D8\ModuleDisabled
+tags:
+  - Drupal 8
+  - Best Practice
+  - Performance
 description: |
   The web profiler is a developer module to help profile a PHP page load.
 remediation: "Disable the module: `drush pm-uninstall webprofiler -y`"

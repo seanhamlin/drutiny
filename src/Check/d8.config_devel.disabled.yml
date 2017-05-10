@@ -1,5 +1,10 @@
 title: Configuration development
 class: \Drutiny\Check\D8\ModuleDisabled
+tags:
+  - Drupal 8
+  - Best Practice
+  - Performance
+  - Security
 description: |
   This module helps with developing configuration. Do not deploy in production
   environments. Exercise caution and always use version control.

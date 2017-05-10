@@ -1,5 +1,8 @@
 title: Cron last run
 class: \Drutiny\Check\D8\CronHasRun
+tags:
+  - Drupal 8
+  - Best Practice
 description: |
   Cron should be run regularly to ensure that scheduled events are processed in
   a timely manner.

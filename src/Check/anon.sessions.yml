@@ -1,5 +1,7 @@
 title: Anonymous sessions
 class: \Drutiny\Check\Drupal\SessionsAnon
+tags:
+  - Performance
 description: |
   If you are generating sessions for anonymous users, you are causing a major
   performance impact to your site. Having anonymous sessions will break

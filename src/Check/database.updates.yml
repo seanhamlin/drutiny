@@ -1,5 +1,8 @@
 title: Database updates
 class: \Drutiny\Check\Drupal\UpdateDBStatus
+tags:
+  - Drupal 8
+  - Best Practice
 description: |
   Updates to Drupal core or contrib modules sometimes include important database
   changes which should be applied after the code updates have been deployed.

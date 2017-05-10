@@ -1,5 +1,8 @@
 title: Hide errors from screen (log only)
 class: \Drutiny\Check\D8\ConfigCheck
+tags:
+  - Drupal 8
+  - Best Practice
 description: |
   When PHP encounters an error, it can generate an error log and display a
   report on the screen. While these error messages can be helpful in debugging

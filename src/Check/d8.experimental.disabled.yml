@@ -1,5 +1,8 @@
 title: No Experimental Modules in Use
 class: \Drutiny\Check\D8\NoExperimentalCore
+tags:
+  - Drupal 8
+  - Best Practice
 description: |
   Drupal 8 core introduces the concept of experimental modules. These are
   modules that are provided with Drupal core for testing purposes, but that are
@@ -11,7 +14,7 @@ remediation: "Uninstall any experimental modules"
 success: No experimental modules are in use.
 failure: |
   The following experimental modules are enabled
-  
+
     {{# modules }}
       - {{ name }}
     {{/ modules }}

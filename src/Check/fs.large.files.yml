@@ -1,5 +1,9 @@
 title: Large public files
 class: Drutiny\Check\Filesystem\LargeFiles
+tags:
+  - Drupal 8
+  - Best Practice
+  - Performance
 description: |
   Large static assets should ideally be housed in other services, e.g.
   Amazon S3 (for files) or Youtube (for videos).

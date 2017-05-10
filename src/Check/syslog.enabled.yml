@@ -1,5 +1,9 @@
 title: Syslog
 class: \Drutiny\Check\Drupal\ModuleEnabled
+tags:
+  - Drupal 8
+  - Best Practice
+  - Performance
 description: |
   Syslog module writes Drupal watchdog logs to the syslog.
 remediation: "Enable the module: `drush en syslog -y`"

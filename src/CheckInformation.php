@@ -27,6 +27,7 @@ class CheckInformation {
   protected $parameters = [];
   protected $remediable = FALSE;
   protected $validation = [];
+  protected $tags = [];
 
   protected $renderableProperties = [
     'title',
@@ -89,6 +90,14 @@ class CheckInformation {
     return $this->{$property};
   }
 
+  public function hasTag($tag) {
+    return in_array($tag, $this->tags);
+  }
+
+  public function getTags() {
+    return $this->tags;
+  }
+
   /**
    * Validation metadata.
    */
@@ -116,6 +125,7 @@ class CheckInformation {
         ]),
       ),
     )));
+    $metadata->addPropertyConstraint('tags', new Optional());
   }
 
   public function getParameterDefaults()

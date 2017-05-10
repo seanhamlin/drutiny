@@ -1,5 +1,8 @@
 title: Duplicate modules
 class: \Drutiny\Check\D7\DuplicateModules
+tags:
+  - Drupal 7
+  - Sanity
 description: |
   Duplicate modules can cause a variety of strange behaviors should Drupal ever
   unexpectedly load the wrong version.

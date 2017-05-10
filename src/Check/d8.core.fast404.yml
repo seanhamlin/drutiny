@@ -1,5 +1,8 @@
 title: Core Fast 404 Enabled
 class: \Drutiny\Check\D8\ConfigCheck
+tags:
+  - Drupal 8
+  - Performance
 description: |
   Core's fast 404 configuration allows Drupal to spend little time on 404 error
   pages that match the Fast 404 criteria.

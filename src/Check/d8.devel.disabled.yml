@@ -1,5 +1,9 @@
 title: Devel
 class: \Drutiny\Check\D8\ModuleDisabled
+tags:
+  - Drupal 8
+  - Best Practice
+  - Security
 description: |
   A suite of modules containing fun for module developers and themers. Not
   recommended for production use.

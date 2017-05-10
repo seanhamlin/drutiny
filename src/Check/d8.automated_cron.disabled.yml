@@ -1,5 +1,9 @@
 title: Automated Cron module is disabled
 class: \Drutiny\Check\D8\ModuleDisabled
+tags:
+  - Drupal 8
+  - Best Practice
+  - Performance
 description: |
   The automated cron module will hijack page requests in order to run cron.
   This has a performance impact for end users who are unlucky being burdened

@@ -1,7 +1,7 @@
 title: Simpletest
-class: \Drutiny\Check\D8\ModuleDisabled
+class: \Drutiny\Check\D7\ModuleDisabled
 tags:
-  - Drupal 8
+  - Drupal 7
   - Best Practice
 description: |
   The Simpletest module is for testing purposes only and shouldn't be enabled

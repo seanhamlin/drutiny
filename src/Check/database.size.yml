@@ -1,5 +1,8 @@
 title: Database size
 class: \Drutiny\Check\Database\DatabaseSize
+tags:
+  - Drupal 8
+  - Performance
 description: |
   Large databases can negatively impact your production site, and slow down
   things like database dumps.

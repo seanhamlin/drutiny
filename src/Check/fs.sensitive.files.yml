@@ -1,5 +1,9 @@
 title: Sensitive public files
 class: Drutiny\Check\Filesystem\SensitivePublicFiles
+tags:
+  - Drupal 8
+  - Best Practice
+  - Security
 description: |
   Certain file extensions should never be in public files for security reasons.
 remediation: |

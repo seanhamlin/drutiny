@@ -1,5 +1,9 @@
 title: "User #1"
 class: \Drutiny\Check\D8\User1
+tags:
+  - Drupal 8
+  - Best Practice
+  - Security
 description: |
   It is important to lock down user #1 in Drupal, this user is special an
   ignores access control.
