@@ -9,9 +9,9 @@ construct a comprehensive audit of your site.
 ## Getting Started
 A Drutiny check consists of two files.
 
-* A `YAML` file that informs Drutiny of the check and provides to variables and
+* A `YAML` file that informs Drutiny of the check and provides variables and
 content for the check
-* A PHP class the executes the check and remediation if applicable.
+* A PHP class that executes the check and remediation if applicable.
 
 Drutiny comes with a scaffolding command to pre-generate these files for you:
 
