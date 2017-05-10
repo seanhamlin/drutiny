@@ -7,15 +7,7 @@ use Drutiny\Sandbox\Sandbox;
 use Drutiny\Check\RemediableInterface;
 
 /**
- * @Drutiny\Annotation\CheckInfo(
- *  title = "User #1",
- *  description = "It is important to lock down user #1 in Drupal, this user is special an ignores access control.",
- *  remediation = "Change the username to be random, set the email address to go nowhere, set the password to something secure.",
- *  success = "User #1 is locked down.:fixups",
- *  failure = "User #1 is not secure.:errors",
- *  exception = "Could not determine user #1 settings.",
- *  supports_remediation = TRUE,
- * )
+ * User #1
  */
 class User1 extends Check implements RemediableInterface {
 
@@ -37,6 +29,7 @@ class User1 extends Check implements RemediableInterface {
     if (preg_match("#${pattern}#i", $user->name)) {
       $errors[] = "Username '$user->name' is too easy to guess.";
     }
+    $sandbox->setParameter('username', $user->name);
 
     // Email address.
     $email = $sandbox->getParameter('email');
