@@ -35,7 +35,7 @@ class SandboxStub extends Sandbox {
      return call_user_func_array([$this->test, 'stubLocalExec'], $args);
    }
 
-   public function drush() {
+   public function drush($options = []) {
      return $this;
    }
 
