@@ -16,7 +16,7 @@ class UpdateDBStatus extends Check {
   public function check(Sandbox $sandbox) {
     $output = $sandbox->drush()->updb('-n');
 
-    if (strpos($output, 'No database updates required') => 0 || empty($output)) {
+    if (strpos($output, 'No database updates required') >= 0 || empty($output)) {
       return TRUE;
     }
     return FALSE;
