@@ -32,7 +32,7 @@ class SensitivePublicFiles extends Check {
     // this check.
 
     $command = "find @location -type f \( @name-lookups \) -printf '@print-format'";
-    $command .= " | grep -v -E '/js/js_|/css/css_' | sort -nr";
+    $command .= " | grep -v -E '/js/js_|/css/css_|/php/twig/' | sort -nr";
     $command = strtr($command, [
       '@location' => "{$root}/{$files}/",
       '@name-lookups' => "-name '*." . implode("' -o -name '*.", $extensions) . "'",
