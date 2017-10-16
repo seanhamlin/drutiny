@@ -6,14 +6,7 @@ use Drutiny\Check\Check;
 use Drutiny\Sandbox\Sandbox;
 
 /**
- * @Drutiny\Annotation\CheckInfo(
- *  title = "BlackList Permissions",
- *  description = "Checks to ensure roles do not contain blacklisted permissions.",
- *  remediation = "Remove blacklisted permissions from roles.",
- *  success = "No blacklisted permissions in use.",
- *  failure = "The following permissions should not be configured: :roles.",
- *  exception = "Could not determine use of blackisted roles.",
- * )
+ * BlackList Permissions
  */
 class BlacklistPermissions extends Check {
 

@@ -20,7 +20,7 @@ abstract class Target {
   /**
    *
    */
-  public function parse() {
+  public function parse($target_data) {
     return $this;
   }
 

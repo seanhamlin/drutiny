@@ -23,14 +23,14 @@ class DrushTarget extends Target implements DrushInterface, ExecInterface {
    * @inheritdoc
    * Implements Target::parse().
    */
-  public function parse($drush_alias) {
-    $this->alias = $drush_alias;
+  public function parse($target_data) {
+    $this->alias = $target_data;
     $data = $this->sandbox()->exec('drush site-alias @alias --format=json', [
-      '@alias' => $drush_alias,
+      '@alias' => $target_data,
     ]);
     $options = json_decode($data, TRUE);
 
-    $key = str_replace('@', '', $drush_alias);
+    $key = str_replace('@', '', $target_data);
     $this->options = isset($options[$key]) ? $options[$key] : array_shift($options);
     return $this;
   }
