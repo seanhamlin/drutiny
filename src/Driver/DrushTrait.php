@@ -63,7 +63,7 @@ trait DrushTrait {
    * Override for drush command 'sqlq'.
    */
   public function sqlq($sql) {
-    $args = ['"' . $sql . '"'];
+    $args = ['--db-prefix', '"' . $sql . '"'];
     return trim($this->__call('sqlq', $args));
   }
 
