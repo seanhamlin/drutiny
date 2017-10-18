@@ -2,7 +2,7 @@
 
 <img src="assets/logo.png" alt="Drutiny logo" align="right"/>
 
-[![Build Status](https://travis-ci.org/drutiny/drutiny.svg?branch=2.x)](https://travis-ci.org/drutiny/drutiny) [![Latest Stable Version](https://poser.pugx.org/drutiny/drutiny/v/stable)](https://packagist.org/drutiny/seanhamlin/drutiny) [![Total Downloads](https://poser.pugx.org/drutiny/drutiny/downloads)](https://packagist.org/drutiny/seanhamlin/drutiny) [![Latest Unstable Version](https://poser.pugx.org/drutiny/drutiny/v/unstable)](https://packagist.org/drutiny/seanhamlin/drutiny) [![License](https://poser.pugx.org/drutiny/drutiny/license)](https://packagist.org/drutiny/seanhamlin/drutiny)
+[![Build Status](https://travis-ci.org/drutiny/drutiny.svg?branch=2.x)](https://travis-ci.org/drutiny/drutiny) [![Latest Stable Version](https://poser.pugx.org/drutiny/drutiny/v/stable)](https://packagist.org/drutiny/drutiny) [![Total Downloads](https://poser.pugx.org/drutiny/drutiny/downloads)](https://packagist.org/drutiny/drutiny) [![Latest Unstable Version](https://poser.pugx.org/drutiny/drutiny/v/unstable)](https://packagist.org/drutiny/drutiny) [![License](https://poser.pugx.org/drutiny/drutiny/license)](https://packagist.org/drutiny/drutiny)
 
 This is a generic Drupal site auditing and optional remediation tool.
 
@@ -23,40 +23,40 @@ Drutiny is a command line tool that can be called from the composer vendor bin d
 ```
 
 ### Finding checks available to run
-Drutiny comes with a `check:list` command that lists all the checks available to you.
+Drutiny comes with a `policy:list` command that lists all the policies available to audit against.
 
 ```
-./vendor/bin/drutiny check:list
+./vendor/bin/drutiny policy:list
 ```
 
-Checks provided by other packages such as [drutiny/acquia](https://github.com/fiasco/drutiny-acquia) will also appear here if they are installed.
+Policies provided by other packages such as [drutiny/plugin-distro-common](https://github.com/drutiny/plugin-distro-common) will also appear here if they are installed.
 
-### Running a check
-A check can be run against a site by using `check:run` and passing the check name and site target:
-
-```
-./vendor/bin/drutiny check:run d8.page.cache @drupalvm.dev
-```
-
-The command above would run the `d8.page.cache` check against the drush alias `@drupalvm.dev` which should point to an active site.
-
-Some checks have parameters you can specify which can be passed in at call time. Use `check:info` to find out more about the parameters available for a check.
+### Running an Audit
+An audit of a single policy can be run against a site by using `policy:audit` and passing the policy name and site target:
 
 ```
-./vendor/bin/drutiny check:run -p max_age=600 d8.page.cache drush:@drupalvm.dev
+./vendor/bin/drutiny policy:audit Drupal-8:PageCacheExpiry @drupalvm.dev
 ```
 
-Checks are simple self contained classes that are simple to read and understand. Drutiny can be extended very easily to check for your own unique requirements. Pull requests are welcome as well, please see the [contributing guide](./CONTRIBUTING.md).
+The command above would audit the site that resolved to the `@drupalvm.dev` drush alias against the `Drupal-8:PageCacheExpiry` policy.
+
+Some policies have parameters you can specify which can be passed in at call time. Use `policy:info` to find out more about the parameters available for a check.
+
+```
+./vendor/bin/drutiny policy:audit -p max_age=600 Drupal-8:PageCacheExpiry @drupalvm.dev
+```
+
+Audits are simple self contained classes that are simple to read and understand. Policies are simple YAML files that determine how to use Audit classes. Drutiny can be extended very easily to audit for your own unique requirements. Pull requests are welcome as well, please see the [contributing guide](./CONTRIBUTING.md).
 
 ### Remediation
 Some checks have remedative capability. Passing the `--remediate` flag into the call with "auto-heal" the site if the check fails on first pass.
 
 ```
-./vendor/bin/drutiny check:run -p max_age=600 --remediate d8.page.cache @drupalvm.dev
+./vendor/bin/drutiny policy:audit -p max_age=600 --remediate Drupal-8:PageCacheExpiry @drupalvm.dev
 ```
 
 ### Running a profile of checks
-A site audit is running a collection of checks that make up a profile. This allows you to audit against a specific standard, policy or best practice. Drutiny comes with some base profiles which you can find using `profile:list`. You can run a profile with `profile:run` in a simlar format to `check:run`.
+A site audit is running a collection of checks that make up a profile. This allows you to audit against a specific standard, policy or best practice. Drutiny comes with some base profiles which you can find using `profile:list`. You can run a profile with `profile:run` in a simlar format to `policy:audit`.
 
 ```
 ./vendor/bin/drutiny profile:run --remediate d8 @drupalvm.dev

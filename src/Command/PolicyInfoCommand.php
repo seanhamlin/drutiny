@@ -6,25 +6,25 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableSeparator;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Drutiny\Registry;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 
 /**
  *
  */
-class CheckInfoCommand extends Command {
+class PolicyInfoCommand extends Command {
 
   /**
    * @inheritdoc
    */
   protected function configure() {
     $this
-      ->setName('check:info')
-      ->setDescription('Show information about a specific check.')
+      ->setName('policy:info')
+      ->setDescription('Show information about a specific policy.')
       ->addArgument(
-        'check',
+        'policy',
         InputArgument::REQUIRED,
         'The name of the check to run.'
       );
@@ -34,11 +34,11 @@ class CheckInfoCommand extends Command {
    * @inheritdoc
    */
   protected function execute(InputInterface $input, OutputInterface $output) {
-    $checks = Registry::checks();
+    $checks = Registry::policies();
 
-    $check_name = $input->getArgument('check');
+    $check_name = $input->getArgument('policy');
     if (!isset($checks[$check_name])) {
-      throw new InvalidArgumentException("$check is not a valid check.");
+      throw new InvalidArgumentException("$check is not a valid policy.");
     }
 
     $info = $checks[$check_name];
@@ -52,15 +52,8 @@ class CheckInfoCommand extends Command {
     $rows[] = new TableSeparator();
     $rows[] = ['Parameters', $this->formatParameters($info->get('parameters'))];
 
-    $table = new Table($output);
-    $table
-      ->setRows($rows)
-      ->getStyle()
-      ->setVerticalBorderChar(' ')
-      ->setHorizontalBorderChar(' ')
-      ->setCrossingChar('');
-
-    $table->render();
+    $io = new SymfonyStyle($input, $output);
+    $io->table([], $rows);
   }
 
   /**
