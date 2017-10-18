@@ -1,0 +1,17 @@
+title: Syslog
+class: \Drutiny\Audit\Drupal\ModuleEnabled
+name: Drupal:SyslogEnabled
+tags:
+  - Drupal
+  - Best Practice
+  - Performance
+description: |
+  Syslog module writes Drupal watchdog logs to the syslog.
+remediation: "Enable the module: `drush en syslog -y`"
+success: The Syslog module is currently enabled.
+failure: The Syslog module is not currently enabled.
+parameters:
+  module:
+    type: string
+    description: The name of the module to ensure is enabled.
+    default: syslog

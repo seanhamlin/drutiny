@@ -100,7 +100,7 @@ class ProfileRunCommand extends Command {
       $uris = ['default'];
     }
 
-    $checks = Registry::checks();
+    $checks = Registry::policies();
     $results = [];
 
     $progress_bar_enabled = TRUE;

@@ -1,0 +1,24 @@
+title: Risky public files
+class: Drutiny\Audit\Filesystem\SensitivePublicFiles
+name: fs:RiskyFiles
+tags:
+  - Best Practice
+  - Security
+description: |
+  Certain file extensions should never be in public files for security reasons.
+remediation: |
+  Either delete the files if they are not needed, or look to house them in a
+  more appropriate location. Note, all the above large public files have a
+  public URL and can be downloaded, ensure you do not have any sensitive
+  information in there.
+success: No sensitive public files found.
+failure: |
+  Sensitive public file{{plural}} found
+  {{#issues}}
+    - `{{ . }}`
+  {{/issues}}
+parameters:
+  extensions:
+    default: php,sh,py,sql,bz2,gz,tar,tgz,zip
+    description: 'The sensitive file extensions to look for.'
+    type: string

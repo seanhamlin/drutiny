@@ -3,11 +3,12 @@
 namespace Drutiny\Check;
 
 use Drutiny\Sandbox\Sandbox;
+use Drutiny\RemediableInterface as CoreRemediableInterface;
 
 /**
  *
  */
-interface RemediableInterface extends CheckInterface {
+interface RemediableInterface extends CoreRemediableInterface {
 
   /**
    *

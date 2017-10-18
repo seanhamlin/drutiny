@@ -3,10 +3,10 @@
 namespace Drutiny\Sandbox;
 
 use Drutiny\Target\Target;
-use Drutiny\Check\CheckInterface;
+use Drutiny\AuditInterface;
 use Drutiny\Check\RemediableInterface;
 use Drutiny\AuditResponse\AuditResponse;
-use Drutiny\CheckInformation;
+use Drutiny\Policy;
 use Drutiny\Cache;
 
 /**
@@ -43,7 +43,7 @@ class Sandbox {
    * @param Drutiny\CheckInformation $check
    *   The class name of the target to create.
    */
-  public function __construct($target, CheckInformation $checkInfo) {
+  public function __construct($target, Policy $checkInfo) {
     $object = new $target($this);
     if (!$object instanceof Target) {
       throw new \InvalidArgumentException("$target is not a valid class for Target.");
@@ -52,7 +52,7 @@ class Sandbox {
 
     $class = $checkInfo->get('class');
     $object = new $class($this);
-    if (!$object instanceof CheckInterface) {
+    if (!$object instanceof AuditInterface) {
       throw new \InvalidArgumentException("Not a valid class for Check.");
     }
     $this->check = $object;

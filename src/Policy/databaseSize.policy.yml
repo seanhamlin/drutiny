@@ -1,0 +1,27 @@
+title: Database size
+class: \Drutiny\Audit\Database\DatabaseSize
+name: Database:Size
+tags:
+  - Drupal 8
+  - Performance
+description: |
+  Large databases can negatively impact your production site, and slow down
+  things like database dumps.
+remediation: |
+  Find out what tables are the largest and see what can be done to make them
+  smaller.
+success: |
+  The size of the database {{db}} is less than {{max_size}}MB, currently {{size}}MB.
+warning: |
+  The size of the database {{db}} is nearing {{max_size}}MB, currently {{size}}MB.
+failure: |
+  The size of the database {{db}} is over {{max_size}}, currently {{size}}MB.
+parameters:
+  max_size:
+    type: integer
+    description: The maximum size in megabytes the database should be.
+    default: 1000
+  warning_size:
+    type: integer
+    description: The size in megabytes this check will issues a warning at.
+    default: 800

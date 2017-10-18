@@ -1,0 +1,15 @@
+title: Database updates
+class: \Drutiny\Audit\Drupal\UpdateDBStatus
+name: Drupal:updates
+tags:
+  - Drupal 8
+  - Drupal 7
+  - Best Practice
+description: |
+  Updates to Drupal core or contrib modules sometimes include important database
+  changes which should be applied after the code updates have been deployed.
+remediation: |
+  Required database updates should be applied by running `drush updatedb`.
+success: No database updates required.
+failure: There are pending updates to be run.
+exception: Could not determine status for the database for update.

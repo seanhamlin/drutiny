@@ -3,20 +3,16 @@
 namespace Drutiny\Check;
 
 use Drutiny\Sandbox\Sandbox;
+use Drutiny\AuditInterface;
 
 /**
  *
  */
-interface CheckInterface {
+interface CheckInterface extends AuditInterface {
 
   /**
    *
    */
   public function check(Sandbox $sandbox);
-
-  /**
-   *
-   */
-  public function execute(Sandbox $sandbox);
 
 }
