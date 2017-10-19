@@ -40,17 +40,17 @@ class ProfileGenerateCommand extends Command {
     $name = $helper->ask($input, $output, $question);
 
     // Checks.
-    $checks = array_keys(Registry::checks());
-    $question = new Question("Add checks you would like added to this profile:\n > ");
+    $checks = array_keys(Registry::policies());
+    $question = new Question("Add policies you would like added to this profile:\n > ");
     do {
       $question->setAutocompleterValues($checks);
       $value = $helper->ask($input, $output, $question);
       if (!empty($value)) {
-        $profile_data['checks'][$value] = [];
+        $profile_data['policies'][$value] = [];
         $i = array_search($value, $checks);
         unset($checks[$i]);
       }
-      $question = new Question("Add another check or <enter> to finish: ");
+      $question = new Question("Add another policy or <enter> to finish: ");
     } while (!empty($value));
 
     // Validate profile.

@@ -11,9 +11,7 @@ use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Drutiny\Registry;
 use Drutiny\Sandbox\Sandbox;
 use Drutiny\Logger\ConsoleLogger;
-use Drutiny\Report\ProfileRunReport;
-use Drutiny\Report\ProfileRunJsonReport;
-use Drutiny\Report\ProfileRunHtmlReport;
+use Drutiny\Report;
 use Drutiny\Target\Target;
 use Symfony\Component\Console\Helper\ProgressBar;
 
@@ -156,22 +154,23 @@ class ProfileRunCommand extends Command {
     if (count($uris) == 1) {
       switch ($format) {
         case 'json':
-          $report = new ProfileRunJsonReport($profiles[$profile], $sandbox->getTarget(), current($result));
+          $report = new Report\ProfileRunJsonReport($profiles[$profile], $sandbox->getTarget(), current($result));
           break;
 
         case 'html':
-          $report = new ProfileRunHtmlReport($profiles[$profile], $sandbox->getTarget(), current($result));
+          $report = new Report\ProfileRunHtmlReport($profiles[$profile], $sandbox->getTarget(), current($result));
           break;
 
         case 'console':
         default:
-          $report = new ProfileRunReport($profiles[$profile], $sandbox->getTarget(), current($result));
+          $report = new Report\ProfileRunReport($profiles[$profile], $sandbox->getTarget(), current($result));
           break;
       }
       $report->render($input, $output);
     }
     else {
-      // TODO: Multisite reporting not yet supported.
+      $report = new Report\ProfileRunMultisiteReport($profiles[$profile], $sandbox->getTarget(), $result);
+      $report->render($input, $output);
     }
   }
 

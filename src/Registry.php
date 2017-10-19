@@ -85,10 +85,6 @@ class Registry {
   /**
    *
    */
-
-  /**
-   *
-   */
   public static function commands() {
     return self::load(__DIR__ . '/Command', 'Symfony\Component\Console\Command\Command');
   }
@@ -97,17 +93,11 @@ class Registry {
    *
    */
   public static function profiles() {
-    $dirs = new Finder();
-    $dirs->directories()
-           ->in('.')
-           ->name('profiles');
+
 
     $finder = new Finder();
     $finder->files();
-
-    foreach ($dirs as $dir) {
-      $finder->in($dir->getRealPath());
-    }
+    $finder->in('.');
 
     $finder->name('*.profile.yml');
 

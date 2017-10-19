@@ -55,6 +55,16 @@ class AuditResponse {
   }
 
   /**
+   * Get the name.
+   *
+   * @return string
+   *   The policy name.
+   */
+  public function getName() {
+    return $this->info->get('name', $this->tokens);
+  }
+
+  /**
    * Get the title.
    *
    * @return string

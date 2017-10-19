@@ -12,15 +12,15 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Helper for building checks.
  */
-class CheckGenerateCommand extends Command {
+class AuditGenerateCommand extends Command {
 
   /**
    * @inheritdoc
    */
   protected function configure() {
     $this
-      ->setName('check:generate')
-      ->setDescription('Create a check');
+      ->setName('audit:generate')
+      ->setDescription('Create an Audit class');
   }
 
   /**
@@ -30,36 +30,36 @@ class CheckGenerateCommand extends Command {
     $helper = $this->getHelper('question');
 
     // Title.
-    $question = new Question('What is the title of your check? ', 'My Custom Check');
+    $question = new Question('What is the title of your audit? ', 'My Custom Audit');
     $title = $helper->ask($input, $output, $question);
 
     // Name.
-    $question = new Question('Please provide a machine name for your check? ', strtolower(preg_replace('/[^a-z0-9]/', '', $title)));
+    $question = new Question('Please provide a machine name for your audit? ', strtolower(preg_replace('/[^a-z0-9]/', '', $title)));
     $name = $helper->ask($input, $output, $question);
 
     $yaml['title'] = $title;
     $class = str_replace(' ', '', ucwords(strtolower($title)));
-    $yaml['class'] = 'Drutiny\Check\\' . $class;
-    $yaml['description'] = 'Description of what the check is and why you would use it.';
+    $yaml['class'] = 'Drutiny\Audit\\' . $class;
+    $yaml['description'] = 'Description of what the audit is and why you would use it.';
     $yaml['remediation'] = 'Recommendations on how to remediation go here.';
-    $yaml['success'] = "Text for the successful report of the check.\n Use {{foo}} to render output.";
-    $yaml['failure'] = "Text for the failed report of the check.\n Use {{foo}} to render output.";
+    $yaml['success'] = "Text for the successful report of the audit.\n Use {{foo}} to render output.";
+    $yaml['failure'] = "Text for the failed report of the audit.\n Use {{foo}} to render output.";
     $yaml['parameters']['foo'] = [
       'type' => 'string',
-      'description' => 'What the parameter is and why how it is used to configure the check.',
+      'description' => 'What the parameter is and why how it is used to configure the audit.',
       'default' => 'bar',
     ];
     $yaml['tags'] = ['Custom'];
 
-    $question = new ConfirmationQuestion("Does this check support auto-remediation? (y/n) ");
+    $question = new ConfirmationQuestion("Does this audit support auto-remediation? (y/n) ");
     $remediable = $helper->ask($input, $output, $question);
 
-    $check_yaml_filepath = 'src/Check/' . $name . '.yml';
+    $check_yaml_filepath = 'src/Audit/' . $name . '.yml';
     file_put_contents($check_yaml_filepath, Yaml::dump($yaml, 4));
     $output->writeln("<info>Created $check_yaml_filepath</info>");
 
     $check_php = $remediable ? $this->getRemediableCheckTemplate($title, $class) : $this->getCheckTemplate($title, $class);
-    $check_php_filepath = 'src/Check/' . $class . '.php';
+    $check_php_filepath = 'src/Audit/' . $class . '.php';
     file_put_contents($check_php_filepath, $check_php);
     $output->writeln("<info>Created $check_php_filepath</info>");
   }
@@ -70,19 +70,19 @@ class CheckGenerateCommand extends Command {
   public function getRemediableCheckTemplate($title, $class) {
     return '<?php
 
-    namespace Drutiny\Check;
+    namespace Drutiny\Audit;
 
     use Drutiny\Sandbox\Sandbox;
 
     /**
      * ' . $title . '
      */
-    class ' . $class . ' extends Check implements RemediableInterface {
+    class ' . $class . ' extends Audit implements RemediableInterface {
 
       /**
        * @inheritDoc
        */
-      public function check(Sandbox $sandbox) {
+      public function audit(Sandbox $sandbox) {
         // TODO: Write check.
         return FALSE;
       }
@@ -104,19 +104,19 @@ class CheckGenerateCommand extends Command {
   public function getCheckTemplate($title, $class) {
     return '<?php
 
-    namespace Drutiny\Check;
+    namespace Drutiny\Audit;
 
     use Drutiny\Sandbox\Sandbox;
 
     /**
      * ' . $title . '
      */
-    class ' . $class . ' extends Check {
+    class ' . $class . ' extends Audit {
 
       /**
        * @inheritDoc
        */
-      public function check(Sandbox $sandbox) {
+      public function audit(Sandbox $sandbox) {
         // TODO: Write check.
         return FALSE;
       }
