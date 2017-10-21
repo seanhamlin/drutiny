@@ -91,7 +91,7 @@ If a particular check pertains to just Drupal 7 or Drupal 8 then it will be name
 Because this is a Symfony Console application, you have some other familiar commands:
 
 ```
-./bin/drutiny help profile:run
+./vendor/bin/drutiny help profile:run
 ```
 
 In particular, if you use the `-vvv` argument, then you will see all the drush commands, and SSH commands printed to the screen.
