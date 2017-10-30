@@ -142,7 +142,7 @@ trait DrushTrait {
    * This function takes PHP in this execution scope (Closure) and executes it
    * against the Drupal target using Drush php-script.
    */
-  public function evaluate(\Closure $callback, Array $args) {
+  public function evaluate(\Closure $callback, Array $args = []) {
     $args = array_values($args);
     $func = new \ReflectionFunction($callback);
     $filename = $func->getFileName();
