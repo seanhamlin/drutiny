@@ -93,7 +93,7 @@ The `profile:generate` wizard will help you to produce a profile. stored in the 
 ### Customizing policies in profiles
 Profiles allow you to define parameters to fine tune policies within. You can do this by specifying parameters listed in `policy:info` in the profile file:
 
-```
+```yaml
 title: 10s Page Cache Expiry Profile
 policies:
     'Drupal-8:PageCacheExpiry':
