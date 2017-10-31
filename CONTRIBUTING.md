@@ -4,10 +4,16 @@ In general the Drutiny team will be looking to find ways to help people contribu
 
 ## Small changes that will be accepted
 
-* New checks that others can utilise. Ideally checks will have arguments where needed to make this as easy as possible to adapt for other sites.
+* New audits and policies that others can utilize. Ideally they will have arguments where needed to make this as easy as possible to adapt for other sites.
 * Spelling typos, grammar changes etc
 * Better comments and code style
 * Tests
+
+Please consider these libraries as appropriate:
+
+* [Drupal 7 Plugin](https://github.com/drutiny/plugin-drupal-7)
+* [Drupal 8 Plugin](https://github.com/drutiny/plugin-drupal-8)
+* [Drupal Distribution](https://github.com/drutiny/plugin-distro-common)
 
 ## Larger changes that will be accepted
 
