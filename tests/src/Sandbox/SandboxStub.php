@@ -3,7 +3,7 @@
 namespace DrutinyTests\Sandbox;
 
 use Drutiny\Sandbox\Sandbox;
-use DrutinyTests\Check\CheckTestCase;
+use DrutinyTests\Audit\AuditTestCase;
 use PHPUnit\Framework\TestCase;
 use Drutiny\AuditResponse\AuditResponse;
 
@@ -11,7 +11,7 @@ class SandboxStub extends Sandbox {
 
   protected $test;
 
-  public function setTestCase(CheckTestCase $test)
+  public function setTestCase(AuditTestCase $test)
   {
     $this->test = $test;
     return $this;

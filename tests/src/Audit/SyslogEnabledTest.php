@@ -1,21 +1,21 @@
 <?php
 
-namespace DrutinyTests\Check;
+namespace DrutinyTests\Audit;
 
 use DrutinyTests\Sandbox\SandboxStub;
 use Drutiny\CheckInformation;
 use Drutiny\Registry;
 
-class SyslogEnabledTest extends CheckTestCase {
+class SyslogEnabledTest extends AuditTestCase {
 
   public function testSyslogEnabled()
   {
-    $this->assertCheckPasses('syslog.enabled');
+    $this->assertPolicyPasses('Drupal:SyslogEnabled');
   }
 
   public function testSyslogDisabled()
   {
-    $this->assertCheckFails('syslog.enabled');
+    $this->assertPolicyFails('Drupal:SyslogEnabled');
   }
 
   public function stubSyslogEnabledPmList()

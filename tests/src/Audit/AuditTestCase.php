@@ -1,17 +1,17 @@
 <?php
 
-namespace DrutinyTests\Check;
+namespace DrutinyTests\Audit;
 
 use PHPUnit\Framework\TestCase;
 use DrutinyTests\Sandbox\SandboxStub;
-use Drutiny\CheckInformation;
+use Drutiny\Policy;
 use Drutiny\Registry;
 use Drutiny\Logger\ConsoleLogger;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
-abstract class CheckTestCase extends TestCase {
+abstract class AuditTestCase extends TestCase {
 
-  protected function createSandbox(CheckInformation $info)
+  protected function createSandbox(Policy $info)
   {
     $sandbox = new SandboxStub('Drutiny\Target\TargetStub', $info);
     $sandbox->setLogger(new ConsoleLogger(new ConsoleOutput()));
@@ -19,9 +19,9 @@ abstract class CheckTestCase extends TestCase {
     return $sandbox;
   }
 
-  protected function getCheckInfo($checkname)
+  protected function getPolicyInfo($checkname)
   {
-    $checks = Registry::checks();
+    $checks = Registry::policies();
     $this->assertArrayHasKey($checkname, $checks);
     return $checks[$checkname];
   }
@@ -29,33 +29,33 @@ abstract class CheckTestCase extends TestCase {
   /**
    * Asserts that a condition is true.
    *
-   * @param  string $checkname
+   * @param  string $policy
    * @param  array  $parameters
    * @throws PHPUnit_Framework_AssertionFailedError
    */
-  public function assertCheckPasses($checkname, $parameters = [])
+  public function assertPolicyPasses($policy, $parameters = [])
   {
-    $info = $this->getCheckInfo($checkname);
+    $info = $this->getPolicyInfo($policy);
     $sandbox = $this->createSandbox($info);
     $sandbox->setParameters($parameters);
     $response = $sandbox->run();
-    self::assertTrue($response->isSuccessful(), "$checkname passed");
+    self::assertTrue($response->isSuccessful(), "$policy passed");
   }
 
   /**
    * Asserts that a condition is true.
    *
-   * @param  string $checkname
+   * @param  string $policy
    * @param  array  $parameters
    * @throws PHPUnit_Framework_AssertionFailedError
    */
-  public function assertCheckFails($checkname, $parameters = [])
+  public function assertPolicyFails($policy, $parameters = [])
   {
-    $info = $this->getCheckInfo($checkname);
+    $info = $this->getPolicyInfo($policy);
     $sandbox = $this->createSandbox($info);
     $sandbox->setParameters($parameters);
     $response = $sandbox->run();
-    self::assertFalse($response->isSuccessful(), "$checkname failed");
+    self::assertFalse($response->isSuccessful(), "$policy failed");
   }
 
 }
