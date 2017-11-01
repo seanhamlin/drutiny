@@ -28,6 +28,7 @@ trait DrushTrait {
       $output = $this->runCommand($method, $args);
     }
     catch (ProcessFailedException $e) {
+      $this->sandbox()->logger()->warning($e->getProcess()->getOutput());
       throw new DrushFormatException("Drush command failed.", $e->getProcess()->getOutput());
     }
 
