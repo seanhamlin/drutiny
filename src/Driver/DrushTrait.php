@@ -3,6 +3,7 @@
 namespace Drutiny\Driver;
 
 use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 /**
  *
@@ -23,7 +24,13 @@ trait DrushTrait {
     // E.g. PmInfo will become pm-info.
     preg_match_all('/((?:^|[A-Z])[a-z]+)/', $method, $matches);
     $method = implode('-', array_map('strtolower', $matches[0]));
-    $output = $this->runCommand($method, $args);
+    try {
+      $output = $this->runCommand($method, $args);
+    }
+    catch (ProcessFailedException $e) {
+      throw new DrushFormatException("Drush command failed.", $e->getProcess()->getOutput());
+    }
+
     if (in_array("--format='json'", $this->drushOptions)) {
       if (!$json = json_decode($output, TRUE)) {
         throw new DrushFormatException("Cannot parse json output from drush: $output", $output);
