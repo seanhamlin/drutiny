@@ -3,6 +3,7 @@
 namespace Drutiny;
 
 use Drutiny\Sandbox\Sandbox;
+use Drutiny\Check\AuditValidationException;
 
 /**
  *
