@@ -69,7 +69,7 @@ class SandboxStub extends Sandbox {
    public function run() {
      $response = new AuditResponse($this->getPolicy());
 
-     $outcome = $this->getCheck()->execute($this);
+     $outcome = $this->getAuditor()->execute($this);
      $response->set($outcome, $this->getParameterTokens());
      return $response;
    }
