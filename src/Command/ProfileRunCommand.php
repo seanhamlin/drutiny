@@ -122,7 +122,7 @@ class ProfileRunCommand extends Command {
 
     foreach ($uris as $uri) {
       foreach ($profiles[$profile]->getChecks() as $name => $parameters) {
-        $progress_bar_enabled && $progress->setMessage("[$uri] Checking " . $checks[$name]->get('title'));
+        $progress_bar_enabled && $progress->setMessage("[$uri] " . $checks[$name]->get('title'));
         $sandbox = new Sandbox($targets[$target_name]->class, $checks[$name]);
         $sandbox->setParameters($parameters)
           ->setLogger(new ConsoleLogger($output))

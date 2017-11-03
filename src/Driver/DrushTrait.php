@@ -28,7 +28,7 @@ trait DrushTrait {
       $output = $this->runCommand($method, $args);
     }
     catch (ProcessFailedException $e) {
-      $this->sandbox()->logger()->warning($e->getProcess()->getOutput());
+      $this->sandbox()->logger()->info($e->getProcess()->getOutput());
       throw new DrushFormatException("Drush command failed.", $e->getProcess()->getOutput());
     }
 
@@ -169,7 +169,6 @@ trait DrushTrait {
     $body[$last] = substr($body[$last], 0, $col);
 
     $code = [];
-    $code[] = '<?php ';
     $calling_args = [];
     foreach ($func->getParameters() as $i => $param) {
       $code[] = '$' . $param->name . ' = ' . var_export($args[$i], TRUE) . ';';
@@ -181,17 +180,9 @@ trait DrushTrait {
     $code[] = 'echo json_encode($response);';
 
     $transfer = base64_encode(implode(PHP_EOL, $code));
-
-    $tmpfile = trim($this->sandbox()->exec('mktemp'));
-    $this->sandbox()->exec('echo ' . $transfer . ' | base64 --decode > ' . $tmpfile);
-    $this->sandbox()->exec('cat ' . $tmpfile);
-
-    $return = $this->phpScript($tmpfile);
-
-    // cleanup.
-    $this->sandbox()->exec('rm ' . $tmpfile);
-
-    return json_decode($return, TRUE);
+    $php_code = "echo $transfer | base64 --decode";
+    $php_code = '"`' . $php_code . '`"';
+    return $this->sandbox()->drush(['format' => 'json'])->ev($php_code);
   }
 
 }

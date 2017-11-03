@@ -21,7 +21,7 @@ trait ParameterTrait {
     }
 
     $defaults = $this->sandbox()
-      ->getCheckInfo()
+      ->getPolicy()
       ->getParameterDefaults();
 
     if (isset($defaults[$key])) {

@@ -37,6 +37,7 @@ class Policy {
     'remediation',
     'success',
     'failure',
+    'depends'
   ];
 
   /**

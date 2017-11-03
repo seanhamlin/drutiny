@@ -2,12 +2,12 @@
     "name": "Drutiny",
     "icons": [
         {
-            "src": "https://raw.githubusercontent.com/seanhamlin/drutiny/master/assets/android-chrome-192x192.png",
+            "src": "https://raw.githubusercontent.com/drutiny/drutiny/2.x/assets/android-chrome-192x192.png",
             "sizes": "192x192",
             "type": "image/png"
         },
         {
-            "src": "https://raw.githubusercontent.com/seanhamlin/drutiny/master/assets/android-chrome-256x256.png",
+            "src": "https://raw.githubusercontent.com/drutiny/drutiny/2.x/assets/android-chrome-256x256.png",
             "sizes": "256x256",
             "type": "image/png"
         }

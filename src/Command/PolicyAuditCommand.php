@@ -101,7 +101,7 @@ class PolicyAuditCommand extends Command {
     $response = $sandbox->run();
 
     // Attempt remeidation.
-    if (!$response->isSuccessful() && $input->getOption('remediate') && ($sandbox->getCheck() instanceof RemediableInterface)) {
+    if (!$response->isSuccessful() && $input->getOption('remediate') && ($sandbox->getAuditor() instanceof RemediableInterface)) {
       $response = $sandbox->remediate();
     }
 

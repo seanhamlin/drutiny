@@ -67,9 +67,9 @@ class SandboxStub extends Sandbox {
     * Run the check and capture the outcomes.
     */
    public function run() {
-     $response = new AuditResponse($this->checkInfo);
+     $response = new AuditResponse($this->getPolicy());
 
-     $outcome = $this->getCheck()->execute($this);
+     $outcome = $this->getAuditor()->execute($this);
      $response->set($outcome, $this->getParameterTokens());
      return $response;
    }

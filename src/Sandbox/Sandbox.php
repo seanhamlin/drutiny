@@ -25,14 +25,14 @@ class Sandbox {
   protected $target;
 
   /**
-   * @var \Drutiny\Check\Check
+   * @var \Drutiny\Audit
    */
-  protected $check;
+  protected $audit;
 
   /**
-   * @var \Drutiny\CheckInformation
+   * @var \Drutiny\Policy
    */
-  protected $checkInfo;
+  protected $policy;
 
   /**
    * Create a new Sandbox.
@@ -43,30 +43,30 @@ class Sandbox {
    * @param Drutiny\CheckInformation $check
    *   The class name of the target to create.
    */
-  public function __construct($target, Policy $checkInfo) {
+  public function __construct($target, Policy $policy) {
     $object = new $target($this);
     if (!$object instanceof Target) {
       throw new \InvalidArgumentException("$target is not a valid class for Target.");
     }
     $this->target = $object;
 
-    $class = $checkInfo->get('class');
+    $class = $policy->get('class');
     $object = new $class($this);
     if (!$object instanceof AuditInterface) {
-      throw new \InvalidArgumentException("Not a valid class for Check.");
+      throw new \InvalidArgumentException("$class is not a valid Audit class.");
     }
-    $this->check = $object;
-    $this->checkInfo = $checkInfo;
+    $this->audit = $object;
+    $this->policy = $policy;
   }
 
   /**
    * Run the check and capture the outcomes.
    */
   public function run() {
-    $response = new AuditResponse($this->checkInfo);
+    $response = new AuditResponse($this->getPolicy());
 
     try {
-      $outcome = $this->getCheck()->execute($this);
+      $outcome = $this->getAuditor()->execute($this);
       $response->set($outcome, $this->getParameterTokens());
     }
     catch (\Exception $e) {
@@ -81,17 +81,17 @@ class Sandbox {
    * Remediate the check if available.
    */
   public function remediate() {
-    $response = new AuditResponse($this->checkInfo);
+    $response = new AuditResponse($this->getPolicy());
     try {
 
       // Do not attempt remediation on checks that don't support it.
-      if (!($this->getCheck() instanceof RemediableInterface)) {
-        throw new \Exception(get_class($this->getCheck()) . ' is not remediable.');
+      if (!($this->getAuditor() instanceof RemediableInterface)) {
+        throw new \Exception(get_class($this->getAuditor()) . ' is not remediable.');
       }
 
       // Make sure remediation does report false positives due to caching.
       Cache::purge();
-      $outcome = $this->getCheck()->remediate($this);
+      $outcome = $this->getAuditor()->remediate($this);
       $response->set($outcome, $this->getParameterTokens());
       if ($response->isSuccessful()) {
         $response->set(AuditResponse::REMEDIATED, $this->getParameterTokens());
@@ -108,15 +108,15 @@ class Sandbox {
   /**
    *
    */
-  public function getCheck() {
-    return $this->check;
+  public function getAuditor() {
+    return $this->audit;
   }
 
   /**
    *
    */
-  public function getCheckInfo() {
-    return $this->checkInfo;
+  public function getPolicy() {
+    return $this->policy;
   }
 
   /**
