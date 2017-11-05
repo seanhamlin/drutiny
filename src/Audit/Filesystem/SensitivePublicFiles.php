@@ -31,7 +31,7 @@ class SensitivePublicFiles extends Audit {
     // Note, the size is in KB in the response, we convert to MB later on in
     // this check.
 
-    $command = "find @location -type f \( @name-lookups \) -printf '@print-format'";
+    $command = "cd @location ; find . -type f \( @name-lookups \) -printf '@print-format'";
     $command .= " | grep -v -E '/js/js_|/css/css_|/php/twig/' | sort -nr";
     $command = strtr($command, [
       '@location' => "{$root}/{$files}/",
@@ -42,10 +42,10 @@ class SensitivePublicFiles extends Audit {
     $output = $sandbox->exec($command);
 
     if (empty($output)) {
-      return TRUE;
+      return AuditResponse::SUCCESS;
     }
 
-    // Output from find is a giant string with newlines to seperate the files.
+    // Output from find is a giant string with newlines to separate the files.
     $rows = array_map(function ($line) {
       $parts = array_map('trim', explode("\t", $line));
       $size = number_format((float) $parts[0] / 1024, 2);
