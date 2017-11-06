@@ -31,7 +31,7 @@ class ProfileListCommand extends Command {
 
     $rows = array();
     foreach ($profiles as $name => $info) {
-      $checks = array_keys($info->getChecks());
+      $checks = array_keys($info->getPolicies());
       $checks = implode(', ', $checks);
       $checks = wordwrap($checks, 80);
       $rows[] = [

@@ -113,7 +113,7 @@ class ProfileRunCommand extends Command {
     }
 
     // Establish a progress bar for reporting since this can take sometime.
-    $progress = new ProgressBar($output, count($profiles[$profile]->getChecks()) * count($uris));
+    $progress = new ProgressBar($output, count($profiles[$profile]->getPolicies()) * count($uris));
     $progress->setFormatDefinition('custom', " <comment>%message%</comment>\n %current%/%max% <info>[%bar%]</info> %percent:3s%% %memory:6s%");
     $progress->setFormat('custom');
     $progress->setMessage("Starting...");
@@ -121,7 +121,7 @@ class ProfileRunCommand extends Command {
     $progress_bar_enabled && $progress->start();
 
     foreach ($uris as $uri) {
-      foreach ($profiles[$profile]->getChecks() as $name => $parameters) {
+      foreach ($profiles[$profile]->getPolicies() as $name => $parameters) {
         $progress_bar_enabled && $progress->setMessage("[$uri] " . $checks[$name]->get('title'));
         $sandbox = new Sandbox($targets[$target_name]->class, $checks[$name]);
         $sandbox->setParameters($parameters)

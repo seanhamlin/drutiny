@@ -26,11 +26,26 @@ class ProfileInformation {
       $this->{$key} = $value;
     }
 
+    $chain = new PolicyChain();
+
+    // Ensure each policy exists and add to the policy chain
+    // to ensure policy dependencies are added.
     foreach ($this->policies as $check => $args) {
-      if (!$this->checkExists($check)) {
+      if (!$this->policyExists($check)) {
         throw new \InvalidArgumentException("Profile '$this->title' specifies check '$check' which does not exist.");
       }
+      $chain->add($this->loadPolicy($check));
     }
+
+    // Re-order profile policies based on dependencies
+    // running first.
+    $policies = [];
+    foreach ($chain->getPolicies() as $policy) {
+      $name = $policy->get('name');
+      $args = isset($this->policies[$name]) ? $this->policies[$name] : [];
+      $policies[$name] = $args;
+    }
+    $this->policies = $policies;
 
     $validator = Validation::createValidatorBuilder()
       ->addMethodMapping('loadValidatorMetadata')
@@ -61,14 +76,20 @@ class ProfileInformation {
   /**
    *
    */
-  public function getChecks() {
+  public function getPolicies() {
     return $this->policies;
   }
 
-  protected function checkExists($name)
+  protected function policyExists($name)
   {
     $registry = Registry::policies();
     return array_key_exists($name, $registry);
+  }
+
+  protected function loadPolicy($name)
+  {
+    $registry = Registry::policies();
+    return $registry[$name];
   }
 
   /**
