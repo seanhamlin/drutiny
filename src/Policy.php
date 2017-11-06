@@ -29,6 +29,7 @@ class Policy {
   protected $remediable = FALSE;
   protected $validation = [];
   protected $tags = [];
+  protected $depends = [];
 
   protected $renderableProperties = [
     'title',
@@ -36,8 +37,7 @@ class Policy {
     'description',
     'remediation',
     'success',
-    'failure',
-    'depends'
+    'failure'
   ];
 
   /**
