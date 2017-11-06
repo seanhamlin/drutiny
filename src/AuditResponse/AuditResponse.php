@@ -133,8 +133,10 @@ class AuditResponse {
       'type' => 'info',
     ];
     switch ($this->state) {
-      case AuditResponse::ERROR:
       case AuditResponse::NA:
+        return "The policy '" . $this->info->get('title') . "' is not applicable to this site.";
+        break;
+      case AuditResponse::ERROR:
         return strtr('Could not determine the state of ' . $this->info->get('title') . ' due to an error:
 ```
 @exception
@@ -151,9 +153,6 @@ class AuditResponse {
       case AuditResponse::FAILURE:
       case AuditResponse::WARNING:
         $summary = $this->info->get('failure', $this->tokens);
-        if ($this->info->get('remediable')) {
-          $summary .= PHP_EOL . $this->info->get('remediation', $this->tokens);
-        }
         return $summary;
 
       break;
