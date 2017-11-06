@@ -65,7 +65,7 @@ class Policy {
        * for debugging.
        */
       $errorsString = (string) $errors;
-      throw new \InvalidArgumentException($errorsString);
+      throw new \InvalidArgumentException($errorsString . PHP_EOL . print_r($info, 1));
     }
 
     $reflect = new \ReflectionClass($this->class);
