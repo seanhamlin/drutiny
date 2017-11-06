@@ -48,7 +48,6 @@ class ProfileRunReport implements ProfileRunReportInterface {
    */
   public function render(InputInterface $input, OutputInterface $output) {
     $io = new SymfonyStyle($input, $output);
-    $io->text('');
     $io->title($this->info->get('title'));
 
     $table_rows = [];
@@ -58,25 +57,17 @@ class ProfileRunReport implements ProfileRunReportInterface {
       $table_rows[] = [
         $response->isSuccessful() ? self::EMOJI_PASS : self::EMOJI_FAIL,
         $response->getTitle(),
-        $response->getSummary(),
+        $response->getSummary() . (
+          $response->isSuccessful() ? '' : PHP_EOL . PHP_EOL . $response->getRemediation()
+        ),
       ];
       $table_rows[] = new TableSeparator();
     }
 
-    $table = new Table($output);
-    $table
-      ->setHeaders(array('', 'Check', 'Summary'))
-      ->setRows($table_rows)
-      ->getStyle()
-      ->setVerticalBorderChar('')
-      ->setHorizontalBorderChar(' ')
-      ->setCrossingChar('');
-
-    $table->render();
-
     $total_tests = count($this->resultSet);
     $total_pass = count(array_filter($pass));
-    $io->text("$total_pass/$total_tests Passed.");
+    $table_rows[] = ['', "$total_pass/$total_tests passed", ''];
+    $io->table(['', 'Policy', 'Summary'], $table_rows);
   }
 
 }
