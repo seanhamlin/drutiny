@@ -110,6 +110,11 @@ class PolicyAuditCommand extends Command {
     $io->text($response->getDescription());
 
     call_user_func([$io, $response->isSuccessful() ? 'success' : 'error'], $response->getSummary());
+
+    if (!$response->isSuccessful()) {
+      $io->title('Remediation');
+      $io->text($response->getRemediation());
+    }
   }
 
 }
