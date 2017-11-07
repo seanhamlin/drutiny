@@ -12,8 +12,6 @@ use Symfony\Component\Yaml\Yaml;
  */
 class Registry {
 
-  const CHECK_DIRECTORY = __DIR__ . '/Check';
-
   /**
    * Retrieve a list of Check classes.
    */
@@ -46,33 +44,70 @@ class Registry {
   /**
    *
    */
-  public static function targets() {
-    return self::load(__DIR__ . '/Target', 'Drutiny\Target\Target', 'name');
+  public function targets() {
+    $targets = [];
+    foreach ($this->config()->Target as $class) {
+      $info = $this->loadClassInfo($class, '\Drutiny\Target\Target');
+      $info->class = $class;
+      $targets[$info->name] = $info;
+    }
+    return $targets;
+  }
+
+  public function getTargetClass($name) {
+    $targets = $this->targets();
+    if (!isset($targets[$name])) {
+      throw new \InvalidArgumentException("Cannot find a registered target with the name: $name.");
+    }
+    return $targets[$name]->class;
+  }
+
+  protected function config()
+  {
+    $finder = new Finder();
+    $finder->files()
+      ->in('.')
+      ->name('drutiny.config.yml');
+
+    $config = [];
+    foreach ($finder as $file) {
+      $config[] = Yaml::parse(file_get_contents($file->getRealPath()));
+    }
+    $config = call_user_func_array('array_merge_recursive', $config);
+    return (object) $config;
+  }
+
+  protected function loadClassInfo($class, $type)
+  {
+    $reflect = new \ReflectionClass($class);
+    $reader = new AnnotationReader();
+    if ($reflect->isAbstract()) {
+      throw new \InvalidArgumentException("$class: Annotations are not supported on abstract classes.");
+    }
+    if (!$reflect->isSubClassOf($type)) {
+      throw new \InvalidArgumentException("$class is not of type $type.");
+    }
+    $info = $reader->getClassAnnotations($reflect);
+    $info = empty($info) ? new \stdClass : $info[0];
+
+    $info->class = $class;
+    return $info;
   }
 
   /**
    *
    */
-  public static function policies() {
+  public function policies() {
     static $registry;
 
     if ($registry) {
       return $registry;
     }
 
-    // $dirs = new Finder();
-    // $dirs->directories()
-    //        ->in('.')
-    //        ->name('Policy');
-
     $finder = new Finder();
-    $finder->files()->in('.');
-
-    // foreach ($dirs as $dir) {
-    //   $finder->in($dir->getRealPath());
-    // }
-
-    $finder->name('*.policy.yml');
+    $finder->files()
+      ->in('.')
+      ->name('*.policy.yml');
 
     $registry = [];
     foreach ($finder as $file) {
@@ -85,14 +120,19 @@ class Registry {
   /**
    *
    */
-  public static function commands() {
-    return self::load(__DIR__ . '/Command', 'Symfony\Component\Console\Command\Command');
+  public function commands() {
+    $commands = [];
+    foreach ($this->config()->Command as $class) {
+      $info = $this->loadClassInfo($class, '\Symfony\Component\Console\Command\Command');
+      $commands[] = $info->class;
+    }
+    return $commands;
   }
 
   /**
    *
    */
-  public static function profiles() {
+  public function profiles() {
 
 
     $finder = new Finder();

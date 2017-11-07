@@ -71,17 +71,11 @@ class ProfileRunCommand extends Command {
    * @inheritdoc
    */
   protected function execute(InputInterface $input, OutputInterface $output) {
-
-    // Setup the target.
-    list($target_name, $target_data) = Target::parseTarget($input->getArgument('target'));
-    $targets = Registry::targets();
-    if (!isset($targets[$target_name])) {
-      throw new InvalidArgumentException("$target_name is not a valid target.");
-    }
+    $registry = new Registry();
 
     // Setup the check.
     $profile = $input->getArgument('profile');
-    $profiles = Registry::profiles();
+    $profiles = $registry->profiles();
     if (!isset($profiles[$profile])) {
       throw new InvalidArgumentException("$profile is not a valid profile.");
     }
@@ -98,7 +92,7 @@ class ProfileRunCommand extends Command {
       $uris = ['default'];
     }
 
-    $checks = Registry::policies();
+    $checks = $registry->policies();
     $results = [];
 
     $progress_bar_enabled = TRUE;
@@ -120,10 +114,14 @@ class ProfileRunCommand extends Command {
     $progress->setBarWidth(80);
     $progress_bar_enabled && $progress->start();
 
+    // Setup the target.
+    list($target_name, $target_data) = Target::parseTarget($input->getArgument('target'));
+    $target_class = $registry->getTargetClass($target_name);
+
     foreach ($uris as $uri) {
       foreach ($profiles[$profile]->getPolicies() as $name => $parameters) {
         $progress_bar_enabled && $progress->setMessage("[$uri] " . $checks[$name]->get('title'));
-        $sandbox = new Sandbox($targets[$target_name]->class, $checks[$name]);
+        $sandbox = new Sandbox($target_class, $checks[$name]);
         $sandbox->setParameters($parameters)
           ->setLogger(new ConsoleLogger($output))
           ->getTarget()

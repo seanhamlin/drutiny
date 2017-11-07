@@ -69,17 +69,11 @@ class PolicyAuditCommand extends Command {
    */
   protected function execute(InputInterface $input, OutputInterface $output) {
 
-    // Setup the target.
-    list($target_name, $target_data) = Target::parseTarget($input->getArgument('target'));
-
-    $targets = Registry::targets();
-    if (!isset($targets[$target_name])) {
-      throw new InvalidArgumentException("$target_name is not a valid target.");
-    }
+    $registry = new Registry();
 
     // Setup the check.
     $policy = $input->getArgument('policy');
-    $policies = Registry::policies();
+    $policies = $registry->policies();
     if (!isset($policies[$policy])) {
       throw new \InvalidArgumentException("$policy is not a valid check.");
     }
@@ -96,6 +90,10 @@ class PolicyAuditCommand extends Command {
       $parameters[$key] = Yaml::parse($value);
     }
 
+    // Setup the target which is usually something like a drush aliases (@sitename.env).
+    list($target_name, $target_data) = Target::parseTarget($input->getArgument('target'));
+    $target_class = $registry->getTargetClass($target_name);
+
     $result = [];
     $failure = FALSE;
 
@@ -106,7 +104,7 @@ class PolicyAuditCommand extends Command {
         continue;
       }
       // Generate the sandbox to execute the check.
-      $sandbox = new Sandbox($targets[$target_name]->class, $policy);
+      $sandbox = new Sandbox($target_class, $policy);
 
       // For the policy that
       if ($policy->get('name') == $input->getArgument('policy')) {

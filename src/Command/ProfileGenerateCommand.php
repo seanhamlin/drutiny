@@ -40,7 +40,7 @@ class ProfileGenerateCommand extends Command {
     $name = $helper->ask($input, $output, $question);
 
     // Checks.
-    $checks = array_keys(Registry::policies());
+    $checks = array_keys((new Registry())->policies());
     $question = new Question("Add policies you would like added to this profile:\n > ");
     do {
       $question->setAutocompleterValues($checks);

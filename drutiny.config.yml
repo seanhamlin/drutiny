@@ -1,0 +1,11 @@
+Target:
+  - Drutiny\Target\DrushTarget
+  - Drutiny\Target\TargetStub
+Command:
+  - Drutiny\Command\AuditGenerateCommand
+  - Drutiny\Command\PolicyAuditCommand
+  - Drutiny\Command\PolicyInfoCommand
+  - Drutiny\Command\PolicyListCommand
+  - Drutiny\Command\ProfileGenerateCommand
+  - Drutiny\Command\ProfileListCommand
+  - Drutiny\Command\ProfileRunCommand

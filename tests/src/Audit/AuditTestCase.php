@@ -21,7 +21,7 @@ abstract class AuditTestCase extends TestCase {
 
   protected function getPolicyInfo($checkname)
   {
-    $checks = Registry::policies();
+    $checks = (new Registry())->policies();
     $this->assertArrayHasKey($checkname, $checks);
     return $checks[$checkname];
   }

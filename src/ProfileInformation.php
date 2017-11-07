@@ -13,11 +13,13 @@ class ProfileInformation {
 
   protected $title;
   protected $policies = [];
+  protected $registry;
 
   /**
    *
    */
   public function __construct(array $info) {
+    $this->registry = new Registry();
 
     foreach ($info as $key => $value) {
       if (!property_exists($this, $key)) {
@@ -82,13 +84,13 @@ class ProfileInformation {
 
   protected function policyExists($name)
   {
-    $registry = Registry::policies();
+    $registry = $this->registry->policies();
     return array_key_exists($name, $registry);
   }
 
   protected function loadPolicy($name)
   {
-    $registry = Registry::policies();
+    $registry = $this->registry->policies();
     return $registry[$name];
   }
 

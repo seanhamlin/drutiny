@@ -16,7 +16,7 @@ class PolicyChain {
 
   public function __construct()
   {
-    $this->policies = Registry::policies();
+    $this->policies = (new Registry())->policies();
   }
 
   /**
