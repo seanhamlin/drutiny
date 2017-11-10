@@ -14,6 +14,10 @@ trait DrushTrait {
 
   protected $globalDefaults = [];
 
+  public function getAlias() {
+    return $this->alias;
+  }
+
   /**
    * Converts into method into a Drush command.
    */
