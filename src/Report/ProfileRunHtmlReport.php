@@ -4,7 +4,6 @@ namespace Drutiny\Report;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use League\CommonMark\CommonMarkConverter;
 
 /**
  *
@@ -17,16 +16,16 @@ class ProfileRunHtmlReport extends ProfileRunJsonReport {
   public function render(InputInterface $input, OutputInterface $output) {
     // Check YAML supports markdown and needs to be converted into HTML before
     // we pass it into our report template.
-    $converter = new CommonMarkConverter();
+    $parsedown = new \Parsedown();
 
     $render_vars = $this->getRenderVariables();
 
     // Render any markdown into HTML for the report.
     foreach ($render_vars['results'] as &$result) {
-      $result['description'] = $converter->convertToHtml($result['description']);
-      $result['remediation'] = $converter->convertToHtml($result['remediation']);
-      $result['success'] = $converter->convertToHtml($result['success']);
-      $result['failure'] = $converter->convertToHtml($result['failure']);
+      $result['description'] = $parsedown->text($result['description']);
+      $result['remediation'] = $parsedown->text($result['remediation']);
+      $result['success'] = $parsedown->text($result['success']);
+      $result['failure'] = $parsedown->text($result['failure']);
     }
 
     $content = $this->renderTemplate('site', $render_vars);

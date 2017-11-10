@@ -9,8 +9,8 @@
         {"name": "Josh Waihi", "email": "joshwaihi@gmail.com"}
     ],
     "support": {
-        "issues": "https://github.com/seanhamlin/drutiny/issues",
-        "source": "https://github.com/seanhamlin/drutiny"
+        "issues": "https://github.com/drutiny/drutiny/issues",
+        "source": "https://github.com/drutiny/drutiny"
     },
     "require": {
         "symfony/console": "^3.1",
@@ -22,8 +22,7 @@
         "symfony/finder": "^3.2",
         "symfony/validator": "^3.2",
         "mustache/mustache": "^2.11",
-        "league/commonmark": "^0.15.3",
-        "league/commonmark-extras": "^0.1.2",
+				"erusev/parsedown": "^1.6.3",
         "twig/twig": "~1.0"
     },
     "autoload": {
