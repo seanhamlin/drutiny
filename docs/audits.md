@@ -23,16 +23,16 @@ class FooAssesor extends Audit {
 
 ```
 
-An `Audit` class requires a single method also called `audit`. Its passed in a `Drutiny\Sandbox` object which holds all tools for running an audit.
+An `Audit` class requires a single method also called `audit`. Its passed in a `Drutiny\Sandbox\Sandbox` object which holds all tools available to running an audit.
 
 ```php
 <?php
 
-use Drutiny\Sandbox;
+use Drutiny\Sandbox\Sandbox;
 
 // ...
 
-public function audit (Sandbox $sandbox)
+public function audit(Sandbox $sandbox)
 {
 
 }
@@ -63,13 +63,14 @@ public function audit(Sandbox $sandbox) {
 Remediation is an optional capability your `Audit` can support.
 To do so, it must implement `Drutiny\RemediableInterface`.
 
-When policies and profiles are run, they can optionally opt into to auto-remediation which will call the remediation method if the audit method returns FALSE.
+When policies and profiles are run, they can optionally opt into to auto-remediation which will call the `remediation` method if the audit method returns FALSE.
 
 ```php
 <?php
 
 namespace Path\to\Audit;
 use Drutiny\Audit;
+use Drutiny\Sandbox\Sandbox;
 use Drutiny\RemediableInterface;
 
 /**
