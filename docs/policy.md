@@ -1,7 +1,8 @@
 # Policy
 
 Policies are structured YAML files that provide the human readable context for
-an audit.
+an audit. Drutiny scans for these files and looks for files ending in `.policy.yml`.
+The convention is to store these files in a directory called `Policy`.
 
 ## Policy structure
 
@@ -100,4 +101,10 @@ parameters:
 
 ### tags
 The tags key is simply a mechanism to allow policies to be grouped together.
-For example "Drupal-7" or "Performance".
+For example "Drupal 7" or "Performance".
+
+```yaml
+tags:
+  - Drupal 7
+  - Performance
+```
