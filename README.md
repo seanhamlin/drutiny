@@ -2,11 +2,14 @@
 
 <img src="assets/logo.png" alt="Drutiny logo" align="right"/>
 
-[![Build Status](https://travis-ci.org/drutiny/drutiny.svg?branch=2.x)](https://travis-ci.org/drutiny/drutiny) [![Latest Stable Version](https://poser.pugx.org/drutiny/drutiny/v/stable)](https://packagist.org/drutiny/drutiny) [![Total Downloads](https://poser.pugx.org/drutiny/drutiny/downloads)](https://packagist.org/drutiny/drutiny) [![Latest Unstable Version](https://poser.pugx.org/drutiny/drutiny/v/unstable)](https://packagist.org/drutiny/drutiny) [![License](https://poser.pugx.org/drutiny/drutiny/license)](https://packagist.org/drutiny/drutiny)
+[![Build Status](https://travis-ci.org/drutiny/drutiny.svg?branch=2.x)](https://travis-ci.org/drutiny/drutiny) [![Documentation Status](https://readthedocs.org/projects/drutiny/badge/?version=latest)](http://drutiny.readthedocs.io/en/latest/?badge=latest)
+ [![Latest Stable Version](https://poser.pugx.org/drutiny/drutiny/v/stable)](https://packagist.org/drutiny/drutiny) [![Total Downloads](https://poser.pugx.org/drutiny/drutiny/downloads)](https://packagist.org/drutiny/drutiny) [![Latest Unstable Version](https://poser.pugx.org/drutiny/drutiny/v/unstable)](https://packagist.org/drutiny/drutiny) [![License](https://poser.pugx.org/drutiny/drutiny/license)](https://packagist.org/drutiny/drutiny)
 
 This is a generic Drupal site auditing and optional remediation tool.
 
+
 ## Installation
+
 You can install Drutiny into your project with [composer](https://getcomposer.org). Drutiny is a require-dev type dependency.
 
 ```
@@ -19,13 +22,15 @@ Alternately, Drutiny can be built as a standalone tool:
 composer create-project --no-interaction --prefer-source -s dev drutiny/project-dev drutiny-dev
 ```
 
-[Drush](http://www.drush.org/en/master/) is also required. Its not specifically marked as a dependency as the version of drush to use will depend on the site you're auditing.
+[Drush](http://www.drush.org/en/master/) is also required. Its not specifically marked as a dependency as the version of Drush to use will depend on the site you're auditing.
 
 ```
 composer require --global drush/drush
 ```
 
+
 ## Usage
+
 Drutiny is a command line tool that can be called from the composer vendor bin directory
 
 ```
@@ -33,6 +38,7 @@ Drutiny is a command line tool that can be called from the composer vendor bin d
 ```
 
 ### Finding policies available to run
+
 Drutiny comes with a `policy:list` command that lists all the policies available to audit against.
 
 ```
@@ -42,6 +48,7 @@ Drutiny comes with a `policy:list` command that lists all the policies available
 Policies provided by other packages such as [drutiny/plugin-distro-common](https://github.com/drutiny/plugin-distro-common) will also appear here if they are installed.
 
 ### Installing Drutiny Libraries
+
 Additional Drutiny policies, audits, profiles and commands can be installed from composer.
 
 ```
@@ -55,6 +62,7 @@ $ composer require drutiny/plugin-drupal-8
 ```
 
 ### Running an Audit
+
 An audit of a single policy can be run against a site by using `policy:audit` and passing the policy name and site target:
 
 ```
@@ -79,6 +87,7 @@ Some checks have redemptive capability. Passing the `--remediate` flag into the 
 ```
 
 ### Running a profile of checks
+
 A site audit is running a collection of checks that make up a profile. This allows you to audit against a specific standard, policy or best practice. Drutiny comes with some base profiles which you can find using `profile:list`. You can run a profile with `profile:run` in a simlar format to `policy:audit`.
 
 ```
@@ -101,11 +110,13 @@ policies:
 ```
 
 ### Reporting
+
 By default, profile runs report to the console but reports can also be exported in html and json formats.
 
 ```
 ./vendor/bin/drutiny profile:run --remediate --format=html --report-filename=drupalvm-dev.html d8 drush:@drupalvm.dev
 ```
+
 
 ## Why another site audit tool?
 
@@ -132,10 +143,12 @@ Because this is a Symfony Console application, you have some other familiar comm
 
 In particular, if you use the `-vvv` argument, then you will see all the drush commands, and SSH commands printed to the screen.
 
+
 ## Documentation
 
-You can find more documentation in the [docs](https://github.com/drutiny/drutiny/tree/2.x/docs) folder.
+You can find more documentation in the [docs](http://drutiny.readthedocs.io/en/latest/) folder.
+
 
 # Credits
 
-* [Theodoros Ploumis](https://github.com/theodorosploumis) for [creating the logo](https://github.com/seanhamlin/drutiny/issues/79) for Drutiny.
+* [Theodoros Ploumis](https://github.com/theodorosploumis) for [creating the logo](https://github.com/drutiny/drutiny/issues/79) for Drutiny.
