@@ -9,7 +9,14 @@ use Doctrine\Common\Annotations\AnnotationRegistry;
 // Set the timezone to the local OS if supported.
 if (file_exists('/etc/localtime')) {
   $systemZoneName = readlink('/etc/localtime');
-  $systemZoneName = substr($systemZoneName, strlen ('/usr/share/zoneinfo/'));
+  $city = basename($systemZoneName);
+  if ($city == 'UTC') {
+    $systemZoneName = $city;
+  }
+  else {
+    $country = basename(dirname($systemZoneName));
+    $systemZoneName = implode('/', [$country, $city]);
+  }
   date_default_timezone_set($systemZoneName);
 }
 // Fallback to UTC.
