@@ -3,6 +3,7 @@
 namespace Drutiny\AuditResponse;
 
 use Drutiny\Policy;
+use Drutiny\Audit;
 
 /**
  * Class AuditResponse.
@@ -11,16 +12,13 @@ use Drutiny\Policy;
  */
 class AuditResponse {
 
-  const NA = -1;
-  const SUCCESS = 0;
-  const WARNING = 1;
-  const FAILURE = 2;
-  const ERROR = 3;
-  const REMEDIATED = 4;
-
   protected $info;
 
-  protected $state = AuditResponse::NA;
+  protected $state = Audit::NOT_APPLICABLE;
+
+  protected $remediated = FALSE;
+
+  protected $warning = FALSE;
 
   protected $tokens = [];
 
@@ -38,18 +36,33 @@ class AuditResponse {
    * Set the state of the response.
    */
   public function set($state = NULL, array $tokens) {
-    if ($state === TRUE) {
-      $state = self::SUCCESS;
+    switch ($state) {
+      case Audit::SUCCESS:
+      case Audit::PASS:
+        $state = Audit::SUCCESS;
+        break;
+
+      case Audit::FAILURE:
+      case Audit::FAIL:
+        $state = Audit::FAIL;
+        break;
+
+      case Audit::NOT_APPLICABLE:
+      case NULL:
+        $state = Audit::NOT_APPLICABLE;
+        break;
+
+      case Audit::WARNING:
+      case Audit::WARNING_FAIL:
+      case Audit::NOTICE:
+      case Audit::ERROR:
+        // Do nothing. These are all ok.
+        break;
+
+      default:
+        throw new AuditResponseException("Unknown state set in Audit Response: $state");
     }
-    elseif ($state === FALSE) {
-      $state = self::FAILURE;
-    }
-    elseif (is_null($state)) {
-      $state = self::NA;
-    }
-    elseif (!is_int($state) || $state > self::REMEDIATED) {
-      $state = self::SUCCESS;
-    }
+
     $this->state = $state;
     $this->tokens = $tokens;
   }
@@ -100,7 +113,7 @@ class AuditResponse {
    * @return string
    *   Translated description.
    */
-  public function getfailure() {
+  public function getFailure() {
     return $this->info->get('failure', $this->tokens);
   }
 
@@ -115,10 +128,35 @@ class AuditResponse {
   }
 
   /**
+   * Get the warning message for the check performed.
+   *
+   * @return string
+   *   Translated description.
+   */
+  public function getWarning() {
+    return $this->info->get('warning', $this->tokens);
+  }
+
+  /**
    *
    */
   public function isSuccessful() {
-    return $this->state === AuditResponse::SUCCESS || $this->state == AuditResponse::REMEDIATED;
+    return $this->state === Audit::SUCCESS || $this->remediated;
+  }
+
+  /**
+   *
+   */
+  public function hasWarning() {
+    return $this->state === Audit::WARNING || $this->state === Audit::WARNING_FAIL;
+  }
+
+  public function isRemediated($set = NULL)
+  {
+    if (isset($set)) {
+      $this->remediated = $set;
+    }
+    return $this->remediated;
   }
 
   /**
@@ -128,38 +166,37 @@ class AuditResponse {
    *   Translated description.
    */
   public function getSummary() {
-    $response = [
-      'summary' => '',
-      'type' => 'info',
-    ];
-    switch ($this->state) {
-      case AuditResponse::NA:
-        return "The policy '" . $this->info->get('title') . "' is not applicable to this site.";
+    $summary = [];
+    switch (TRUE) {
+      case ($this->state === Audit::NOT_APPLICABLE):
+        $summary[] = "This policy is not applicable to this site.";
         break;
-      case AuditResponse::ERROR:
-        return strtr('Could not determine the state of ' . $this->info->get('title') . ' due to an error:
+
+      case ($this->state === Audit::ERROR):
+        $summary[] = strtr('Could not determine the state of ' . $this->getTitle() . ' due to an error:
 ```
 @exception
 ```', $this->tokens);
+        break;
 
-      break;
+      case ($this->state === Audit::WARNING):
+        $summary[] = $this->getWarning();
+      case ($this->state === Audit::SUCCESS):
+      case ($this->state === Audit::PASS):
+        $summary[] = $this->getSuccess();
+        break;
 
-      case AuditResponse::SUCCESS:
-      case AuditResponse::REMEDIATED:
-        return $this->info->get('success', $this->tokens);
-
-      break;
-
-      case AuditResponse::FAILURE:
-      case AuditResponse::WARNING:
-        $summary = $this->info->get('failure', $this->tokens);
-        return $summary;
-
-      break;
+      case ($this->state === Audit::WARNING_FAIL):
+        $summary[] = $this->getWarning();
+      case ($this->state === Audit::FAILURE):
+      case ($this->state === Audit::FAIL):
+        $summary[] = $this->getFailure();
+        break;
 
       default:
-        throw new \InvalidArgumentException("Unknown AuditResponse state. Cannot generate summary.");
+        throw new AuditResponseException("Unknown AuditResponse state ({$this->state}). Cannot generate summary for '" . $this->getTitle() . "'.");
+        break;
     }
+    return implode(PHP_EOL, $summary);
   }
-
 }

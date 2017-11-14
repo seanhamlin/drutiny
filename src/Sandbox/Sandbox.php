@@ -4,6 +4,7 @@ namespace Drutiny\Sandbox;
 
 use Drutiny\Target\Target;
 use Drutiny\AuditInterface;
+use Drutiny\Audit;
 use Drutiny\Check\RemediableInterface;
 use Drutiny\AuditResponse\AuditResponse;
 use Drutiny\Policy;
@@ -72,7 +73,7 @@ class Sandbox {
     }
     catch (\Exception $e) {
       $this->setParameter('exception', $e->getMessage());
-      $response->set(AuditResponse::ERROR, $this->getParameterTokens());
+      $response->set(Audit::ERROR, $this->getParameterTokens());
     }
 
     return $response;
@@ -94,13 +95,10 @@ class Sandbox {
       Cache::purge();
       $outcome = $this->getAuditor()->remediate($this);
       $response->set($outcome, $this->getParameterTokens());
-      if ($response->isSuccessful()) {
-        $response->set(AuditResponse::REMEDIATED, $this->getParameterTokens());
-      }
     }
     catch (\Exception $e) {
       $this->setParameter('exception', $e->getMessage());
-      $response->set(AuditResponse::ERROR, $this->getParameterTokens());
+      $response->set(Audit::ERROR, $this->getParameterTokens());
     }
 
     return $response;

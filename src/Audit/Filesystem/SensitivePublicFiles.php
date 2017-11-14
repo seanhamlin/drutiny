@@ -57,7 +57,7 @@ class SensitivePublicFiles extends Audit {
     $sandbox->setParameter('issues', $rows);
     $sandbox->setParameter('plural', count($rows) > 1 ? 's' : '');
 
-    return AuditResponse::WARNING;
+    return Audit::WARNING;
   }
 
 }
