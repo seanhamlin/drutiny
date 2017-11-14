@@ -55,6 +55,7 @@ class ProfileRunJsonReport extends ProfileRunReport {
         'remediation' => $response->getRemediation(),
         'success' => $response->getSuccess(),
         'failure' => $response->getFailure(),
+        'warning' => $response->getWarning(),
       ];
     }
     return $render_vars;

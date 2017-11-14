@@ -104,7 +104,7 @@ class AuditResponse {
    *   Translated description.
    */
   public function getRemediation() {
-    return $this->info->get('remediation', $this->tokens);
+    return $this->info->has('remediation') ? $this->info->get('remediation', $this->tokens) : '';
   }
 
   /**
@@ -114,7 +114,7 @@ class AuditResponse {
    *   Translated description.
    */
   public function getFailure() {
-    return $this->info->get('failure', $this->tokens);
+    return $this->info->has('failure') ? $this->info->get('failure', $this->tokens) : '';
   }
 
   /**
@@ -134,7 +134,7 @@ class AuditResponse {
    *   Translated description.
    */
   public function getWarning() {
-    return $this->info->get('warning', $this->tokens);
+    return $this->info->has('warning') ? $this->info->get('warning', $this->tokens) : '';
   }
 
   /**

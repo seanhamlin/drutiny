@@ -93,6 +93,10 @@ class Policy {
     return $this->{$property};
   }
 
+  public function has($property) {
+    return isset($this->{$property});
+  }
+
   public function hasTag($tag) {
     return in_array($tag, $this->tags);
   }

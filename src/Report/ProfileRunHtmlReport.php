@@ -26,9 +26,16 @@ class ProfileRunHtmlReport extends ProfileRunJsonReport {
       $result['remediation'] = $parsedown->text($result['remediation']);
       $result['success'] = $parsedown->text($result['success']);
       $result['failure'] = $parsedown->text($result['failure']);
+      $result['warning'] = $parsedown->text($result['warning']);
+      $result['id'] = preg_replace('/[^0-9a-zA-Z]/', '', $result['title']);
     }
 
     $content = $this->renderTemplate('site', $render_vars);
+
+    // Hack to fix table styles in bootstrap theme.
+    $content = strtr($content, [
+      '<table>' => '<table class="table table-hover">'
+    ]);
 
     $filename = $input->getOption('report-filename');
     if ($filename == 'stdout') {
