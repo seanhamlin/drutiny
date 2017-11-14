@@ -11,26 +11,22 @@ use Drutiny\Check\AuditValidationException;
 abstract class Audit implements AuditInterface {
 
   /**
-   * Return a successful audit outcome.
+   * The policy successfully passed the audit.
    */
   const SUCCESS = TRUE;
 
   /**
-   * Return a successful audit outcome.
-   *
-   * @Synonum for Audit::SUCCESS.
+   * Same as Audit::SUCCESS
    */
   const PASS = 1;
 
   /**
-   * Return a failed audit outcome.
+   * Same as Audit::FAILURE
    */
   const FAIL = FALSE;
 
   /**
-   * Return a failed audit outcome.
-   *
-   * @Synonum for Audit::FAIL.
+   * The policy failed to pass the audit.
    */
   const FAILURE = 0;
 

@@ -59,6 +59,25 @@ public function audit(Sandbox $sandbox) {
 }
 ```
 
+## Return values
+The audit expects a returned value to indicate the outcome of the audit. The follow table describes the return options and their meaning.
+
+Return Value | Purpose
+--- | ---
+`Drutiny\Audit::SUCCESS` | The policy successfully passed the audit.
+`Drutiny\Audit::PASS` | Same as `Audit::SUCCESS`
+`Drutiny\Audit::FAILURE` | The policy failed to pass the audit.
+`Drutiny\Audit::FAIL` | Same as `Audit::FAILURE`
+`Drutiny\Audit::NOTICE` | An audit returned non-assertive information.
+`Drutiny\Audit::WARNING` | An audit returned **successful** but with a warning.
+`Drutiny\Audit::WARNING_FAIL` | An audit returned a **failure** but with a warning.
+`Drutiny\Audit::ERROR` | An audit did not complete and returned an error.
+`Drutiny\Audit::NOT_APPLICABLE` | An audit was not applicable to the target.
+
+In addition to using Return Values, audits can also return `TRUE`, `FALSE` and
+`NULL` values which correlate to `Drutiny\Audit::SUCCESS`, `Drutiny\Audit::FAILURE`
+and `Drutiny\Audit::NOT_APPLICABLE` respectively.
+
 ## Remediation
 Remediation is an optional capability your `Audit` can support.
 To do so, it must implement `Drutiny\RemediableInterface`.
