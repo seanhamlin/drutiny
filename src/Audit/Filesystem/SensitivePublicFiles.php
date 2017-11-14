@@ -42,7 +42,7 @@ class SensitivePublicFiles extends Audit {
     $output = $sandbox->exec($command);
 
     if (empty($output)) {
-      return AuditResponse::SUCCESS;
+      return Audit::SUCCESS;
     }
 
     // Output from find is a giant string with newlines to separate the files.
