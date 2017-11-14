@@ -108,3 +108,13 @@ tags:
   - Drupal 7
   - Performance
 ```
+
+### depends
+Policies can depend on other policies meaning that all policies specified in this
+field **must** pass successfully for this policy to pass.
+
+```yaml
+depends:
+  - fs:largeFiles
+  - Drupal:SyslogEnabled
+```
