@@ -17,6 +17,7 @@ class Sandbox {
   use ExecTrait;
   use ParameterTrait;
   use LoggerTrait;
+  use RegistryTrait;
 
 
   /**
