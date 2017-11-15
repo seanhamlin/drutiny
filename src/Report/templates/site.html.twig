@@ -20,15 +20,15 @@
       <table class="table">
         <thead>
           <tr>
-            <th>Check</th>
-            <th>Result</th>
+            <th>Policy</th>
+            <th>Audit</th>
           </tr>
         </thead>
         <tbody>
           {% for result in results %}
-          <tr class="{% if result.status %}has-success{% else %}has-error{% endif %}">
+          <tr class="{% if result.is_notice %}{% elseif result.status %}has-success{% else %}has-error{% endif %}">
             <th><a href="#{{ result.id }}">{{ result.title }}</a></th>
-            <td class="control-label">{% if result.status %}Passed{% else %}Failed{% endif %}</td>
+            <td class="control-label">{% if result.is_notice %}Inform{% elseif result.status %}Passed{% else %}Failed{% endif %}</td>
             </tr>
           {% endfor %}
         </tbody>
@@ -42,7 +42,7 @@
       <div class="col-sm-12">
         <h2 id="{{ result.id }}">{{ result.title }} <small><span class="glyphicon {% if result.status %}glyphicon-ok{% else %}glyphicon-remove{% endif %}" aria-hidden="true"></span></small></h2>
         <p>{{ result.description | raw }}</p>
-        <div class="alert alert-{% if result.status %}success{% else %}danger{% endif %}" role="alert">
+        <div class="alert alert-{% if result.is_notice %}info{% elseif result.has_warning %}warning{% elseif result.status %}success{% else %}danger{% endif %}" role="alert">
           {% if result.status %}
             {{ result.success | raw }}
           {% else %}

@@ -15,9 +15,11 @@ use Symfony\Component\Console\Helper\TableSeparator;
  */
 class ProfileRunReport implements ProfileRunReportInterface {
 
-  const EMOJI_PASS = "\xe2\x9c\x85";
+  const EMOJI_PASS = "✅";
 
-  const EMOJI_FAIL = "\xE2\x9D\x8C";
+  const EMOJI_FAIL = "❌";
+
+  const EMOJI_INFO = "ℹ️";
 
   /**
    * @var Drutiny\ProfileInformation
@@ -54,8 +56,16 @@ class ProfileRunReport implements ProfileRunReportInterface {
     $pass = [];
     foreach ($this->resultSet as $response) {
       $pass[] = $response->isSuccessful();
+
+      if ($response->isNotice()) {
+        $icon = self::EMOJI_INFO;
+      }
+      else {
+        $icon = $response->isSuccessful() ? self::EMOJI_PASS : self::EMOJI_FAIL;
+      }
+
       $table_rows[] = [
-        $response->isSuccessful() ? self::EMOJI_PASS : self::EMOJI_FAIL,
+        $icon,
         $response->getTitle(),
         $response->getSummary() . (
           $response->isSuccessful() ? '' : PHP_EOL . PHP_EOL . $response->getRemediation()

@@ -36,26 +36,26 @@ class AuditResponse {
    * Set the state of the response.
    */
   public function set($state = NULL, array $tokens) {
-    switch ($state) {
-      case Audit::SUCCESS:
-      case Audit::PASS:
+    switch (TRUE) {
+      case ($state === Audit::SUCCESS):
+      case ($state === Audit::PASS):
         $state = Audit::SUCCESS;
         break;
 
-      case Audit::FAILURE:
-      case Audit::FAIL:
+      case ($state === Audit::FAILURE):
+      case ($state === Audit::FAIL):
         $state = Audit::FAIL;
         break;
 
-      case Audit::NOT_APPLICABLE:
-      case NULL:
+      case ($state === Audit::NOT_APPLICABLE):
+      case ($state === NULL):
         $state = Audit::NOT_APPLICABLE;
         break;
 
-      case Audit::WARNING:
-      case Audit::WARNING_FAIL:
-      case Audit::NOTICE:
-      case Audit::ERROR:
+      case ($state === Audit::WARNING):
+      case ($state === Audit::WARNING_FAIL):
+      case ($state === Audit::NOTICE):
+      case ($state === Audit::ERROR):
         // Do nothing. These are all ok.
         break;
 
@@ -141,7 +141,14 @@ class AuditResponse {
    *
    */
   public function isSuccessful() {
-    return $this->state === Audit::SUCCESS || $this->remediated;
+    return $this->state === Audit::SUCCESS || $this->remediated || $this->isNotice();
+  }
+
+  /**
+   *
+   */
+  public function isNotice() {
+    return $this->state === Audit::NOTICE;
   }
 
   /**
@@ -183,6 +190,7 @@ class AuditResponse {
         $summary[] = $this->getWarning();
       case ($this->state === Audit::SUCCESS):
       case ($this->state === Audit::PASS):
+      case ($this->state === Audit::NOTICE):
         $summary[] = $this->getSuccess();
         break;
 

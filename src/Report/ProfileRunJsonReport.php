@@ -50,6 +50,8 @@ class ProfileRunJsonReport extends ProfileRunReport {
     foreach ($this->resultSet as $response) {
       $render_vars['results'][] = [
         'status' => $response->isSuccessful(),
+        'is_notice' => $response->isNotice(),
+        'has_warning' => $response->hasWarning(),
         'title' => $response->getTitle(),
         'description' => $response->getDescription(),
         'remediation' => $response->getRemediation(),

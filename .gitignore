@@ -10,3 +10,4 @@ domains-*.yml
 # Add the reports directory, but none of the reports.
 reports/*
 !reports/README.md
+.DS_Store
