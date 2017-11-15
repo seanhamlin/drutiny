@@ -4,23 +4,25 @@ repo_url: https://github.com/drutiny/drutiny
 site_description: 'Drutiny - A generic Drupal 7 and Drupal 8 site auditing and optional remediation tool.'
 theme: readthedocs
 strict: true
+docs_dir: docs
 
 extra_javascript:
   - docs/js/fix_search.js
 
 pages:
-  - Home: 'index.md'
-  - Overview: 'README.md'
+  - Home: '../index.md'
+  - Overview: '../README.md'
+  - Vision: '../VISION.md'
   - Getting started:
     - Installation:
-       - System requirements:  'INSTALL.md'
-    - Create a new project: 'docs/creating-new-project.md'
-    - Updating Drutiny: 'docs/updating-drutiny.md'
+       - System requirements:  '../INSTALL.md'
+    - Create a new project: 'creating-new-project.md'
+    - Updating Drutiny: 'updating-drutiny.md'
   - Project documentation:
     - How to use it:
-      - Profiles: 'docs/profiles.md'
-      - Policy: 'docs/policy.md'
-      - Audits: 'docs/audits.md'
+      - Profiles: 'profiles.md'
+      - Policy: 'policy.md'
+      - Audits: 'audits.md'
     - Contributing:
-      - Sandbox: 'docs/sandbox.md'
-      - Support & Contribution: 'CONTRIBUTING.md'
+      - Sandbox: 'sandbox.md'
+      - Support & Contribution: '../CONTRIBUTING.md'
