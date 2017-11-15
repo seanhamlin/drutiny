@@ -1,16 +1,12 @@
 site_name: Drutiny Documentation
 
 repo_url: https://github.com/drutiny/drutiny
-site_description: 'Drutiny - auditing and reporting for Drupal (7 or 8) sites'
+site_description: 'Drutiny - A generic Drupal 7 and Drupal 8 site auditing and optional remediation tool.'
 theme: readthedocs
 strict: true
 
 extra_javascript:
   - docs/js/fix_search.js
-
-markdown_extensions:
-  - toc:
-    permalink: True
 
 pages:
   - Home: 'index.md'
