@@ -4,5 +4,5 @@
 This is a generic Drupal site auditing and optional remediation tool.
 
 ## Extending Drutiny
-  * [Writing Policies](policy.md)
-  * [Writing Audits](audits.md)
+  * [Writing Policies](docs/policy.md)
+  * [Writing Audits](docs/audits.md)

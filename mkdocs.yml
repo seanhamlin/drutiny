@@ -1,0 +1,30 @@
+site_name: Drutiny Documentation
+
+repo_url: https://github.com/drutiny/drutiny
+site_description: 'Drutiny - auditing and reporting for Drupal (7 or 8) sites'
+theme: readthedocs
+strict: true
+
+extra_javascript:
+  - docs/js/fix_search.js
+
+markdown_extensions:
+  - toc:
+    permalink: True
+
+pages:
+  - Home: 'index.md'
+  - Overview: 'README.md'
+  - Getting started:
+    - Installation:
+       - System requirements:  'INSTALL.md'
+    - Create a new project: 'docs/creating-new-project.md'
+    - Updating Drutiny: 'docs/updating-drutiny.md'
+  - Project documentation:
+    - How to use it:
+      - Profiles: 'docs/profiles.md'
+      - Policy: 'docs/policy.md'
+      - Audits: 'docs/audits.md'
+    - Contributing:
+      - Sandbox: 'docs/sandbox.md'
+      - Support & Contribution: 'CONTRIBUTING.md'
