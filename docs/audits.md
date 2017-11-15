@@ -79,6 +79,39 @@ In addition to using Return Values, audits can also return `TRUE`, `FALSE` and
 `NULL` values which correlate to `Drutiny\Audit::SUCCESS`, `Drutiny\Audit::FAILURE`
 and `Drutiny\Audit::NOT_APPLICABLE` respectively.
 
+## Audit Prerequisites
+In order to keep audit methods as lean as possible and to focus on evaluating the
+success/failure of the task at hand, Drutiny Audit classess support the ability
+to validate prerequisites before attempting an audit. These are called **require**
+methods.
+
+Any protected method on an Audit class that starts with the term "require" will
+be considered a prerequisite to pass prior to an audit being run.
+
+```php
+<?php
+
+namespace Path\to\Audit;
+use Drutiny\Audit;
+use Drutiny\Sandbox\Sandbox;
+use Drutiny\Target\DrushTarget;
+
+class DrushVersionCheck extends Audit {
+
+  /**
+   * This will be called before audit().
+   *
+   * Must return TRUE to continue audit.
+   */
+  protected function requireDrushTarget(Sandbox $sandbox)
+  {
+    return $sandbox->getTarget() instanceof DrushTarget;
+  }
+
+  public function audit(Sandbox $sandbox) {
+
+```
+
 ## Remediation
 Remediation is an optional capability your `Audit` can support.
 To do so, it must implement `Drutiny\RemediableInterface`.
