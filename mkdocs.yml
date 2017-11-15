@@ -7,15 +7,15 @@ strict: true
 docs_dir: docs
 
 extra_javascript:
-  - docs/js/fix_search.js
+  - js/fix_search.js
 
 pages:
-  - Home: '../index.md'
-  - Overview: '../README.md'
-  - Vision: '../VISION.md'
+  - Home: 'index.md'
+  - Overview: 'README.md'
+  - Vision: 'VISION.md'
   - Getting started:
     - Installation:
-       - System requirements:  '../INSTALL.md'
+       - System requirements:  'INSTALL.md'
     - Create a new project: 'creating-new-project.md'
     - Updating Drutiny: 'updating-drutiny.md'
   - Project documentation:
@@ -25,4 +25,4 @@ pages:
       - Audits: 'audits.md'
     - Contributing:
       - Sandbox: 'sandbox.md'
-      - Support & Contribution: '../CONTRIBUTING.md'
+      - Support & Contribution: 'CONTRIBUTING.md'
