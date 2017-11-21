@@ -38,3 +38,13 @@ policies:
   Drupal-7:BlackListPermissions: {}
   Drupal-7:PhpModuleDisabled: {}
 ```
+
+### include
+The include directive allows profiles to be build on top of collections or other
+profiles. Each include name should be the machine name of another available profile.
+
+```yaml
+include:
+  - cloud
+  - d8
+```
