@@ -133,7 +133,11 @@ class Registry {
    *
    */
   public function profiles() {
+    static $registry;
 
+    if (!empty($registry)) {
+      return $registry;
+    }
 
     $finder = new Finder();
     $finder->files();

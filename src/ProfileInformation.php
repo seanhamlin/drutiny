@@ -28,6 +28,18 @@ class ProfileInformation {
       $this->{$key} = $value;
     }
 
+    // This allows profiles to be built upon one another.
+    if (isset($info['include'])) {
+      $info['include'] = is_array($info['include']) ? $info['include'] : [$info['include']];
+      $profiles = $this->registry->profiles();
+      foreach ($info['include'] as $profile) {
+        if (!isset($profiles[$profile])) {
+          throw new \InvalidArgumentException("Profile '$this->title' requires profile '$profile' but doesn't exist");
+        }
+        $this->policies = array_merge($this->getPolicies(), $profiles[$profile]->getPolicies());
+      }
+    }
+
     $chain = new PolicyChain();
 
     // Ensure each policy exists and add to the policy chain
