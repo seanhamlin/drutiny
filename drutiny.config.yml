@@ -9,3 +9,5 @@ Command:
   - Drutiny\Command\ProfileGenerateCommand
   - Drutiny\Command\ProfileListCommand
   - Drutiny\Command\ProfileRunCommand
+Template:
+  - src/Report/templates

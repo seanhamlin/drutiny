@@ -4,6 +4,7 @@ namespace Drutiny\Report;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Drutiny\Registry;
 
 /**
  *
@@ -30,7 +31,7 @@ class ProfileRunHtmlReport extends ProfileRunJsonReport {
       $result['id'] = preg_replace('/[^0-9a-zA-Z]/', '', $result['title']);
     }
 
-    $content = $this->renderTemplate('site', $render_vars);
+    $content = $this->renderTemplate($this->info->get('template'), $render_vars);
 
     // Hack to fix table styles in bootstrap theme.
     $content = strtr($content, [
@@ -60,7 +61,8 @@ class ProfileRunHtmlReport extends ProfileRunJsonReport {
    *   An array of variables to be used within the template by the rendering engine.
    */
   public function renderTemplate($tpl, array $render_vars) {
-    $loader = new \Twig_Loader_Filesystem(__DIR__ . '/templates');
+    $registry = new Registry();
+    $loader = new \Twig_Loader_Filesystem($registry->templateDirs());
     $twig = new \Twig_Environment($loader, array(
       'cache' => sys_get_temp_dir() . '/drutiny/cache',
       'auto_reload' => TRUE,
