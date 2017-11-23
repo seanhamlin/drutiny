@@ -32,6 +32,11 @@ class DrushTarget extends Target implements DrushInterface, ExecInterface {
 
     $key = str_replace('@', '', $target_data);
     $this->options = isset($options[$key]) ? $options[$key] : array_shift($options);
+
+    if (isset($this->options['uri'])) {
+      $this->setGlobalDefaultOption('uri', $this->options['uri']);
+    }
+
     return $this;
   }
 
@@ -45,7 +50,7 @@ class DrushTarget extends Target implements DrushInterface, ExecInterface {
    * Implements Target::uri().
    */
   public function uri() {
-    return isset($this->options['uri']) ? $this->options['uri'] : 'default';
+    return $this->getGlobalDefaultOption('uri') ? $this->getGlobalDefaultOption('uri') : 'default';
   }
 
   /**
