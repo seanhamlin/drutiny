@@ -21,6 +21,8 @@ class ProfileRunReport implements ProfileRunReportInterface {
 
   const EMOJI_INFO = "ℹ️";
 
+  const EMOJI_WARN = "⚠️";
+
   /**
    * @var Drutiny\ProfileInformation
    */
@@ -59,6 +61,9 @@ class ProfileRunReport implements ProfileRunReportInterface {
 
       if ($response->isNotice()) {
         $icon = self::EMOJI_INFO;
+      }
+      elseif ($response->hasWarning()) {
+        $icon = self::EMOJI_WARN;
       }
       else {
         $icon = $response->isSuccessful() ? self::EMOJI_PASS : self::EMOJI_FAIL;

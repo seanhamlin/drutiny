@@ -134,7 +134,7 @@ class AuditResponse {
    *   Translated description.
    */
   public function getWarning() {
-    return $this->info->has('warning') ? $this->info->get('warning', $this->tokens) : '';
+    return $this->hasWarning() ? $this->info->get('warning', $this->tokens) : '';
   }
 
   /**
