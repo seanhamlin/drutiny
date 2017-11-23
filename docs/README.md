@@ -13,7 +13,7 @@ This is a generic Drupal site auditing and optional remediation tool.
 You can install Drutiny into your project with [composer](https://getcomposer.org). Drutiny is a require-dev type dependency.
 
 ```
-composer require --dev drutiny/drutiny 2.x
+composer require --dev drutiny/drutiny 2.x-dev
 ```
 
 Alternately, Drutiny can be built as a standalone tool:
