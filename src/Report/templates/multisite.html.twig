@@ -3,8 +3,8 @@
 <!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron">
   <div class="container">
-    <h1>{{ profile.title }}</h1>
-    <p>Report run across <strong>{{ sites | length }}</strong> site{% if sites | length > 1 %}s{% endif %}<br/>
+    <h1>{{ title }}</h1>
+    <p>Report ran across <strong>{{ domains | length }}</strong> site{% if domains | length > 1 %}s{% endif %}<br/>
       {{ 'now' | date('Y-m-d h:i a (T)') }}
     </p>
   </div>
@@ -15,53 +15,60 @@
   <div class="row">
 
     <div class="col-sm-12">
-      <h2>Sites</h2>
+      <h2>Summary</h2>
 
       <table class="table table-bordered">
         <thead>
           <tr>
-            <th>Domain</th>
-            <th>Check</th>
+            <th>Policy</th>
             <th>Result</th>
           </tr>
         </thead>
         <tbody>
-          {% for id, site in sites %}
-            {% for index, result in site.results %}
-              {% if result.status <= 0 %}
-                {% set class = 'success' %}
-              {% elseif result.status == 1 %}
-                {% set class = 'warning' %}
-              {% else %}
-                {% set class = 'danger' %}
-              {% endif %}
-              <tr>
-                {% if index == 0 %}
-                  <th rowspan="{{ site.results | length }}">{{ site.domain }}</th>
-                {% endif %}
-                <td class="{{ class }}">
-                  {{ result.title }}
-                </td>
-                <td class="{{ class }}">
-                  {{ result | filterXssAdmin }}
-                  {% if result.status > 1 %}
-                    <p><em>{{ result.description }}</em></p>
-                    <div class="panel panel-default">
-                      <div class="panel-heading">Remediation</div>
-                      <div class="panel-body">
-                        <p>{{ result.remediation | filterXssAdmin }}</p>
-                      </div>
-                    </div>
-                  {% endif %}
-                </td>
-              </tr>
-            {% endfor %}
+          {% for policy_results in results %}
+            <tr>
+              <td><a href="#{{ policy_results.id }}">{{ policy_results.title }}</a></td>
+              <td>{{ policy_results.pass }} of {{ policy_results.total }} sites passed</td>
+            </tr>
           {% endfor %}
         </tbody>
       </table>
-
     </div>
+  </div>
 
+  <div class="row">
+    <div class="col-sm-12">
+      <h2>Policy failures by site</h2>
+      {% for policy_results in results %}
+      {% if policy_results.pass < policy_results.total %}
+      <h3 id="{{ policy_results.id }}">{{ policy_results.title }}</h3>
+      <div>{{ policy_results.description | raw }}</div>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Site</th>
+            <th>Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for uri, site in policy_results.sites %}
+            {% if not site.status %}
+            <tr>
+              <td>{{ uri }}</td>
+              <td>
+                {% if site.has_warning %}
+                <div class="alert alert-warning" role="alert">{{ site.warning | raw }}</div>
+                {% endif %}
+                {{ site.summary | raw }}
+              </td>
+            </tr>
+            {% endif %}
+          {% endfor %}
+        </tbody>
+      </table>
+      {% endif %}
+      {% endfor %}
+    </div>
   </div>
 
   <hr>
