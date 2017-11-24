@@ -64,6 +64,12 @@ class Registry {
 
   protected function config()
   {
+    static $config;
+
+    if (!empty($config)) {
+      return (object) $config;
+    }
+
     $finder = new Finder();
     $finder->files()
       ->in('.')
@@ -71,7 +77,15 @@ class Registry {
 
     $config = [];
     foreach ($finder as $file) {
-      $config[] = Yaml::parse(file_get_contents($file->getRealPath()));
+      $conf = Yaml::parse(file_get_contents($file->getRealPath()));
+
+      // Templates are in filepaths which need to be translated into absolute filepaths.
+      if (isset($conf['Template'])) {
+        foreach ($conf['Template'] as &$directory) {
+          $directory = dirname($file->getRealPath()) . '/' . $directory;
+        }
+      }
+      $config[] = $conf;
     }
     $config = call_user_func_array('array_merge_recursive', $config);
     return (object) $config;
@@ -127,6 +141,10 @@ class Registry {
       $commands[] = $info->class;
     }
     return $commands;
+  }
+
+  public function templateDirs() {
+    return array_filter($this->config()->Template, 'file_exists');
   }
 
   /**

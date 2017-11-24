@@ -134,6 +134,14 @@ trait DrushTrait {
   }
 
   /**
+   * Get an option that will be presented on every drush command.
+   */
+  public function getGlobalDefaultOption($key)
+  {
+    return isset($this->globalDefaults[$key]) ? $this->globalDefaults[$key] : FALSE;
+  }
+
+  /**
    * Remove global option.
    */
   public function removeGlobalDefaultOption($key)

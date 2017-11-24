@@ -167,7 +167,21 @@ class ProfileRunCommand extends Command {
       $report->render($input, $output);
     }
     else {
-      $report = new Report\ProfileRunMultisiteReport($profiles[$profile], $sandbox->getTarget(), $result);
+      switch ($format) {
+        // case 'json':
+        //   $report = new Report\ProfileRunJsonReport($profiles[$profile], $sandbox->getTarget(), current($result));
+        //   break;
+
+        case 'html':
+          $report = new Report\ProfileRunMultisiteHTMLReport($profiles[$profile], $sandbox->getTarget(), $result);
+          break;
+
+        case 'console':
+        default:
+          $report = new Report\ProfileRunMultisiteReport($profiles[$profile], $sandbox->getTarget(), $result);
+          break;
+      }
+
       $report->render($input, $output);
     }
   }

@@ -25,6 +25,7 @@ class Policy {
   protected $remediation;
   protected $success;
   protected $failure;
+  protected $warning;
   protected $parameters = [];
   protected $remediable = FALSE;
   protected $validation = [];
@@ -37,7 +38,8 @@ class Policy {
     'description',
     'remediation',
     'success',
-    'failure'
+    'failure',
+    'warning'
   ];
 
   /**
