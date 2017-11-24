@@ -22,7 +22,7 @@ Alternately, Drutiny can be built as a standalone tool:
 composer create-project --no-interaction --prefer-source -s dev drutiny/project-dev drutiny-dev
 ```
 
-[Drush](http://www.drush.org/en/master/) is also required. Its not specifically marked as a dependency as the version of Drush to use will depend on the site you're auditing.
+[Drush](http://docs.drush.org/en/master/) is also required. Its not specifically marked as a dependency as the version of Drush to use will depend on the site you're auditing.
 
 ```
 composer require --global drush/drush
