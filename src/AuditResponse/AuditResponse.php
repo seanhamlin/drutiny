@@ -64,14 +64,6 @@ class AuditResponse {
     }
 
     $this->state = $state;
-
-    // Cannot support array and object tokens.
-    foreach ($tokens as $key => $value) {
-      if (is_array($value) || is_object($value)) {
-        unset($tokens[$key]);
-      }
-    }
-    
     $this->tokens = $tokens;
   }
 
@@ -191,7 +183,7 @@ class AuditResponse {
         $summary[] = strtr('Could not determine the state of ' . $this->getTitle() . ' due to an error:
 ```
 exception
-```', $this->tokens);
+```', ['exception' => $this->tokens['exception']]);
         break;
 
       case ($this->state === Audit::WARNING):
