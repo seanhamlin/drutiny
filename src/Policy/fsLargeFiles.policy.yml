@@ -19,7 +19,7 @@ failure: |
     - `{{ . }}`
   {{/issues}}
 parameters:
-  extensions:
-    default: php,sh,py,sql,bz2,gz,tar,tgz,zip
-    description: 'The sensitive file extensions to look for.'
-    type: string
+  max_size:
+    default: 50
+    description: 'Report files larger than this value measured in megabytes.'
+    type: integer
