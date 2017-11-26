@@ -164,9 +164,16 @@ class Registry {
     $finder->name('*.profile.yml');
 
     $registry = [];
+    $profiles = [];
     foreach ($finder as $file) {
       $profile = Yaml::parse(file_get_contents($file->getRealPath()));
       $profile['name'] = str_replace('.profile.yml', '', $file->getFilename());
+      $profiles[] = $profile;
+      $registry[$profile['name']] = new ProfileInformation($profile, TRUE);
+    }
+
+    // Rebuild profile information with dependencies.
+    foreach ($profiles as $profile) {
       $registry[$profile['name']] = new ProfileInformation($profile);
     }
     return $registry;

@@ -19,7 +19,7 @@ class ProfileInformation {
   /**
    *
    */
-  public function __construct(array $info) {
+  public function __construct(array $info, $ignore_dependencies = FALSE) {
     $this->registry = new Registry();
 
     foreach ($info as $key => $value) {
@@ -35,6 +35,9 @@ class ProfileInformation {
       $profiles = $this->registry->profiles();
       foreach ($info['include'] as $profile) {
         if (!isset($profiles[$profile])) {
+          if ($ignore_dependencies) {
+            continue;
+          }
           throw new \InvalidArgumentException("Profile '$this->title' requires profile '$profile' but doesn't exist");
         }
         $this->policies = array_merge($this->getPolicies(), $profiles[$profile]->getPolicies());
