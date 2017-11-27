@@ -194,7 +194,8 @@ trait DrushTrait {
     $transfer = base64_encode(implode(PHP_EOL, $code));
     $php_code = "echo $transfer | base64 --decode";
     $php_code = '"`' . $php_code . '`"';
-    return $this->sandbox()->drush(['format' => 'json'])->ev($php_code);
+    $output = $this->sandbox()->drush()->ev($php_code);
+    return json_decode($output, TRUE);
   }
 
 }
