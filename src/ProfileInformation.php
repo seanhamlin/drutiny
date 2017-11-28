@@ -30,14 +30,11 @@ class ProfileInformation {
     }
 
     // This allows profiles to be built upon one another.
-    if (isset($info['include'])) {
+    if (isset($info['include']) && !$ignore_dependencies) {
       $info['include'] = is_array($info['include']) ? $info['include'] : [$info['include']];
       $profiles = $this->registry->profiles();
       foreach ($info['include'] as $profile) {
         if (!isset($profiles[$profile])) {
-          if ($ignore_dependencies) {
-            continue;
-          }
           throw new \InvalidArgumentException("Profile '$this->title' requires profile '$profile' but doesn't exist");
         }
         $this->policies = array_merge($this->getPolicies(), $profiles[$profile]->getPolicies());
