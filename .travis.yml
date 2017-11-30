@@ -16,7 +16,7 @@ install:
 
 script:
   - ./vendor/bin/phpunit
-  - ./bin/drutiny profile:list
+  - ./bin/drutiny policy:list
 
 # Configure email notifications
 notifications:
