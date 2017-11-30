@@ -48,3 +48,27 @@ include:
   - cloud
   - d8
 ```
+
+### template
+The template to use to theme an HTML report. Defaults to `page` which is the option
+provided by default. To add your own template you need to register a template
+directory and add a template [twig](https://twig.symfony.com/) file.
+
+> drutiny.config.yml:
+
+```yaml
+Template:
+  - my_templates_dir
+```
+
+> < profile >.profile.yml:
+
+```yaml
+template: my-page
+```
+
+The configuration example above will register the `my_templates_dir` directory
+(relative to where drutiny.config.yml is placed). When rendering an HTML report,
+Drutiny will look inside `my_templates_dir` among other registered template directories
+for a template called `my-page.html.twig`. Note that multiple template directories
+can be registered.

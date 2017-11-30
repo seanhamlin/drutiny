@@ -43,6 +43,8 @@ class ProfileRunJsonReport extends ProfileRunReport {
     // Site domain.
     $render_vars['domain'] = $this->target->uri();
 
+    $render_vars['summary'] = $this->target->uri();
+
     // Profile Description
     // $render_vars['description'] = $converter->convertToHtml(
     //   $this->info->get('description')

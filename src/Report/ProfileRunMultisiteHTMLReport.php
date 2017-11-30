@@ -68,12 +68,11 @@ class ProfileRunMultisiteHTMLReport extends ProfileRunReport {
       }
     }
 
-    $tpl = $this->info->get('template');
-    $tpl = $tpl == 'site' ? 'multisite' : $tpl;
-
     $vars['title'] = $this->info->get('title');
+    $vars['summary'] = 'Report ran across <strong>' . count($vars['domains']) . '</strong> sites<br/>' . date('Y-m-d h:i a (T)');
 
-    $content = $this->renderTemplate($tpl, $vars);
+    $vars['content'] = $this->renderTemplate('multisite', $vars);
+    $content = $this->renderTemplate($this->info->get('template'), $vars);
 
     $filename = $input->getOption('report-filename');
     if ($filename == 'stdout') {

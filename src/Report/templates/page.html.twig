@@ -74,3 +74,28 @@
     </div><!--/.navbar-collapse -->
   </div>
 </nav>
+
+<a id="top"></a>
+<!-- Main jumbotron for a primary marketing message or call to action -->
+<div class="jumbotron">
+  <div class="container">
+    <h1>{{ title }}</h1>
+    <p>{{ summary | raw }}</p>
+  </div>
+</div>
+
+{{ content | raw }}
+
+<div class="container">
+  <footer>
+    <p>&copy; Drutiny {{ 'now' | date('Y') }}</p>
+  </footer>
+</div>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+</body>
+</html>

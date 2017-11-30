@@ -31,6 +31,11 @@ class ProfileRunHtmlReport extends ProfileRunJsonReport {
       $result['id'] = preg_replace('/[^0-9a-zA-Z]/', '', $result['title']);
     }
 
+    // Render the site report.
+    $content = $this->renderTemplate('site', $render_vars);
+
+    // Render the header/footer etc.
+    $render_vars['content'] = $content;
     $content = $this->renderTemplate($this->info->get('template'), $render_vars);
 
     // Hack to fix table styles in bootstrap theme.
