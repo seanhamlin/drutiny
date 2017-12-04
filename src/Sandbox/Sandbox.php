@@ -68,7 +68,14 @@ class Sandbox {
     $response = new AuditResponse($this->getPolicy());
 
     try {
+      // Run the audit over the policy.
       $outcome = $this->getAuditor()->execute($this);
+
+      // Allow the policy to modify the severity according
+      // to the policy importance.
+      $outcome = $this->getPolicy()->getSeverity($outcome);
+
+      // Set the response.
       $response->set($outcome, $this->getParameterTokens());
     }
     catch (\Exception $e) {

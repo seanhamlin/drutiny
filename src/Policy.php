@@ -31,6 +31,7 @@ class Policy {
   protected $validation = [];
   protected $tags = [];
   protected $depends = [];
+  protected $maxSeverity;
 
   protected $renderableProperties = [
     'title',
@@ -52,6 +53,12 @@ class Policy {
         continue;
       }
       $this->{$key} = $value;
+    }
+
+    // Don't allow this value to be set by the policy $info.
+    $this->maxSeverity = Audit::FAIL;
+    if (isset($info['max_severity'])) {
+      $this->setMaxSeverity($info['max_severity']);
     }
 
     $validator = Validation::createValidatorBuilder()
@@ -80,6 +87,72 @@ class Policy {
   protected function render($markdown, $replacements) {
     $m = new \Mustache_Engine();
     return $m->render($markdown, $replacements);
+  }
+
+  /**
+   * Set the max severity of an audited outcome applicable to this policy.
+   *
+   * This ensures that an audit doesn't set a severity that doesn't match the
+   * importance of the policy. This does not apply for Audit::ERROR or
+   * Audit::NOT_APPLICABLE responses.
+   */
+  public function setMaxSeverity($severity = Audit::FAIL)
+  {
+    if (is_string($severity)) {
+      $severity = strtolower($severity);
+    }
+    switch (TRUE) {
+      case $severity === 'warning':
+      case $severity === 'warn':
+        $this->maxSeverity = Audit::WARNING;
+        break;
+
+      case $severity === 'warning_fail':
+        $this->maxSeverity = Audit::WARNING_FAIL;
+        break;
+
+      case $severity === 'notice':
+        $this->maxSeverity = Audit::NOTICE;
+        break;
+
+      case $severity === Audit::FAIL:
+      case $severity === Audit::FAILURE:
+      case $severity === Audit::WARNING:
+      case $severity === Audit::WARNING_FAIL:
+      case $severity === Audit::NOTICE:
+        $this->maxSeverity = $severity;
+        break;
+
+      default:
+        throw new \InvalidArgumentException("Cannot set max severity of policy to: " . var_export($severity, TRUE));
+    }
+  }
+
+  public function getSeverity($severity)
+  {
+    switch (TRUE) {
+      // Statuses that we'd never alter.
+      case $severity === Audit::PASS:
+      case $severity === Audit::SUCCESS:
+      case $severity === Audit::NOTICE:
+      case $severity === Audit::ERROR:
+      case $severity === Audit::NOT_APPLICABLE:
+        return $severity;
+
+      case $this->maxSeverity === Audit::NOTICE:
+        return Audit::NOTICE;
+
+      case $this->maxSeverity === Audit::WARNING:
+      case $severity === Audit::WARNING:
+        return Audit::WARNING;
+
+      case $this->maxSeverity === Audit::WARNING_FAIL:
+      case $severity === Audit::WARNING_FAIL:
+        return Audit::WARNING_FAIL;
+
+      default:
+        return $severity;
+    }
   }
 
   /**

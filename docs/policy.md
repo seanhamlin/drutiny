@@ -118,3 +118,25 @@ depends:
   - fs:largeFiles
   - Drupal:SyslogEnabled
 ```
+
+### max_severity
+Sometimes a policy may use an audit which returns an outcome more severe than
+the policy really deserves. For example you may wish to use a `ModuleDisabled`
+audit which returns a pass or fail. Instead your policy may only want to **warn**
+instead of fail. In this case, you can set `max_severity`.
+
+When using max_severity, outcomes less than `max_severity` can still be returned
+but values more severe cannot. This excludes `Drutiny\Audit::NOT_APPLICABLE` and
+`Drutiny\Audit::ERROR`.
+
+```yaml
+max_severity: 'notice'
+```
+
+#### Severity Map
+
+Policy max_severity | Audit return value
+------------------- | -----------------------------
+`'notice'`          | `Drutiny\Audit::NOTICE`
+`'warning'`         | `Drutiny\Audit::WARNING`
+`'warning_fail'`    | `Drutiny\Audit::WARNING_FAIL`
