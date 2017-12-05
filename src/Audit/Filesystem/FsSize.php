@@ -7,45 +7,39 @@ use Drutiny\Sandbox\Sandbox;
 use Drutiny\AuditResponse\AuditResponse;
 
 /**
- * Sensitive public files
+ * Large files
  */
-class SensitivePublicFiles extends Audit {
+class FsSize extends Audit {
 
   /**
    * @inheritdoc
    */
   public function audit(Sandbox $sandbox) {
+    $path = $sandbox->getParameter('path', '%files');
     $stat = $sandbox->drush(['format' => 'json'])->status();
+
+    $path = strtr($path, $stat['%paths']);
 
     $root = $stat['root'];
     $files = $stat['files'];
 
-    $extensions = $sandbox->getParameter('extensions');
-    $extensions = array_map('trim', explode(',', $extensions));
+    $max_size = (int) $sandbox->getParameter('max_size', 20);
 
-    // Output is in the format:
-    //
-    // 7048 ./iStock_000017426795Large-2.jpg
-    // 6370 ./portrait-small-1.png
-    //
-    // Note, the size is in KB in the response, we convert to MB later on in
-    // this check.
-
-    $command = "cd @location ; find . -type f \( @name-lookups \) -printf '@print-format'";
-    $command .= " | grep -v -E '/js/js_|/css/css_|/php/twig/|/php/html_purifier_serializer/' | sort -nr";
+    $command = "find @location -type f -size +@sizeM -printf '@print-format'";
+    $command .= " | sort -nr";
     $command = strtr($command, [
       '@location' => "{$root}/{$files}/",
-      '@name-lookups' => "-name '*." . implode("' -o -name '*.", $extensions) . "'",
+      '@size' => $max_size,
       '@print-format' => '%k\t%p\n',
     ]);
 
     $output = $sandbox->exec($command);
 
     if (empty($output)) {
-      return Audit::SUCCESS;
+      return TRUE;
     }
 
-    // Output from find is a giant string with newlines to separate the files.
+    // Output from find is a giant string with newlines to seperate the files.
     $rows = array_map(function ($line) {
       $parts = array_map('trim', explode("\t", $line));
       $size = number_format((float) $parts[0] / 1024, 2);
@@ -57,7 +51,7 @@ class SensitivePublicFiles extends Audit {
     $sandbox->setParameter('issues', $rows);
     $sandbox->setParameter('plural', count($rows) > 1 ? 's' : '');
 
-    return Audit::FAIL;
+    return Audit::WARNING;
   }
 
 }
