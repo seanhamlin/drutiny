@@ -24,6 +24,7 @@ class Exec extends Driver implements ExecInterface {
     }
 
     $process = new Process($command);
+    $process->setTimeout(600);
 
     $this->log($command);
     $process->run();
