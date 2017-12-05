@@ -1,8 +1,6 @@
 <?php
 
-namespace Drutiny\Check;
-
-use Drutiny\Sandbox\Sandbox;
+namespace Drutiny;
 
 /**
  *

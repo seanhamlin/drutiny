@@ -79,7 +79,7 @@ class Policy {
     }
 
     $reflect = new \ReflectionClass($this->class);
-    $this->remediable = $reflect->implementsInterface('\Drutiny\Check\RemediableInterface');
+    $this->remediable = $reflect->implementsInterface('\Drutiny\RemediableInterface');
   }
 
   /**

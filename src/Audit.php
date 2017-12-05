@@ -3,7 +3,7 @@
 namespace Drutiny;
 
 use Drutiny\Sandbox\Sandbox;
-use Drutiny\Check\AuditValidationException;
+use Drutiny\AuditValidationException;
 
 /**
  *
@@ -83,7 +83,7 @@ abstract class Audit implements AuditInterface {
     try {
       foreach ($validators as $method) {
         if (call_user_func([$this, $method->name], $sandbox) === FALSE) {
-          throw new \Exception("Validation failed.");
+          throw new AuditValidationException("Validation failed: {$method->name}");
         }
       }
     }

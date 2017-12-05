@@ -15,7 +15,7 @@ use Drutiny\PolicyChain;
 use Drutiny\Sandbox\Sandbox;
 use Drutiny\Logger\ConsoleLogger;
 use Drutiny\Target\Target;
-use Drutiny\Check\RemediableInterface;
+use Drutiny\RemediableInterface;
 use Drutiny\Report\ProfileRunReport;
 use Drutiny\ProfileInformation;
 use Drutiny\AuditResponse\AuditResponse;
