@@ -141,7 +141,7 @@ class AuditResponse {
    *
    */
   public function isSuccessful() {
-    return $this->state === Audit::SUCCESS || $this->remediated || $this->isNotice();
+    return $this->state === Audit::SUCCESS || $this->remediated || $this->isNotice() || $this->state === Audit::WARNING;
   }
 
   /**
@@ -164,6 +164,16 @@ class AuditResponse {
       $this->remediated = $set;
     }
     return $this->remediated;
+  }
+
+  public function hasError()
+  {
+    return $this->state === Audit::ERROR;
+  }
+
+  public function isNotApplicable()
+  {
+    return $this->state === Audit::NOT_APPLICABLE;
   }
 
   /**
