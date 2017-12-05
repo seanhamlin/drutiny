@@ -35,7 +35,16 @@ class ProfileRunJsonReport extends ProfileRunReport {
    * Form a render array as variables for rendering.
    */
   protected function getRenderVariables() {
-    $render_vars = [];
+    $render_vars = [
+      'notices' => 0,
+      'warnings' => 0,
+      'failures' => 0,
+      'passes' => 0,
+      'errors' => 0,
+      'not_applicable' => 0,
+      'remediated' => 0,
+      'total' => 0,
+    ];
 
     // Report Title.
     $render_vars['title'] = $this->info->get('title');
@@ -50,10 +59,12 @@ class ProfileRunJsonReport extends ProfileRunReport {
     //   $this->info->get('description')
     // );.
     foreach ($this->resultSet as $response) {
-      $render_vars['results'][] = [
+      $var = [
         'status' => $response->isSuccessful(),
         'is_notice' => $response->isNotice(),
         'has_warning' => $response->hasWarning(),
+        'has_error' => $response->hasError(),
+        'is_not_applicable' => $response->isNotApplicable(),
         'title' => $response->getTitle(),
         'description' => $response->getDescription(),
         'remediation' => $response->getRemediation(),
@@ -61,6 +72,44 @@ class ProfileRunJsonReport extends ProfileRunReport {
         'failure' => $response->getFailure(),
         'warning' => $response->getWarning(),
       ];
+
+      $render_vars['total']++;
+
+      if ($response->isSuccessful()) {
+        if ($response->isNotice()) {
+          $render_vars['notices']++;
+          $var['status_title'] = 'Notice';
+        }
+        elseif ($response->isRemediated()) {
+          $render_vars['remediated']++;
+          $var['status_title'] = 'Remediated';
+        }
+        else {
+          $render_vars['passes']++;
+          $var['status_title'] = 'Passed';
+        }
+      }
+      elseif ($response->isNotApplicable()) {
+        $render_vars['not_applicable']++;
+        $var['status_title'] = 'Not Applicable';
+      }
+      else {
+        if ($response->hasError()) {
+          $render_vars['errors']++;
+          $var['status_title'] = 'Error';
+        }
+        else {
+          $render_vars['failures']++;
+          $var['status_title'] = 'Failed';
+        }
+      }
+
+      if ($response->hasWarning()) {
+        $render_vars['warnings']++;
+        $var['status_title'] .= ' with warning';
+      }
+
+      $render_vars['results'][] = $var;
     }
     return $render_vars;
   }

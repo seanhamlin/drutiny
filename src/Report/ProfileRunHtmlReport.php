@@ -29,7 +29,39 @@ class ProfileRunHtmlReport extends ProfileRunJsonReport {
       $result['failure'] = $parsedown->text($result['failure']);
       $result['warning'] = $parsedown->text($result['warning']);
       $result['id'] = preg_replace('/[^0-9a-zA-Z]/', '', $result['title']);
+
+      $result['state_class'] = 'info';
+      if (!$result['is_notice'] && $result['status']) {
+        $result['state_class'] = 'success';
+      }
+      elseif ($result['is_not_applicable']) {
+        $result['state_class'] = 'default';
+      }
+      elseif (!$result['status']) {
+        $result['state_class'] = 'danger';
+      }
+      if ($result['has_warning']) {
+        $result['state_class'] = 'warning';
+      }
+
     }
+
+    usort($render_vars['results'], function ($a, $b) {
+      if ($a['status'] != $b['status']) {
+        return $a['status'] ? 1 : -1;
+      }
+
+      if ($a['has_warning'] && !$b['has_warning']) {
+        return 1;
+      }
+      elseif (!$a['has_warning'] && $b['has_warning']) {
+        return -1;
+      }
+      
+      $order = [$a['title'], $b['title']];
+      sort($order);
+      return $a['title'] == $order[0] ? -1 : 1;
+    });
 
     // Render the site report.
     $content = $this->renderTemplate('site', $render_vars);
