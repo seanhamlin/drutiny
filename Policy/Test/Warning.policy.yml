@@ -3,7 +3,18 @@ class: \Drutiny\Audit\AlwaysWarn
 name: Test:Warning
 tags:
   - test
-description: This policy should always issue a warning.
+description: |
+  This policy should always issue a warning. Twee godard poutine knausgaard, 
+  keytar readymade unicorn wayfarers vape mumblecore blue bottle. Portland
+  pitchfork air plant kale chips, craft beer meditation tumeric seitan umami
+  vexillologist cred coloring book taxidermy actually.
+
+  Banjo narwhal la croix portland green juice lumbersexual biodiesel kombucha
+  vegan umami aesthetic trust fund ramps. Art party +1 celiac everyday carry
+  succulents seitan franzen distillery venmo keytar cray mustache gastropub.
+  8-bit seitan banh mi, vice chillwave viral synth vinyl +1. Mixtape mustache
+  pitchfork, meh tacos kitsch offal pop-up intelligentsia VHS air plant pork
+  belly. Thundercats microdosing taxidermy try-hard +1 ennui photo booth 8-bit.
 warning: 'policy issued a warning as it should.'
 success: policy succeeded and with a warning.
 failure: policy failed. This means there is a problem with the Drutiny framework.
