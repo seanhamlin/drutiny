@@ -1,0 +1,8 @@
+title: Test Profile
+policies:
+  Test:Pass: {}
+  Test:Fail: {}
+  Test:Warning: {}
+  Test:NA: {}
+  Test:Error: {}
+  Test:Notice: {}
