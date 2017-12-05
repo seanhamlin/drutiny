@@ -16,7 +16,7 @@ class AlwaysError extends Audit {
 
   public function audit(Sandbox $sandbox)
   {
-    return Audit::ERROR;
+    throw new \Exception("This audit will always throw an exception as an error.");
   }
 }
 

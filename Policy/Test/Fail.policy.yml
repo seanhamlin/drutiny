@@ -1,0 +1,9 @@
+title: Always fail test policy
+class: \Drutiny\Audit\AlwaysFail
+name: Test:Fail
+tags:
+  - test
+description: This policy should always fail.
+success: policy succeeded. This means there is a problem with the Drutiny framework.
+failure: policy failed.
+remediation: Please run with remediation to resolve.

@@ -1,0 +1,8 @@
+title: Always pass test policy
+class: \Drutiny\Audit\AlwaysPass
+name: Test:Pass
+tags:
+  - test
+description: This policy should always pass.
+success: policy succeeded
+failure: policy failed. This means there is a problem with the Drutiny framework.

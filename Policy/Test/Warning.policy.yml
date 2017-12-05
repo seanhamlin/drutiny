@@ -1,0 +1,9 @@
+title: Always warn test policy
+class: \Drutiny\Audit\AlwaysWarn
+name: Test:Warning
+tags:
+  - test
+description: This policy should always issue a warning.
+warning: 'policy issued a warning as it should.'
+success: policy succeeded and with a warning.
+failure: policy failed. This means there is a problem with the Drutiny framework.
