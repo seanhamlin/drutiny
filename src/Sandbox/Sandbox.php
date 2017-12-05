@@ -5,7 +5,8 @@ namespace Drutiny\Sandbox;
 use Drutiny\Target\Target;
 use Drutiny\AuditInterface;
 use Drutiny\Audit;
-use Drutiny\Check\RemediableInterface;
+use Drutiny\AuditValidationException;
+use Drutiny\RemediableInterface;
 use Drutiny\AuditResponse\AuditResponse;
 use Drutiny\Policy;
 use Drutiny\Cache;
@@ -77,6 +78,10 @@ class Sandbox {
 
       // Set the response.
       $response->set($outcome, $this->getParameterTokens());
+    }
+    catch (AuditValidationException $e) {
+      $this->setParameter('exception', $e->getMessage());
+      $response->set(Audit::NOT_APPLICABLE, $this->getParameterTokens());
     }
     catch (\Exception $e) {
       $this->setParameter('exception', $e->getMessage());
