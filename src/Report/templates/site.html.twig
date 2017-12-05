@@ -3,7 +3,105 @@
   <div class="row">
 
     <div class="col-sm-12">
-      <h2 id="overview">Overview</h2>
+      <h2 id="summary">At a glance</h2>
+
+      <div class="row">
+        <div class="col-xs-6 col-md-4">
+          <div class="panel panel-info text-center">
+            <div class="panel-body" style="font-size: 5em;">
+              {{ total }}
+            </div>
+            <div class="panel-heading">
+              <h3 class="panel-title"><strong>Policies audited</strong></h3>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xs-6 col-md-4">
+          <div class="panel panel-success text-center">
+            <div class="panel-body" style="font-size: 5em;">
+              {{ passes }}
+            </div>
+            <div class="panel-heading">
+              <h3 class="panel-title"><a href="#policy-passes"><strong>Passed</strong></a></h3>
+              <p>The number of policies assessed that passed.</p>
+            </div>
+          </div>
+        </div>
+
+        {% if notices %}
+        <div class="col-xs-6 col-md-4">
+          <div class="panel panel-info text-center">
+            <div class="panel-body" style="font-size: 5em;">
+              {{ notices }}
+            </div>
+            <div class="panel-heading">
+              <h3 class="panel-title"><a href="#policy-notices"><strong>Informational</strong></a></h3>
+              <p>Provided information only (no pass/fail assessment).</p>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+
+        {% if failures %}
+        <div class="col-xs-6 col-md-4">
+          <div class="panel panel-danger text-center">
+            <div class="panel-body" style="font-size: 5em;">
+              {{ failures }}
+            </div>
+            <div class="panel-heading">
+              <h3 class="panel-title"><a href="#policy-failures"><strong>Failed</strong></a></h3>
+              <p>The assessed target did not pass {{ failures }} policies</p>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+
+        {% if errors %}
+        <div class="col-xs-6 col-md-4">
+          <div class="panel panel-danger text-center">
+            <div class="panel-body" style="font-size: 5em;">
+              {{ errors }}
+            </div>
+            <div class="panel-heading">
+              <h3 class="panel-title"><a href="#policy-errors"><strong>Errors</strong></a></h3>
+              <p>{{ errors }} policies were unable to complete due to an error.</p>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+
+        {% if warnings %}
+        <div class="col-xs-6 col-md-4">
+          <div class="panel panel-warning text-center">
+            <div class="panel-body" style="font-size: 5em;">
+              {{ warnings }}
+            </div>
+            <div class="panel-heading">
+              <h3 class="panel-title"><strong>Warnings</strong></h3>
+              <p>{{ warnings }} policies raised a warning. These policies still attribute against pass/fail rates.</p>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+
+        {% if not_applicable %}
+        <div class="col-xs-6 col-md-4">
+          <div class="panel panel-default text-center">
+            <div class="panel-body" style="font-size: 5em;">
+              {{ not_applicable }}
+            </div>
+            <div class="panel-heading">
+              <h3 class="panel-title"><strong>N/A</strong></h3>
+              <p>The number of policies that were not applicable to the assessed target. These are not shown in this report.</p>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+
+      </div>
+
+      <h2 id="overview">Issue Overview</h2>
       <p>These are the results of the report conducted against <a href="{{ domain }}">{{ domain }}</a>.</p>
       <table class="table">
         <thead>
@@ -13,10 +111,10 @@
           </tr>
         </thead>
         <tbody>
-          {% for result in results %}
+          {% for result in results if result.has_warning or result.has_error or not result.status and not result.is_not_applicable %}
           <tr class="{% if result.is_notice %}{% elseif result.status %}has-success{% else %}has-error{% endif %}">
             <th><a href="#{{ result.id }}">{{ result.title }}</a></th>
-            <td class="control-label">{% if result.is_notice %}Inform{% elseif result.status %}Passed{% else %}Failed{% endif %}</td>
+            <td class="control-label">{{ result.status_title }}</td>
             </tr>
           {% endfor %}
         </tbody>
@@ -24,32 +122,91 @@
 
     </div>
 
-    {% for result in results %}
+    {% if failures %}
+    <h2 id="policy-failures">Policy Failures</h2>
+    {% for result in results if not result.is_not_applicable and not result.status and not result.has_error %}
     <div class="row result-group">
 
       <div class="col-sm-12">
-        <h2 id="{{ result.id }}">{{ result.title }} <small><span class="glyphicon {% if result.status %}glyphicon-ok{% else %}glyphicon-remove{% endif %}" aria-hidden="true"></span></small></h2>
+        <h3 id="{{ result.id }}">{{ result.title }} <small class="label label-{{ result.state_class }}">{{ result.status_title }} <span class="glyphicon {% if result.status %}glyphicon-ok{% else %}glyphicon-remove{% endif %}" aria-hidden="true"></span></small></h3>
         <p>{{ result.description | raw }}</p>
-        <div class="alert alert-{% if result.is_notice %}info{% elseif result.has_warning %}warning{% elseif result.status %}success{% else %}danger{% endif %}" role="alert">
+        {% if result.has_warning %}
+        <div class="alert alert-warning" role="alert">
+          {{ result.warning | raw }}
+        </div>
+        {% endif %}
+
+        <div class="alert alert-{{ result.state_class }}" role="alert">
+          {{ result.failure | raw }}
+        </div>
+
+        <div class="panel panel-info">
+          <div class="panel-heading">Remediation</div>
+          <div class="panel-body">
+            {{ result.remediation | raw }}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    {% if errors %}
+    <h2 id="policy-errors">Policy Errors</h2>
+    {% for result in results if not result.is_not_applicable and not result.status and result.has_error %}
+    <div class="row result-group">
+
+      <div class="col-sm-12">
+        <h3 id="{{ result.id }}">{{ result.title }} <small class="label label-{{ result.state_class }}">{{ result.status_title }} <span class="glyphicon {% if result.status %}glyphicon-ok{% else %}glyphicon-remove{% endif %}" aria-hidden="true"></span></small></h3>
+        <p>{{ result.description | raw }}</p>
+        <div class="alert alert-{{ result.state_class }}" role="alert">
+          This policy was unable to determine the state of {{ domain }}.
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    {% if passes %}
+    <h2 id="policy-passes">Policy Passes</h2>
+    {% for result in results if not result.is_not_applicable and result.status and not result.is_notice %}
+    <div class="row result-group">
+
+      <div class="col-sm-12">
+        <h3 id="{{ result.id }}">{{ result.title }} <small class="label label-{{ result.state_class }}">{{ result.status_title }} <span class="glyphicon {% if result.status %}glyphicon-ok{% else %}glyphicon-remove{% endif %}" aria-hidden="true"></span></small></h3>
+        <p>{{ result.description | raw }}</p>
+        {% if result.has_warning %}
+        <div class="alert alert-warning" role="alert">
+          {{ result.warning | raw }}
+        </div>
+        {% endif %}
+        <div class="alert alert-{{ result.state_class }}" role="alert">
+          {{ result.success | raw }}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    {% if notices %}
+    <h2 id="policy-notices">Policy Information</h2>
+    {% for result in results if not result.is_not_applicable and result.is_notice %}
+    <div class="row result-group">
+
+      <div class="col-sm-12">
+        <h3 id="{{ result.id }}">{{ result.title }} <small class="label label-{{ result.state_class }}">{{ result.status_title }} <span class="glyphicon {% if result.status %}glyphicon-ok{% else %}glyphicon-remove{% endif %}" aria-hidden="true"></span></small></h3>
+        <p>{{ result.description | raw }}</p>
+        <div class="alert alert-{{ result.state_class }}" role="alert">
           {% if result.status %}
             {{ result.success | raw }}
           {% else %}
             {{ result.failure | raw }}
           {% endif %}
         </div>
-
-        {% if not result.status %}
-        <div class="panel panel-default">
-          <div class="panel-heading">Remediation</div>
-          <div class="panel-body">
-            {{ result.remediation | raw }}
-          </div>
-        </div>
-
-        {% endif %}
       </div>
     </div>
     {% endfor %}
+    {% endif %}
 
   </div>
 
