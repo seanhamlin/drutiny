@@ -32,6 +32,7 @@ class Policy {
   protected $tags = [];
   protected $depends = [];
   protected $maxSeverity;
+  protected $filepath;
 
   protected $renderableProperties = [
     'title',

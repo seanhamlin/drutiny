@@ -126,6 +126,7 @@ class Registry {
     $registry = [];
     foreach ($finder as $file) {
       $policy = Yaml::parse(file_get_contents($file->getRealPath()));
+      $policy['filepath'] = $file->getRealPath();
       $registry[$policy['name']] = new Policy($policy);
     }
     return $registry;
