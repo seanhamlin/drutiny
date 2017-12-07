@@ -5,17 +5,19 @@
     <div class="col-sm-12">
       <h2 id="summary">At a glance</h2>
 
+      {% if total - notices %}
       <div class="row">
         <div class="col-xs-6 col-md-3">
           <div class="panel panel-primary text-center">
             <div class="panel-body" style="font-size: 5em;">
-              {{ total }}
+              {{ total - notices }}
             </div>
             <div class="panel-heading">
               <h3 class="panel-title"><strong>Policies audited</strong></h3>
             </div>
           </div>
         </div>
+
 
         <div class="col-xs-6 col-md-3">
           <div class="panel panel-success text-center">
@@ -25,19 +27,6 @@
             <div class="panel-heading">
               <h3 class="panel-title"><a href="#policy-passes"><strong>Passed</strong></a></h3>
               <p>The number of policies assessed that passed.</p>
-            </div>
-          </div>
-        </div>
-
-        {% if notices %}
-        <div class="col-xs-6 col-md-3">
-          <div class="panel panel-info text-center">
-            <div class="panel-body" style="font-size: 5em;">
-              {{ notices }}
-            </div>
-            <div class="panel-heading">
-              <h3 class="panel-title"><a href="#policy-notices"><strong>Informational</strong></a></h3>
-              <p>Provided information only (no pass/fail assessment).</p>
             </div>
           </div>
         </div>
@@ -101,6 +90,7 @@
 
       </div>
 
+      {% if failures + errors %}
       <h2 id="overview">Issue Overview</h2>
       <p>These are the results of the report conducted against <a href="{{ domain }}">{{ domain }}</a>.</p>
       <table class="table">
@@ -120,7 +110,7 @@
         </tbody>
       </table>
 
-
+      {% endif %}
 
       {% if failures %}
       <h2 id="policy-failures">Policy Failures</h2>
@@ -167,8 +157,27 @@
       {% endfor %}
       {% endif %}
 
+      {% if notices %}
+      <h2>{% if failures + errors %}Appendix - {% endif %}Information</h2>
+      {% for result in results if not result.is_not_applicable and result.is_notice %}
+      <div class="row result-group">
+        <div class="col-sm-12">
+          <h3 id="{{ result.id }}">{{ result.title }}</h3>
+          <p>{{ result.description | raw }}</p>
+
+          <div class="panel panel-info">
+            <!-- <div class="panel-heading">{{ result.title }}</div> -->
+            <div class="panel-body">
+              {{ result.success | raw }}
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      {% endif %}
+
       {% if passes %}
-      <h2 id="policy-passes">Policy Passes</h2>
+      <h2 id="policy-passes">{% if failures + errors %}Appendix - {% endif %}Policy Passes</h2>
       {% for result in results if not result.is_not_applicable and result.status and not result.is_notice %}
       <div class="row result-group">
 
@@ -187,27 +196,6 @@
               </div>
               {% endif %}
 
-            </div>
-          </div>
-
-        </div>
-      </div>
-      {% endfor %}
-      {% endif %}
-
-      {% if notices %}
-      <h2 id="policy-notices">Policy Information</h2>
-      {% for result in results if not result.is_not_applicable and result.is_notice %}
-      <div class="row result-group">
-
-        <div class="col-sm-12">
-          <h3 id="{{ result.id }}">{{ result.title }} <small class="label label-{{ result.state_class }}">{{ result.status_title }} <span class="glyphicon {% if result.status %}glyphicon-ok{% else %}glyphicon-remove{% endif %}" aria-hidden="true"></span></small></h3>
-          <p>{{ result.description | raw }}</p>
-
-          <div class="panel panel-info">
-            <div class="panel-heading">{{ result.status_title }}</div>
-            <div class="panel-body">
-              {{ result.success | raw }}
             </div>
           </div>
 
