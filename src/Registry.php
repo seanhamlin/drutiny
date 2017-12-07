@@ -13,35 +13,6 @@ use Symfony\Component\Yaml\Yaml;
 class Registry {
 
   /**
-   * Retrieve a list of Check classes.
-   */
-  public static function load($path, $type, $key_by = 'class') {
-    $registry = [];
-    $reader = new AnnotationReader();
-    $map = ClassMapGenerator::createMap($path);
-
-    foreach ($map as $class => $filepath) {
-      $reflect = new \ReflectionClass($class);
-      if ($reflect->isAbstract()) {
-        continue;
-      }
-      if (!$reflect->isSubClassOf($type)) {
-        continue;
-      }
-      $info = $reader->getClassAnnotations($reflect);
-
-      if ($key_by == "class") {
-        $registry[$class] = $class;
-      }
-      else {
-        $info[0]->class = $class;
-        $registry[$info[0]->{$key_by}] = $info[0];
-      }
-    }
-    return $registry;
-  }
-
-  /**
    *
    */
   public function targets() {
@@ -130,6 +101,15 @@ class Registry {
       $registry[$policy['name']] = new Policy($policy);
     }
     return $registry;
+  }
+
+  public function getPolicy($name)
+  {
+    $r = $this->policies();
+    if (!isset($r[$name])) {
+      throw new \InvalidArgumentException("No such policy exists: $name");
+    }
+    return $r[$name];
   }
 
   /**

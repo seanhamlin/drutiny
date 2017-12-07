@@ -10,7 +10,7 @@ trait ParameterTrait {
   /**
    * @var array
    */
-  protected $params;
+  protected $params = [];
 
   /**
    * Expose parameters to the check.

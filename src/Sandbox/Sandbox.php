@@ -84,7 +84,7 @@ class Sandbox {
       $response->set(Audit::NOT_APPLICABLE, $this->getParameterTokens());
     }
     catch (\Exception $e) {
-      $this->setParameter('exception', $e->getMessage());
+      $this->setParameter('exception', $e->getMessage() . PHP_EOL . $e->getTraceAsString());
       $response->set(Audit::ERROR, $this->getParameterTokens());
     }
 

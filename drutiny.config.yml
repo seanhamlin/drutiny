@@ -1,6 +1,6 @@
 Target:
   - Drutiny\Target\DrushTarget
-  - Drutiny\Target\TargetStub
+  - Drutiny\Target\TargetNone
 Command:
   - Drutiny\Command\AuditGenerateCommand
   - Drutiny\Command\AuditRunCommand
