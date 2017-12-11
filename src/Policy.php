@@ -87,7 +87,12 @@ class Policy {
    */
   protected function render($markdown, $replacements) {
     $m = new \Mustache_Engine();
-    return $m->render($markdown, $replacements);
+    try {
+      return $m->render($markdown, $replacements);
+    }
+    catch (\Mustache_Exception $e) {
+      throw new \Exception("Error in $this->name: " . $e->getMessage());
+    }
   }
 
   /**
