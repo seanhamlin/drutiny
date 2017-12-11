@@ -94,6 +94,7 @@ trait DrushTrait {
       '@method' => $method,
       '@args' => implode(' ', $args),
       '@options' => implode(' ', $this->drushOptions),
+      '@pipe' => $pipe
     ]);
   }
 
@@ -180,7 +181,7 @@ trait DrushTrait {
     $col = strpos($body[$last], '}') + 1;
     $body[$last] = substr($body[$last], 0, $col);
 
-    $code = [];
+    $code = ['<?php'];
     $calling_args = [];
     foreach ($func->getParameters() as $i => $param) {
       $code[] = '$' . $param->name . ' = ' . var_export($args[$i], TRUE) . ';';
@@ -192,9 +193,26 @@ trait DrushTrait {
     $code[] = 'echo json_encode($response);';
 
     $transfer = base64_encode(implode(PHP_EOL, $code));
-    $php_code = "echo $transfer | base64 --decode";
-    $php_code = '"`' . $php_code . '`"';
-    $output = $this->sandbox()->drush()->ev($php_code);
+
+    $execution = [];
+    $execution[] = 'f=`tempfile`';
+    $execution[] = "echo $transfer | base64 --decode > \$f";
+
+    $pipe = implode(';' . PHP_EOL, $execution);
+
+    $this->setDrushOptions($this->getGlobalDefaults());
+    $execution[] = strtr('drush @alias @options scr $f', [
+      '@options' => implode(' ', $this->drushOptions),
+      '@alias' => $this->alias,
+    ]);
+    $execution[] = 'rm $f';
+
+    $transfer = implode(';' . PHP_EOL, $execution);
+
+
+    // $transfer = "echo $transfer | base64 --decode | bash";
+
+    $output = $this->sandbox()->exec($transfer);
     return json_decode($output, TRUE);
   }
 
