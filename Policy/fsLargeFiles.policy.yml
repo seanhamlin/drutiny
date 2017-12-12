@@ -17,7 +17,7 @@ failure: |
   Large public file{{plural}} found
   {{#issues}}
     - `{{ . }}`
-  {{/issues
+  {{/issues}}
 warning: |
   Large public file{{plural}} found
   {{#issues}}
