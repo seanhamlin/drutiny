@@ -189,8 +189,7 @@ trait DrushTrait {
     }
 
     $code[] = '$evaluation = ' . implode("", $body) . ';';
-    $code[] = '$response = $evaluation(' . implode(', ', $calling_args) . ');';
-    $code[] = 'echo json_encode($response);';
+    $code[] = 'echo json_encode($evaluation(' . implode(', ', $calling_args) . '));';
 
     $transfer = base64_encode(implode(PHP_EOL, $code));
 
