@@ -1,0 +1,34 @@
+title: Large Drupal Files
+class: \Drutiny\Audit\Drupal\LargeDrupalFiles
+name: Drupal:largeFiles
+tags:
+  - Drupal 8
+  - Drupal 7
+description: |
+  Large static assets should be optimized for online display or ideally be housed in other services, e.g.
+    Amazon S3 (for files) or Youtube (for videos). Storing large files can consume storage volumes,
+    increase page load time and contribute to a higher than desired cache eviction rate.
+
+    This policy identifies files managed by Drupal that are larger than {{readable_max_size}}.
+remediation: |
+  Either delete the files if they are not needed, compress or optimize them,
+  or look to house them in a more appropriate location.success: No database updates required.
+success: No large files found.
+failure: |
+  **{{total}} Large Drupal file{{plural}} found**<br>
+  The table below contains the following data:
+      - **URI** - The path and filename.
+      - **Size** - The size of the file as reported by Drupal.
+      - **Used** - Determines if the file is associated with any content according to Drupal's file_usage table.
+
+  URI | Size | Used
+    --- | --- | ---
+    {{# files }}
+      {{uri}} | {{size}} | {{usage}}
+    {{/ files }}
+    {{too_many_files}}
+parameters:
+  max_size:
+    default: 20000000
+    description: 'Report files larger than this value measured in bytes.'
+    type: integer
