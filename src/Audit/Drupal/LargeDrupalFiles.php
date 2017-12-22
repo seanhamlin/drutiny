@@ -44,9 +44,9 @@ class LargeDrupalFiles extends Audit {
     $totalRows = count($rows);
     $sandbox->setParameter('total', $totalRows);
 
-    // Reduce the number of rows to 20
-    $rows = array_slice($rows, 0, 20);
-    $too_many_files = ($totalRows > 20) ? "Only the first 20 files are displayed." : "";
+    // Reduce the number of rows to 10
+    $rows = array_slice($rows, 0, 10);
+    $too_many_files = ($totalRows > 10) ? "Only the first 10 files are displayed." : "";
 
     $sandbox->setParameter('too_many_files', $too_many_files);
     $sandbox->setParameter('files', $rows);
