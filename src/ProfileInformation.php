@@ -12,6 +12,7 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
 class ProfileInformation {
 
   protected $title;
+  protected $type;
   protected $policies = [];
   protected $registry;
   protected $template = 'page';
