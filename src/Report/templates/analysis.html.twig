@@ -1,0 +1,111 @@
+<div class="container">
+  <!-- Example row of columns -->
+  <div class="row">
+
+    <div class="col-sm-12">
+      <h2>Contents</h2>
+      <p>This analysis report contains the following information:</p>
+      <ul class="list-group">
+        {% for policy_results in results %}
+          <li class="list-group-item list-group-item-action"><a href="#{{ policy_results.id }}">{{ policy_results.title }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+
+  {% for result in results %}
+    {% if not result.is_not_applicable and result.is_notice %}
+      <!--- Policy Notice --->
+      <div class="row result-group">
+        <div class="col-sm-12">
+          <h2 id="{{ result.id }}">{{ result.title }}</h2>
+          <p>{{ result.description | raw }}</p>
+
+          <div class="panel panel-info">
+            <div class="panel-body">
+              {{ result.success | raw }}
+            </div>
+          </div>
+        </div>
+      </div>
+    {% elseif not result.is_not_applicable and result.status and not result.is_notice %}
+      <!--- Policy Pass --->
+      <div class="row result-group">
+        <div class="col-sm-12">
+          <h2 id="{{ result.id }}">{{ result.title }} <small class="label label-{{ result.state_class }}">{{ result.status_title }} <span class="glyphicon {% if result.status %}glyphicon-ok{% else %}glyphicon-remove{% endif %}" aria-hidden="true"></span></small></h2>
+          <p>{{ result.description | raw }}</p>
+
+          <div class="panel panel-success">
+            <div class="panel-heading">{{ result.status_title }}</div>
+            <div class="panel-body">
+              {{ result.success | raw }}
+
+              {% if result.has_warning %}
+                <div class="alert alert-warning" role="alert">
+                  {{ result.warning | raw }}
+                </div>
+              {% endif %}
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    {% elseif not result.is_not_applicable and not result.status and not result.has_error %}
+      <!--- Policy Failure --->
+      <div class="row result-group">
+        <div class="col-sm-12">
+          <h2 id="{{ result.id }}">{{ result.title }} <small class="label label-{{ result.state_class }}">{{ result.status_title }} <span class="glyphicon {% if result.status %}glyphicon-ok{% else %}glyphicon-remove{% endif %}" aria-hidden="true"></span></small></h2>
+          <p>{{ result.description | raw }}</p>
+          {% if result.has_warning %}
+            <div class="alert alert-warning" role="alert">
+              {{ result.warning | raw }}
+            </div>
+          {% endif %}
+
+          <div class="alert alert-{{ result.state_class }}" role="alert">
+            {{ result.failure | raw }}
+          </div>
+
+          <div class="panel panel-info">
+            <div class="panel-heading">Remediation</div>
+            <div class="panel-body">
+              {{ result.remediation | raw }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+    {% elseif not result.is_not_applicable and not result.status and result.has_error %}
+      <!--- Policy Error --->
+      <div class="row result-group">
+        <div class="col-sm-12">
+          <h2 id="{{ result.id }}">{{ result.title }} <small class="label label-{{ result.state_class }}">{{ result.status_title }} <span class="glyphicon {% if result.status %}glyphicon-ok{% else %}glyphicon-remove{% endif %}" aria-hidden="true"></span></small></h2>
+          <p>{{ result.description | raw }}</p>
+          <div class="alert alert-{{ result.state_class }}" role="alert">
+            This policy was unable to determine the state of {{ domain }}.
+          </div>
+        </div>
+      </div>
+    {% elseif result.is_not_applicable %}
+      <!--- Policy Not Applicable --->
+      <div class="row result-group">
+        <div class="col-sm-12">
+          <h2 id="{{ result.id }}">{{ result.title }} <small class="label label-{{ result.state_class }}">{{ result.status_title }} <span class="glyphicon {% if result.status %}glyphicon-ok{% else %}glyphicon-remove{% endif %}" aria-hidden="true"></span></small></h2>
+          <p>{{ result.description | raw }}</p>
+          <div class="alert alert-{{ result.state_class }}" role="alert">
+            This policy is not applicable to {{ domain }}.
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+
+  {% endfor %}
+
+
+  <hr>
+
+</div>
