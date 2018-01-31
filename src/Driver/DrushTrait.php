@@ -97,7 +97,7 @@ trait DrushTrait {
    */
   public function moduleEnabled($name) {
     $this->drushOptions[] = '--format=json';
-    $modules = $this->runCommand('pm-list', []);
+    $modules = $this->__call('pmList', []);
     if (!$modules = json_decode($modules, TRUE)) {
       throw new DrushFormatException("Cannot parse json output from drush: $modules", $modules);
     }
