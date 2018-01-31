@@ -3,7 +3,7 @@
     "type": "library",
     "description": "This is a generic Drupal 7 and Drupal 8 site auditing and optional remediation tool.",
     "keywords": ["drupal", "audit", "drush", "ssh", "report"],
-    "license": "GPL-2.0",
+    "license": "GPL-2.0-only",
     "authors": [
         {"name": "Sean Hamlin", "email": "iwiifm@gmail.com"},
         {"name": "Josh Waihi", "email": "joshwaihi@gmail.com"}
