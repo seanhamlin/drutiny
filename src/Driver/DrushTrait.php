@@ -50,7 +50,70 @@ trait DrushTrait {
   }
 
   /**
+   * Clean up the output of Drush.
+   *
+   * @param $output
+   * @return array
+   */
+  private function cleanOutput($output) {
+    if (!is_array($output)) {
+      $output = explode(PHP_EOL, $output);
+    }
+
+    // Datetime weirdness. Apparently this is caused by theming issues on the
+    // remote theme. Why it is being called when executed via CLI is another
+    // story.
+    foreach ($output as $key => $value) {
+      $invalid_strings = [
+        'date_timezone_set() expects parameter',
+        'date_format() expects parameter',
+        'common.inc:20',
+        'given common.inc:20',
+        'Warning: Using a password on the command line interface can be insecure.',
+      ];
+      foreach ($invalid_strings as $invalid_string) {
+        if (strpos($value, $invalid_string) === 0) {
+          unset($output[$key]);
+        }
+      }
+    }
+
+    // Remove blank lines.
+    $output = array_filter($output);
+
+    // Ensure we are returning arrays with no key association.
+    return array_values($output);
+  }
+
+  /**
+   * Determine if a module is enabled or not.
+   *
+   * @param $name
+   *   The machine name of the module to check.
+   * @return bool
+   *   Whether the module is enabled or not.
+   *
+   * @throws DrushFormatException
+   */
+  public function moduleEnabled($name) {
+    $this->drushOptions[] = '--format=json';
+    $modules = $this->runCommand('pm-list', []);
+    if (!$modules = json_decode($modules, TRUE)) {
+      throw new DrushFormatException("Cannot parse json output from drush: $modules", $modules);
+    }
+
+    // Reset drush options.
+    $this->drushOptions = [];
+    return isset($modules[$name]) && $modules[$name]['status'] === 'Enabled';
+  }
+
+  /**
    * Override config-set to allow better value setting.
+   *
+   * @param $collection
+   * @param $key
+   * @param $value
+   * @return bool
    */
   public function configSet($collection, $key, $value) {
     $value = base64_encode(Yaml::dump($value));
@@ -63,7 +126,7 @@ trait DrushTrait {
 
     $pipe = "echo '$value' | base64 --decode |";
 
-    $output = $this->runCommand('config-set', [
+    $this->runCommand('config-set', [
       $collection, $key, '-'
     ], $pipe);
 
@@ -76,7 +139,9 @@ trait DrushTrait {
    */
   public function sqlq($sql) {
     $args = ['--db-prefix', '"' . $sql . '"'];
-    return trim($this->__call('sqlq', $args));
+    $output = $this->__call('sqlq', $args);
+    $output = $this->cleanOutput($output);
+    return $output;
   }
 
   /**
@@ -128,8 +193,7 @@ trait DrushTrait {
   /**
    * Set an option that will be presented on every drush command.
    */
-  public function setGlobalDefaultOption($key, $value)
-  {
+  public function setGlobalDefaultOption($key, $value) {
     $this->globalDefaults[$key] = $value;
     return $this;
   }
@@ -137,16 +201,14 @@ trait DrushTrait {
   /**
    * Get an option that will be presented on every drush command.
    */
-  public function getGlobalDefaultOption($key)
-  {
+  public function getGlobalDefaultOption($key) {
     return isset($this->globalDefaults[$key]) ? $this->globalDefaults[$key] : FALSE;
   }
 
   /**
    * Remove global option.
    */
-  public function removeGlobalDefaultOption($key)
-  {
+  public function removeGlobalDefaultOption($key) {
     unset($this->globalDefaults[$key]);
     return $this;
   }
@@ -154,14 +216,17 @@ trait DrushTrait {
   /**
    * Retrieve global defaults.
    */
-  public function getGlobalDefaults()
-  {
+  public function getGlobalDefaults() {
     return $this->globalDefaults;
   }
 
   /**
    * This function takes PHP in this execution scope (Closure) and executes it
    * against the Drupal target using Drush php-script.
+   *
+   * @param \Closure $callback
+   * @param array $args
+   * @return mixed
    */
   public function evaluate(\Closure $callback, Array $args = []) {
     $args = array_values($args);

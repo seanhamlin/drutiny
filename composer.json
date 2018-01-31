@@ -22,7 +22,7 @@
         "symfony/finder": "^3.2",
         "symfony/validator": "^3.2",
         "mustache/mustache": "^2.11",
-				"erusev/parsedown": "^1.6.3",
+        "erusev/parsedown": "^1.6.3",
         "twig/twig": "~1.0"
     },
     "autoload": {
