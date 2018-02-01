@@ -7,7 +7,6 @@ use Drutiny\Target\Target;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableSeparator;
 
 /**
@@ -24,12 +23,12 @@ class ProfileRunReport implements ProfileRunReportInterface {
   const EMOJI_WARN = "⚠️";
 
   /**
-   * @var Drutiny\ProfileInformation
+   * @var \Drutiny\ProfileInformation
    */
   protected $info;
 
   /**
-   * @var Drutiny\Target\Target
+   * @var \Drutiny\Target\Target
    */
   protected $target;
 

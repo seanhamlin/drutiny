@@ -15,12 +15,12 @@ use Drutiny\Cache;
  * Run check in an isolated environment.
  */
 class Sandbox {
+
   use DrushDriverTrait;
   use ExecTrait;
   use ParameterTrait;
   use LoggerTrait;
   use RegistryTrait;
-
 
   /**
    * @var \Drutiny\Target\Target
@@ -42,9 +42,9 @@ class Sandbox {
    *
    * @param string $target
    *   The class name of the target to create.
+   * @param Policy $policy
    *
-   * @param Drutiny\CheckInformation $check
-   *   The class name of the target to create.
+   * @throws \Exception
    */
   public function __construct($target, Policy $policy) {
     $object = new $target($this);
@@ -140,8 +140,8 @@ class Sandbox {
   /**
    * A wrapper function for traits to use.
    */
-  public function sandbox()
-  {
+  public function sandbox() {
     return $this;
   }
+
 }

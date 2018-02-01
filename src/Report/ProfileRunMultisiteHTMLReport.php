@@ -2,13 +2,9 @@
 
 namespace Drutiny\Report;
 
-use Drutiny\ProfileInformation;
-use Drutiny\Target\Target;
 use Drutiny\Registry;
-use Drutiny\AuditResponse\AuditResponse;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  *
@@ -33,18 +29,12 @@ class ProfileRunMultisiteHTMLReport extends ProfileRunReport {
           'is_notice' => $response->isNotice(),
           'has_warning' => $response->hasWarning(),
           'title' => $response->getTitle(),
-          'description' =>
-            $parsedown->text($response->getDescription()),
-          'remediation' =>
-            $parsedown->text($response->getRemediation()),
-          'success' =>
-            $parsedown->text($response->getSuccess()),
-          'failure' =>
-            $parsedown->text($response->getFailure()),
-          'warning' =>
-            $parsedown->text($response->getWarning()),
-          'summary' =>
-            $parsedown->text($response->getSummary()),
+          'description' => $parsedown->text($response->getDescription()),
+          'remediation' => $parsedown->text($response->getRemediation()),
+          'success' => $parsedown->text($response->getSuccess()),
+          'failure' => $parsedown->text($response->getFailure()),
+          'warning' => $parsedown->text($response->getWarning()),
+          'summary' => $parsedown->text($response->getSummary()),
         ];
       }
     }
@@ -74,6 +64,11 @@ class ProfileRunMultisiteHTMLReport extends ProfileRunReport {
     $vars['content'] = $this->renderTemplate('multisite', $vars);
     $content = $this->renderTemplate($this->info->get('template'), $vars);
 
+    // Hack to fix table styles in bootstrap theme.
+    $content = strtr($content, [
+      '<table>' => '<table class="table table-bordered">'
+    ]);
+
     $filename = $input->getOption('report-filename');
     if ($filename == 'stdout') {
       echo $content;
@@ -84,7 +79,7 @@ class ProfileRunMultisiteHTMLReport extends ProfileRunReport {
     }
     else {
       echo $content;
-      $ouput->writeln('<error>Could not write to ' . $filename . '. Output to stdout instead.</error>');
+      $output->writeln('<error>Could not write to ' . $filename . '. Output to stdout instead.</error>');
     }
   }
 
@@ -95,6 +90,8 @@ class ProfileRunMultisiteHTMLReport extends ProfileRunReport {
    *   The name of the .html.tpl template file to load for rendering.
    * @param array $render_vars
    *   An array of variables to be used within the template by the rendering engine.
+   *
+   * @return string
    */
   public function renderTemplate($tpl, array $render_vars) {
     $registry = new Registry();

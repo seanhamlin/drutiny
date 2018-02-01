@@ -27,7 +27,7 @@ class ProfileRunJsonReport extends ProfileRunReport {
     }
     else {
       echo $content;
-      $ouput->writeln('<error>Could not write to ' . $filename . '. Output to stdout instead.</error>');
+      $output->writeln('<error>Could not write to ' . $filename . '. Output to stdout instead.</error>');
     }
   }
 

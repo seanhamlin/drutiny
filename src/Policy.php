@@ -45,10 +45,9 @@ class Policy {
   ];
 
   /**
-   *
+   * @param array $info
    */
   public function __construct(array $info) {
-
     foreach ($info as $key => $value) {
       if (!property_exists($this, $key)) {
         continue;
@@ -84,6 +83,11 @@ class Policy {
 
   /**
    * Render a property.
+   *
+   * @param $markdown
+   * @param $replacements
+   * @return string
+   * @throws \Exception
    */
   protected function render($markdown, $replacements) {
     $m = new \Mustache_Engine();
@@ -101,9 +105,10 @@ class Policy {
    * This ensures that an audit doesn't set a severity that doesn't match the
    * importance of the policy. This does not apply for Audit::ERROR or
    * Audit::NOT_APPLICABLE responses.
+   *
+   * @param bool $severity
    */
-  public function setMaxSeverity($severity = Audit::FAIL)
-  {
+  public function setMaxSeverity($severity = Audit::FAIL) {
     if (is_string($severity)) {
       $severity = strtolower($severity);
     }
@@ -134,8 +139,7 @@ class Policy {
     }
   }
 
-  public function getSeverity($severity)
-  {
+  public function getSeverity($severity) {
     switch (TRUE) {
       // Statuses that we'd never alter.
       case $severity === Audit::PASS:
@@ -163,6 +167,11 @@ class Policy {
 
   /**
    * Retrieve a property value and token replacement.
+   *
+   * @param $property
+   * @param array $replacements
+   * @return string
+   * @throws \Exception
    */
   public function get($property, $replacements = []) {
     if (!isset($this->{$property})) {
@@ -188,6 +197,8 @@ class Policy {
 
   /**
    * Validation metadata.
+   *
+   * @param ClassMetadata $metadata
    */
   public static function loadValidatorMetadata(ClassMetadata $metadata) {
     $metadata->addPropertyConstraint('title', new Type("string"));
@@ -217,8 +228,7 @@ class Policy {
     $metadata->addPropertyConstraint('tags', new Optional());
   }
 
-  public function getParameterDefaults()
-  {
+  public function getParameterDefaults() {
       $defaults = [];
       foreach ($this->parameters as $name => $info) {
         $defaults[$name] = isset($info['default']) ? $info['default'] : null;

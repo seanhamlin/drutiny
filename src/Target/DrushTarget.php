@@ -40,8 +40,7 @@ class DrushTarget extends Target implements DrushInterface, ExecInterface {
     return $this;
   }
 
-  public function getOptions()
-  {
+  public function getOptions() {
     return $this->options;
   }
 

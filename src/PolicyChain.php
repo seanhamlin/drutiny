@@ -5,8 +5,8 @@ namespace Drutiny;
  * Provides an ordered list of Policies and dependencies.
  */
 class PolicyChain {
-  protected $chain = [];
 
+  protected $chain = [];
   protected $policies;
 
   /**
@@ -14,16 +14,18 @@ class PolicyChain {
    */
   protected $built = FALSE;
 
-  public function __construct()
-  {
+  public function __construct() {
     $this->policies = (new Registry())->policies();
   }
 
   /**
    * Add a policy to the policy chain.
+   *
+   * @param Policy $policy
+   * @return bool
+   * @throws \Exception
    */
-  public function add(Policy $policy)
-  {
+  public function add(Policy $policy) {
     // Don't add policy if it has already been added.
     if (isset($this->chain[$policy->get('name')])) {
       return TRUE;
@@ -44,8 +46,7 @@ class PolicyChain {
     return TRUE;
   }
 
-  public function getPolicies()
-  {
+  public function getPolicies() {
     if ($this->built) {
       return $this->chain;
     }
@@ -63,6 +64,5 @@ class PolicyChain {
     $this->built = TRUE;
     return $this->chain;
   }
-}
 
- ?>
+}

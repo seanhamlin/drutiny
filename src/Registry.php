@@ -33,8 +33,7 @@ class Registry {
     return $targets[$name]->class;
   }
 
-  protected function config()
-  {
+  protected function config() {
     static $config;
 
     if (!empty($config)) {
@@ -62,8 +61,7 @@ class Registry {
     return (object) $config;
   }
 
-  protected function loadClassInfo($class, $type)
-  {
+  protected function loadClassInfo($class, $type) {
     $reflect = new \ReflectionClass($class);
     $reader = new AnnotationReader();
     if ($reflect->isAbstract()) {

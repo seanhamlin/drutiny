@@ -85,7 +85,7 @@ class ProfileRunHtmlReport extends ProfileRunJsonReport {
     }
     else {
       echo $content;
-      $ouput->writeln('<error>Could not write to ' . $filename . '. Output to stdout instead.</error>');
+      $output->writeln('<error>Could not write to ' . $filename . '. Output to stdout instead.</error>');
     }
   }
 
@@ -96,6 +96,8 @@ class ProfileRunHtmlReport extends ProfileRunJsonReport {
    *   The name of the .html.tpl template file to load for rendering.
    * @param array $render_vars
    *   An array of variables to be used within the template by the rendering engine.
+   *
+   * @return string
    */
   public function renderTemplate($tpl, array $render_vars) {
     $registry = new Registry();
