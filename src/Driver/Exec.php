@@ -19,14 +19,14 @@ class Exec extends Driver implements ExecInterface {
     $command = strtr($command, $args);
 
     if ($output = Cache::get('exec', $command)) {
-      $this->log("cache hit for: $command");
+      $this->logInfo("Cache hit for: $command");
       return $output;
     }
 
     $process = new Process($command);
     $process->setTimeout(600);
 
-    $this->log($command);
+    $this->logInfo($command);
     $process->run();
 
     // Executes after the command finishes.
@@ -36,7 +36,7 @@ class Exec extends Driver implements ExecInterface {
 
     $output = $process->getOutput();
 
-    $this->log($output);
+    $this->logDebug($output);
     Cache::set('exec', $command, $output);
 
     return $output;
