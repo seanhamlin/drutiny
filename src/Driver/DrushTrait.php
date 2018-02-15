@@ -105,38 +105,6 @@ trait DrushTrait {
     return isset($modules[$name]) && $modules[$name]['status'] === 'Enabled';
   }
 
-
-  /**
-   * Try to return a variable value.
-   *
-   * @param $name
-   *   The name of the variable (exact).
-   * @param mixed $default
-   *   The value to return if the variable is not set.
-   *
-   * @return mixed
-   */
-  public function variableGet($name, $default = 0) {
-    try {
-      $this->drushOptions[] = '--format=json';
-      $variables = $this->__call('variableGet', []);
-      if (!$variables = json_decode($variables, TRUE)) {
-        throw new DrushFormatException("Cannot parse json output from drush: $variables", $variables);
-      }
-      $this->drushOptions = [];
-
-      if (isset($variables[$name])) {
-        return $variables[$name];
-      }
-      return $default;
-    }
-    // The response from Drush can be "No matching variable found.", even with
-    // JSON being requested, which is weird.
-    catch (\Exception $e) {
-      return $default;
-    }
-  }
-
   /**
    * Override config-set to allow better value setting.
    *
@@ -168,8 +136,12 @@ trait DrushTrait {
    * Override for drush command 'sqlq'.
    */
   public function sqlq($sql) {
-    $args = ['--db-prefix', '"' . $sql . '"'];
-    $output = $this->__call('sqlq', $args);
+    // $args = ['--db-prefix', '"' . $sql . '"'];
+    $sql = strtr($sql, [
+      "{" => '',
+       "}" => ''
+     ]);
+    $output = trim($this->__call('sqlq', ['"' . $sql . '"']));
     $output = $this->cleanOutput($output);
     return $output;
   }
