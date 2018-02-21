@@ -15,6 +15,7 @@ class ProfileInformation {
   protected $policies = [];
   protected $registry;
   protected $template = 'page';
+  protected $description = '';
 
   /**
    *
