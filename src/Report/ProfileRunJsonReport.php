@@ -54,10 +54,10 @@ class ProfileRunJsonReport extends ProfileRunReport {
 
     $render_vars['summary'] = $this->target->uri();
 
-    // Profile Description
-    // $render_vars['description'] = $converter->convertToHtml(
-    //   $this->info->get('description')
-    // );.
+    $render_vars['description'] = $this->info->get('description');
+
+    $render_vars['remediations'] = [];
+
     foreach ($this->resultSet as $response) {
       $var = [
         'status' => $response->isSuccessful(),
@@ -71,42 +71,50 @@ class ProfileRunJsonReport extends ProfileRunReport {
         'success' => $response->getSuccess(),
         'failure' => $response->getFailure(),
         'warning' => $response->getWarning(),
+        'type' => $response->getType(),
+        'severity' => $response->getSeverity(),
       ];
 
       $render_vars['total']++;
 
-      if ($response->isSuccessful()) {
-        if ($response->isNotice()) {
+      switch ($response->getType()) {
+        case 'data':
+        case 'notice':
           $render_vars['notices']++;
           $var['status_title'] = 'Notice';
-        }
-        elseif ($response->isRemediated()) {
-          $render_vars['remediated']++;
-          $var['status_title'] = 'Remediated';
-        }
-        else {
-          $render_vars['passes']++;
-          $var['status_title'] = 'Passed';
-        }
-      }
-      elseif ($response->isNotApplicable()) {
-        $render_vars['not_applicable']++;
-        $var['status_title'] = 'Not Applicable';
-      }
-      else {
-        if ($response->hasError()) {
+          break;
+
+        case 'error':
           $render_vars['errors']++;
           $var['status_title'] = 'Error';
-        }
-        else {
+          break;
+
+        case 'not-applicable':
+          $render_vars['not_applicable']++;
+          $var['status_title'] = 'Not Applicable';
+          break;
+
+        case 'warning':
+          $render_vars['warnings']++;
+          $var['status_title'] = 'Warning';
+          break;
+
+        case 'success':
+          $render_vars['passes']++;
+          if ($response->isRemediated()) {
+            $render_vars['remediated']++;
+            $var['status_title'] = 'Remediated';
+          }
+          else {
+            $var['status_title'] = 'Passed';
+          }
+          break;
+
+        case 'failure':
           $render_vars['failures']++;
           $var['status_title'] = 'Failed';
-        }
-      }
-
-      if ($response->hasWarning()) {
-        $render_vars['warnings']++;
-        $var['status_title'] .= ' with warning';
+          $render_vars['remediations'][] = $response->getRemediation();
+          break;
       }
 
       $render_vars['results'][] = $var;

@@ -43,7 +43,13 @@ class ProfileRunHtmlReport extends ProfileRunJsonReport {
       if ($result['has_warning']) {
         $result['state_class'] = 'warning';
       }
+    }
 
+    foreach ($render_vars['results'] as &$result) {
+      $results_vars = ['result' => $result];
+      $result_render = $this->renderTemplate($result['type'], $results_vars);
+      $render_vars['output_' . $result['type']][] = $result_render;
+      $result['rendered_result'] = $result_render;
     }
 
     usort($render_vars['results'], function ($a, $b) {
@@ -57,11 +63,33 @@ class ProfileRunHtmlReport extends ProfileRunJsonReport {
       elseif (!$a['has_warning'] && $b['has_warning']) {
         return -1;
       }
-      
+
       $order = [$a['title'], $b['title']];
       sort($order);
       return $a['title'] == $order[0] ? -1 : 1;
     });
+
+    $render_vars['summary_table'] = $this->renderTemplate('summary_table', $render_vars);
+    $render_vars['appendix_table'] = $this->renderTemplate('appendix_table', $render_vars);
+
+    $sections = [];
+    $render_engine = new \Mustache_Engine();
+    $toc = [];
+    foreach ($this->info->get('content') as $idx => $section) {
+      $id = 'section-' . $idx . '-' . preg_replace('[^a-z]', '', strtolower($section['heading']));
+      $toc[$id] = $section['heading'];
+      try {
+         $section = '<h2 id="' . $id . '">' . $section['heading'] . '</h2>' . PHP_EOL . $section['body'];
+         $section = $render_engine->render($section, $render_vars);
+      }
+      catch (\Mustache_Exception $e) {
+        throw new \Exception("Error in " . __CLASS__ . ": " . $e->getMessage());
+      }
+      $sections[] = $parsedown->text($section);
+    }
+    $render_vars['toc'] = $toc;
+
+    $render_vars['sections'] = $sections;
 
     // Render the site report.
     $content = $this->renderTemplate('site', $render_vars);

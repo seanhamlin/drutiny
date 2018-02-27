@@ -72,3 +72,60 @@ The configuration example above will register the `my_templates_dir` directory
 Drutiny will look inside `my_templates_dir` among other registered template directories
 for a template called `my-page.html.twig`. Note that multiple template directories
 can be registered.
+
+### content
+
+The `content` declaration allows a profile to specify the content displayed in an
+HTML report and the order that it displays in. By default, Drutiny will load in
+the contents from [content.default.yml](https://github.com/drutiny/drutiny/blob/2.x/Profiles/content.default.yml).
+
+The content property is an array of sections. Each section specifies a `heading`
+and `body`. Each section will roll up into a Table of Contents in the report.
+
+```yaml
+content:
+  - heading: My custom section
+    body: |
+      This is a multiline field that can contain mustache and markdown syntax.
+      There are also a variety of variables available to dynamically render
+      results.
+
+      ### Summary
+      {{{ summary_table }}}
+
+      {{ #failures }}
+        ### Issues
+        {{# output_failure }}
+          {{{.}}}
+        {{/ output_failure }}
+      {{ /failures }}
+
+      {{ #warnings }}
+        ### Warnings
+        {{# output_warning }}
+          {{{.}}}
+        {{/ output_warning }}
+      {{ /warnings }}
+```
+
+#### Content Variables
+
+Variable | Type | description
+--|--|--
+`summary_table` | string | A summary table of failures, errors and warnings found from the report.
+`appendix_table`| string | A table all results from the audit and data gathering.
+`output_failure` | array | An array of rendered failed results
+`output_warning` | array | An array of rendered warnings results
+`output_error` | array | An array of rendered erroneous results
+`output_success` | array | An array of rendered successful results
+`output_data` | array | An array of rendered data results
+`remediations` | array | An array of recommendations aggregated from failed policies.
+`failures` | integer | The number of failed results
+`errors` | integer | The number of erred results
+`passes` | integer | The number of passed results
+`warnings` | integer | The number of failed results
+`not_applicable` | integer | The number of results not applicable to tested target.
+`notices` | integer | The number of results that provide information/data only.
+`title` | string | Profile title
+`description` | string | Profile description
+`results` | array | An array of result arrays. Its not recommended to use this variable as it requires a lot more complexity for a profile.

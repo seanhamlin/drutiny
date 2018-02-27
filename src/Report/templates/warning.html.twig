@@ -1,0 +1,23 @@
+
+<div class="row result-group">
+
+  <div class="col-sm-12">
+    <h4 id="{{ result.id }}">{{ result.title }} <small class="label label-{{ result.state_class }}">{{ result.status_title }} <span class="glyphicon {% if result.status %}glyphicon-ok{% else %}glyphicon-remove{% endif %}" aria-hidden="true"></span></small></h4>
+    <p>{{ result.description | raw }}</p>
+
+    <div class="panel panel-success">
+      <div class="panel-heading">{{ result.status_title }}</div>
+      <div class="panel-body">
+        {{ result.success | raw }}
+
+        {% if result.has_warning %}
+        <div class="alert alert-warning" role="alert">
+          {{ result.warning | raw }}
+        </div>
+        {% endif %}
+
+      </div>
+    </div>
+
+  </div>
+</div>

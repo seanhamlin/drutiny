@@ -1,0 +1,14 @@
+
+<div class="row result-group">
+  <div class="col-sm-12">
+    <h4 id="{{ result.id }}">{{ result.title }}</h4>
+    <p>{{ result.description | raw }}</p>
+
+    <div class="panel panel-info">
+      <!-- <div class="panel-heading">{{ result.title }}</div> -->
+      <div class="panel-body">
+        {{ result.success | raw }}
+      </div>
+    </div>
+  </div>
+</div>

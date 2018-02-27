@@ -1,0 +1,57 @@
+- heading: Purpose
+  body: |
+    This report is designed to provide some feedback on the overall health of
+    the web application by performing some deep dive analysis. The items
+    surfaced in the report can help improve performance and stability.
+- heading: Recommendations
+  body: |
+    {{# remediations }}
+      - {{ . }}
+    {{/ remediations }}
+- heading: Findings
+  body: |
+    ### Summary
+    {{{ summary_table }}}
+
+    {{ #failures }}
+      ### Issues
+      {{# output_failure }}
+        {{{.}}}
+      {{/ output_failure }}
+    {{ /failures }}
+
+    {{ #warnings }}
+      ### Warnings
+      {{# output_warning }}
+        {{{.}}}
+      {{/ output_warning }}
+    {{ /warnings }}
+- heading: Appendix
+  body: |
+    {{# notices }}
+      ### Appendix - Analysis
+
+      The various appendices provides more detailed data regarding the health of
+      the site.
+
+      {{# output_data }}
+        {{{.}}}
+      {{/ output_data }}
+    {{/ notices }}
+
+    {{# errors }}
+      ### Appendix - Errors
+
+      During the production of this report, not all report policies were able to
+      be carried out due to errors encounted.
+
+      {{# output_error }}
+        {{{.}}}
+      {{/ output_error }}
+    {{/ errors }}
+
+    ### Appendix - Summary
+    The below table describes all audit and analysis work completed for the
+    production of this report and their associated outcomes.
+
+    {{{ appendix_table }}}

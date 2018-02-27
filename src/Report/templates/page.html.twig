@@ -65,16 +65,22 @@
 <!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron">
   <div class="container">
+    <p>{{ "now"|date("H:i - F jS, Y") }}</p>
     <h1>{{ title }}</h1>
     <p>{{ summary | raw }}</p>
   </div>
 </div>
 
+<div class="container">
+  <div class="row">
+    {{ description | raw }}
+  </div>
+</div>
 {{ content | raw }}
 
 <div class="container">
   <footer>
-    <p>&copy; Drutiny {{ 'now' | date('Y') }}</p>
+    <p>&copy; Drutiny {{ 'now' | date('Y') }} | {{ "now"|date("F jS, Y") }}</p>
   </footer>
 </div>
 

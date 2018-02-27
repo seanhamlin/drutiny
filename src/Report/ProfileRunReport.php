@@ -41,9 +41,24 @@ class ProfileRunReport implements ProfileRunReportInterface {
    * @inheritdoc
    */
   public function __construct(ProfileInformation $info, Target $target, array $result_set) {
+    usort($result_set, [$this, 'usort']);
     $this->info = $info;
     $this->resultSet = $result_set;
     $this->target = $target;
+  }
+
+  public function usort($a, $b)
+  {
+    if ($a->isSuccessful() && !$b->isSuccessful()) {
+      return 1;
+    }
+    elseif (!$a->isSuccessful() && $b->isSuccessful()) {
+      return -1;
+    }
+    elseif ($a->getSeverity() == $a->getSeverity()) {
+      return 0;
+    }
+    return $a->getSeverityCode() > $b->getSeverityCode() ? 1 : 0;
   }
 
   /**
@@ -71,6 +86,7 @@ class ProfileRunReport implements ProfileRunReportInterface {
       $table_rows[] = [
         $icon,
         $response->getTitle(),
+        $response->getSeverity(),
         $response->getSummary() . (
           $response->isSuccessful() ? '' : PHP_EOL . PHP_EOL . $response->getRemediation()
         ),
@@ -81,7 +97,7 @@ class ProfileRunReport implements ProfileRunReportInterface {
     $total_tests = count($this->resultSet);
     $total_pass = count(array_filter($pass));
     $table_rows[] = ['', "$total_pass/$total_tests passed", ''];
-    $io->table(['', 'Policy', 'Summary'], $table_rows);
+    $io->table(['', 'Policy', 'Severity', 'Summary'], $table_rows);
   }
 
 }

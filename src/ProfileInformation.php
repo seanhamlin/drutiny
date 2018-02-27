@@ -2,9 +2,11 @@
 
 namespace Drutiny;
 
-use Symfony\Component\Validator\Constraints\Type;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  *
@@ -16,6 +18,7 @@ class ProfileInformation {
   protected $registry;
   protected $template = 'page';
   protected $description = '';
+  protected $content;
 
   /**
    *
@@ -28,6 +31,10 @@ class ProfileInformation {
         continue;
       }
       $this->{$key} = $value;
+    }
+
+    if (empty($this->content)) {
+      $this->content = Yaml::parse(file_get_contents(dirname(__FILE__) . '/../Profiles/content.default.yml'));
     }
 
     // This allows profiles to be built upon one another.
@@ -113,20 +120,22 @@ class ProfileInformation {
    */
   public static function loadValidatorMetadata(ClassMetadata $metadata) {
     // $checks = Registry::checks();
-    $metadata->addPropertyConstraint('title', new Type("string"));
-
-    // TODO: Validate checks in profile.
-    // $metadata->addPropertyConstraint('checks', new Assert\All([
-    //   'constraints' => [
-    //     new Assert\Callback(function ($name, ExecutionContextInterface $context, $payload) use ($checks) {
-    //         if (!isset($checks[$name])) {
-    //             $context->buildViolation("$name is not a valid check.")
-    //                 ->atPath('checks')
-    //                 ->addViolation();
-    //         }
-    //     }
-    //   ]
-    // ]);
+    $metadata->addPropertyConstraint('title', new Assert\Type("string"));
+    $metadata->addPropertyConstraint('content', new Assert\Type("array"));
+    $metadata->addPropertyConstraint('content', new Assert\Callback(function ($array, ExecutionContextInterface $context) {
+      foreach ($array as $idx => $section) {
+        if (!isset($section['heading'])) {
+          $context->buildViolation('Missing property "heading"')
+               ->atPath("content[$idx].heading")
+               ->addViolation();
+        }
+        if (!isset($section['body'])) {
+          $context->buildViolation('Missing property "body"')
+               ->atPath("content[$idx].body")
+               ->addViolation();
+        }
+      }
+    }));
   }
 
 }
