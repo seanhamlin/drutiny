@@ -12,37 +12,19 @@ use Symfony\Component\Validator\Constraints\Type;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Drutiny\Item\Item;
 
 /**
  *
  */
-class Policy {
+class Policy extends Item {
+  use \Drutiny\Item\ContentSeverityTrait;
+  use \Drutiny\Item\ParameterizedContentTrait;
 
-  protected $title;
-  protected $name;
-  protected $class;
-  protected $description;
+  /**
+   * @string A written recommendation of what remediation to take if the policy fails.
+   */
   protected $remediation;
-  protected $success;
-  protected $failure;
-  protected $warning;
-  protected $parameters = [];
-  protected $remediable = FALSE;
-  protected $validation = [];
-  protected $tags = [];
-  protected $depends = [];
-  protected $maxSeverity;
-  protected $filepath;
-
-  protected $renderableProperties = [
-    'title',
-    'name',
-    'description',
-    'remediation',
-    'success',
-    'failure',
-    'warning'
-  ];
 
   /**
    * @param array $info
@@ -67,19 +49,15 @@ class Policy {
 
     $errors = $validator->validate($this);
 
-    if (count($errors) > 0) {
-      /*
-       * Uses a __toString method on the $errors variable which is a
-       * ConstraintViolationList object. This gives us a nice string
-       * for debugging.
-       */
-      $errorsString = (string) $errors;
-      throw new \InvalidArgumentException($errorsString . PHP_EOL . print_r($info, 1));
-    }
+  /**
+   * @string A written failure message template. May contain tokens.
+   */
+  protected $failure;
 
-    $reflect = new \ReflectionClass($this->class);
-    $this->remediable = $reflect->implementsInterface('\Drutiny\RemediableInterface');
-  }
+  /**
+   * @string A written warning message. May contain tokens.
+   */
+  protected $warning;
 
   /**
    * Render a property.
@@ -89,15 +67,7 @@ class Policy {
    * @return string
    * @throws \Exception
    */
-  protected function render($markdown, $replacements) {
-    $m = new \Mustache_Engine();
-    try {
-      return $m->render($markdown, $replacements);
-    }
-    catch (\Mustache_Exception $e) {
-      throw new \Exception("Error in $this->name: " . $e->getMessage());
-    }
-  }
+  private $remediable = FALSE;
 
   /**
    * Set the max severity of an audited outcome applicable to this policy.
@@ -173,26 +143,21 @@ class Policy {
    * @return string
    * @throws \Exception
    */
-  public function get($property, $replacements = []) {
-    if (!isset($this->{$property})) {
-      throw new \Exception("Attempt to retrieve unknown property: $property. Available properties: \n" . print_r((array) $this, 1));
+  public function __construct(array $info) {
+    if (isset($info['severity'])) {
+      $this->setSeverity($info['severity']);
     }
-    if (in_array($property, $this->renderableProperties)) {
-      return $this->render($this->{$property}, $replacements);
-    }
-    return $this->{$property};
-  }
 
-  public function has($property) {
-    return isset($this->{$property});
-  }
+    parent::__construct($info);
+    $this->renderableProperties[] = 'remediation';
+    $this->renderableProperties[] = 'success';
+    $this->renderableProperties[] = 'failure';
+    $this->renderableProperties[] = 'warning';
 
-  public function hasTag($tag) {
-    return in_array($tag, $this->tags);
-  }
+    $reflect = new \ReflectionClass($this->class);
+    $this->remediable = $reflect->implementsInterface('\Drutiny\RemediableInterface');
 
-  public function getTags() {
-    return $this->tags;
+
   }
 
   /**
@@ -201,17 +166,7 @@ class Policy {
    * @param ClassMetadata $metadata
    */
   public static function loadValidatorMetadata(ClassMetadata $metadata) {
-    $metadata->addPropertyConstraint('title', new Type("string"));
-    $metadata->addPropertyConstraint('name', new Type("string"));
-    $metadata->addPropertyConstraint('class', new Callback(function ($class, ExecutionContextInterface $context, $payload) {
-      if (!class_exists($class)) {
-        $context->buildViolation("$class is not a valid class.")
-          ->atPath('class')
-          ->addViolation();
-      }
-    }));
-    $metadata->addPropertyConstraint('description', new NotBlank());
-    $metadata->addPropertyConstraint('remediation', new Optional());
+    parent::loadValidatorMetadata($metadata);
     $metadata->addPropertyConstraint('success', new NotBlank());
     $metadata->addPropertyConstraint('failure', new NotBlank());
     $metadata->addPropertyConstraint('parameters', new All(array(

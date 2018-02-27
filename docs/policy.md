@@ -33,6 +33,18 @@ fail when attempting to use this policy.
 class: \Drutiny\Audit\Drupal\ModuleEnabled
 ```
 
+### type (default: audit)
+Policies can be of two types: audit (the default) or data.
+
+Audit types evaluate the target for a pass/fail result. Data types simply
+collect and display the data.
+
+This property helps define how to best display the policy in an HTML report.
+
+```yaml
+type: data
+```
+
 ### description (required)
 A human readable description of the policy. The description should be informative
 enough for a human to read the description and be able to interpret the audit
@@ -119,24 +131,16 @@ depends:
   - Drupal:SyslogEnabled
 ```
 
-### max_severity
-Sometimes a policy may use an audit which returns an outcome more severe than
-the policy really deserves. For example you may wish to use a `ModuleDisabled`
-audit which returns a pass or fail. Instead your policy may only want to **warn**
-instead of fail. In this case, you can set `max_severity`.
+### severity
+Not all policies are of equal importance. Severity allows you to specify how
+critical a failure or warning is. Possible values in order of importance:
 
-When using max_severity, outcomes less than `max_severity` can still be returned
-but values more severe cannot. This excludes `Drutiny\Audit::NOT_APPLICABLE` and
-`Drutiny\Audit::ERROR`.
+* none (default)
+* low
+* normal
+* high
+* critical
 
 ```yaml
-max_severity: 'notice'
+severity: 'high'
 ```
-
-#### Severity Map
-
-Policy max_severity | Audit return value
-------------------- | -----------------------------
-`'notice'`          | `Drutiny\Audit::NOTICE`
-`'warning'`         | `Drutiny\Audit::WARNING`
-`'warning_fail'`    | `Drutiny\Audit::WARNING_FAIL`

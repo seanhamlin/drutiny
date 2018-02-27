@@ -18,3 +18,4 @@ description: |
 success: policy succeeded. This means there is a problem with the Drutiny framework.
 failure: policy failed.
 remediation: Please run with remediation to resolve.
+severity: critical

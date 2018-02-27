@@ -98,6 +98,30 @@ class AuditResponse {
   }
 
   /**
+   * Get the type of response based on policy type and audit response.
+   */
+  public function getType()
+  {
+    $policy_type = $this->info->get('type');
+    if ($policy_type == 'data') {
+      return $policy_type;
+    }
+    if ($this->isNotApplicable()) {
+      return 'not-applicable';
+    }
+    if ($this->hasError()) {
+      return 'error';
+    }
+    if ($this->isNotice()) {
+      return 'notice';
+    }
+    if ($this->hasWarning()) {
+      return 'warning';
+    }
+    return $this->isSuccessful() ? 'success' : 'failure';
+  }
+
+  /**
    * Get the remediation for the check performed.
    *
    * @return string
@@ -174,6 +198,16 @@ class AuditResponse {
   public function isNotApplicable()
   {
     return $this->state === Audit::NOT_APPLICABLE;
+  }
+
+  public function getSeverity()
+  {
+    return $this->info->getSeverityName();
+  }
+
+  public function getSeverityCode()
+  {
+    return $this->info->getSeverity();
   }
 
   /**
