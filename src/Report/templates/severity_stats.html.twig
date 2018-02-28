@@ -15,35 +15,35 @@
       <th>{{ severity }} ({{ totals[severity] }})</th>
       <td>
         {% if row.success %}
-          {{ row.success / totals[severity] * 100 | round(2) }}% ({{ row.success }})
+          {{ (row.success / totals[severity] * 100) | round(2) }}% ({{ row.success }})
         {% else %}
           -
         {% endif %}
       </td>
       <td>
         {% if row.failure %}
-          {{ row.failure / totals[severity] * 100 | round(2) }}% ({{ row.failure }})
+          {{ (row.failure / totals[severity] * 100) | round(2) }}% ({{ row.failure }})
         {% else %}
           -
         {% endif %}
       </td>
       <td>
         {% if row.error %}
-          {{ row.error / totals[severity] * 100 | round(2) }}% ({{ row.error }})
+          {{ (row.error / totals[severity] * 100) | round(2) }}% ({{ row.error }})
         {% else %}
           -
         {% endif %}
       </td>
       <td>
         {% if row.warning %}
-          {{ row.warning / totals[severity] * 100 | round(2) }}% ({{ row.warning }})
+          {{ (row.warning / totals[severity] * 100) | round(2) }}% ({{ row.warning }})
         {% else %}
           -
         {% endif %}
       </td>
       <td>
         {% if row.not_applicable %}
-          {{ row.not_applicable / totals[severity] * 100 | round(2) }}% ({{ row.not_applicable }})
+          {{ (row.not_applicable / totals[severity] * 100) | round(2) }}% ({{ row.not_applicable }})
         {% else %}
           -
         {% endif %}
