@@ -75,6 +75,7 @@ class ProfileRunHtmlReport extends ProfileRunJsonReport {
 
     $render_vars['summary_table'] = $this->renderTemplate('summary_table', $render_vars);
     $render_vars['appendix_table'] = $this->renderTemplate('appendix_table', $render_vars);
+    $render_vars['severity_stats'] = $this->renderTemplate('severity_stats', $render_vars);
 
     $sections = [];
     $render_engine = new \Mustache_Engine();

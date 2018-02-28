@@ -57,6 +57,20 @@ class ProfileRunJsonReport extends ProfileRunReport {
     $render_vars['description'] = $this->info->get('description');
 
     $render_vars['remediations'] = [];
+    $outcomes = [
+      'success' => 0,
+      'failure' => 0,
+      'warning' => 0,
+      'error' => 0,
+      'not_applicable' => 0,
+    ];
+    $render_vars['stats'] = [
+      'critical' => $outcomes,
+      'high' => $outcomes,
+      'normal' => $outcomes,
+      'low' => $outcomes,
+      'none' => $outcomes,
+    ];
 
     foreach ($this->resultSet as $response) {
       $var = [
@@ -87,16 +101,19 @@ class ProfileRunJsonReport extends ProfileRunReport {
         case 'error':
           $render_vars['errors']++;
           $var['status_title'] = 'Error';
+          $render_vars['stats'][$var['severity']]['error']++;
           break;
 
         case 'not-applicable':
           $render_vars['not_applicable']++;
           $var['status_title'] = 'Not Applicable';
+          $render_vars['stats'][$var['severity']]['not_applicable']++;
           break;
 
         case 'warning':
           $render_vars['warnings']++;
           $var['status_title'] = 'Warning';
+          $render_vars['stats'][$var['severity']]['warning']++;
           break;
 
         case 'success':
@@ -108,16 +125,27 @@ class ProfileRunJsonReport extends ProfileRunReport {
           else {
             $var['status_title'] = 'Passed';
           }
+          $render_vars['stats'][$var['severity']]['success']++;
           break;
 
         case 'failure':
           $render_vars['failures']++;
           $var['status_title'] = 'Failed';
           $render_vars['remediations'][] = $response->getRemediation();
+          $render_vars['stats'][$var['severity']]['failure']++;
           break;
       }
       $render_vars['results'][] = $var;
     }
+
+    $render_vars['stats'] = array_filter($render_vars['stats'], function ($a) {
+      return count(array_filter($a));
+    });
+
+    foreach ($render_vars['stats'] as $severity => $results) {
+      $render_vars['totals'][$severity] = array_sum($results);
+    }
+
     return $render_vars;
   }
 

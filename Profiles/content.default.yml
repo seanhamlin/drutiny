@@ -12,7 +12,8 @@
     </ul>
 - heading: Findings
   body: |
-    ### Summary
+    {{{ severity_stats }}}
+    ### Issue Summary
     {{{ summary_table }}}
 
     {{ #failures }}
