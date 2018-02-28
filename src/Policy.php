@@ -47,14 +47,9 @@ class Policy extends Item {
   protected $depends = [];
 
   /**
-   * Render a property.
-   *
-   * @param $markdown
-   * @param $replacements
-   * @return string
-   * @throws \Exception
+   * @boolean Determine if a policy is remediable.
    */
-  private $remediable = FALSE;
+  protected $remediable;
 
   /**
    * Retrieve a property value and token replacement.
