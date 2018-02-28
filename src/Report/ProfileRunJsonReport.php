@@ -116,7 +116,6 @@ class ProfileRunJsonReport extends ProfileRunReport {
           $render_vars['remediations'][] = $response->getRemediation();
           break;
       }
-
       $render_vars['results'][] = $var;
     }
     return $render_vars;

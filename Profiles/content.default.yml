@@ -5,9 +5,11 @@
     surfaced in the report can help improve performance and stability.
 - heading: Recommendations
   body: |
+    <ul>
     {{# remediations }}
-      - {{ . }}
+      <li>{{{ . }}}</li>
     {{/ remediations }}
+    </ul>
 - heading: Findings
   body: |
     ### Summary

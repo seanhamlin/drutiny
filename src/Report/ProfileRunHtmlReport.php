@@ -21,6 +21,10 @@ class ProfileRunHtmlReport extends ProfileRunJsonReport {
 
     $render_vars = $this->getRenderVariables();
 
+    foreach ($render_vars['remediations'] as &$remedy) {
+      $remedy = $parsedown->text($remedy);
+    }
+
     // Render any markdown into HTML for the report.
     foreach ($render_vars['results'] as &$result) {
       $result['description'] = $parsedown->text($result['description']);
