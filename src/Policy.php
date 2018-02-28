@@ -27,37 +27,24 @@ class Policy extends Item {
   protected $remediation;
 
   /**
-   * @param array $info
-   */
-  public function __construct(array $info) {
-    foreach ($info as $key => $value) {
-      if (!property_exists($this, $key)) {
-        continue;
-      }
-      $this->{$key} = $value;
-    }
-
-    // Don't allow this value to be set by the policy $info.
-    $this->maxSeverity = Audit::FAIL;
-    if (isset($info['max_severity'])) {
-      $this->setMaxSeverity($info['max_severity']);
-    }
-
-    $validator = Validation::createValidatorBuilder()
-      ->addMethodMapping('loadValidatorMetadata')
-      ->getValidator();
-
-    $errors = $validator->validate($this);
-
-  /**
    * @string A written failure message template. May contain tokens.
    */
   protected $failure;
 
   /**
+   * @string A written success message. May contain tokens.
+   */
+  protected $success;
+
+  /**
    * @string A written warning message. May contain tokens.
    */
   protected $warning;
+
+  /**
+   * @string An array of dependencies.
+   */
+  protected $depends = [];
 
   /**
    * Render a property.
@@ -70,72 +57,6 @@ class Policy extends Item {
   private $remediable = FALSE;
 
   /**
-   * Set the max severity of an audited outcome applicable to this policy.
-   *
-   * This ensures that an audit doesn't set a severity that doesn't match the
-   * importance of the policy. This does not apply for Audit::ERROR or
-   * Audit::NOT_APPLICABLE responses.
-   *
-   * @param bool $severity
-   */
-  public function setMaxSeverity($severity = Audit::FAIL) {
-    if (is_string($severity)) {
-      $severity = strtolower($severity);
-    }
-    switch (TRUE) {
-      case $severity === 'warning':
-      case $severity === 'warn':
-        $this->maxSeverity = Audit::WARNING;
-        break;
-
-      case $severity === 'warning_fail':
-        $this->maxSeverity = Audit::WARNING_FAIL;
-        break;
-
-      case $severity === 'notice':
-        $this->maxSeverity = Audit::NOTICE;
-        break;
-
-      case $severity === Audit::FAIL:
-      case $severity === Audit::FAILURE:
-      case $severity === Audit::WARNING:
-      case $severity === Audit::WARNING_FAIL:
-      case $severity === Audit::NOTICE:
-        $this->maxSeverity = $severity;
-        break;
-
-      default:
-        throw new \InvalidArgumentException("Cannot set max severity of policy to: " . var_export($severity, TRUE));
-    }
-  }
-
-  public function getSeverity($severity) {
-    switch (TRUE) {
-      // Statuses that we'd never alter.
-      case $severity === Audit::PASS:
-      case $severity === Audit::SUCCESS:
-      case $severity === Audit::NOTICE:
-      case $severity === Audit::ERROR:
-      case $severity === Audit::NOT_APPLICABLE:
-        return $severity;
-
-      case $this->maxSeverity === Audit::NOTICE:
-        return Audit::NOTICE;
-
-      case $this->maxSeverity === Audit::WARNING:
-      case $severity === Audit::WARNING:
-        return Audit::WARNING;
-
-      case $this->maxSeverity === Audit::WARNING_FAIL:
-      case $severity === Audit::WARNING_FAIL:
-        return Audit::WARNING_FAIL;
-
-      default:
-        return $severity;
-    }
-  }
-
-  /**
    * Retrieve a property value and token replacement.
    *
    * @param $property
@@ -144,9 +65,14 @@ class Policy extends Item {
    * @throws \Exception
    */
   public function __construct(array $info) {
-    if (isset($info['severity'])) {
-      $this->setSeverity($info['severity']);
+
+    $severity = isset($info['severity']) ? $info['severity'] : self::SEVERITY_NORMAL;
+
+    // Data type policies do not have a severity.
+    if ($this->type == 'data') {
+      $severity = self::SEVERITY_NONE;
     }
+    $this->setSeverity($severity);
 
     parent::__construct($info);
     $this->renderableProperties[] = 'remediation';
@@ -156,7 +82,6 @@ class Policy extends Item {
 
     $reflect = new \ReflectionClass($this->class);
     $this->remediable = $reflect->implementsInterface('\Drutiny\RemediableInterface');
-
 
   }
 
@@ -182,13 +107,4 @@ class Policy extends Item {
     )));
     $metadata->addPropertyConstraint('tags', new Optional());
   }
-
-  public function getParameterDefaults() {
-      $defaults = [];
-      foreach ($this->parameters as $name => $info) {
-        $defaults[$name] = isset($info['default']) ? $info['default'] : null;
-      }
-      return $defaults;
-  }
-
 }

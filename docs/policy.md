@@ -135,9 +135,9 @@ depends:
 Not all policies are of equal importance. Severity allows you to specify how
 critical a failure or warning is. Possible values in order of importance:
 
-* none (default)
+* none (only option for `data` type policies)
 * low
-* normal
+* normal (default)
 * high
 * critical
 
