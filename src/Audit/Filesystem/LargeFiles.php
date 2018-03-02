@@ -5,9 +5,28 @@ namespace Drutiny\Audit\Filesystem;
 use Drutiny\Audit;
 use Drutiny\Sandbox\Sandbox;
 use Drutiny\AuditResponse\AuditResponse;
+use Drutiny\Annotation\Param;
+use Drutiny\Annotation\Token;
 
 /**
  * Large files
+ * @Param(
+ *  name = "max_size",
+ *  description = "Report files larger than this value measured in megabytes.",
+ *  type = "integer",
+ *  default = 20
+ * )
+ * @Token(
+ *  name = "issues",
+ *  description = "A list of files that reach the max file size.",
+ *  type = "array"
+ * )
+ * @Token(
+ *  name = "plural",
+ *  description = "This variable will contain an 's' if there is more than one issue found.",
+ *  type = "string",
+ *  default = ""
+ * )
  */
 class LargeFiles extends Audit {
 

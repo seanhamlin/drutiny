@@ -36,7 +36,9 @@ public function audit(Sandbox $sandbox)
 {
 
 }
+
 ```
+
 
 ## The Sandbox
 The Sandbox object passed to the check method contains access to drivers you may use in your audit such as `drush`.
@@ -59,6 +61,7 @@ public function audit(Sandbox $sandbox) {
   return $denied && empty($lama_access);
 }
 ```
+
 
 ## Return values
 The audit expects a returned value to indicate the outcome of the audit. The follow table describes the return options and their meaning.
@@ -149,16 +152,44 @@ public function remediate(Sandbox $sandbox) {
 Parameters allow you to configure the audit based on the runtime environment.
 For example, the page cache audit contains parameters to allow you to audit what the page cache `max_age` setting should be.
 
-Parameters are defined in policies and can be used in the `audit` and `remediate` methods.
+Parameters are defined as annotations in the audit class. This allows policy writers
+to understand how to use the parameters when integrating with a specific audit.
+
+```php
+<?php
+
+namespace Path\to\Audit;
+use Drutiny\Audit;
+use Drutiny\Sandbox\Sandbox;
+use Drutiny\RemediableInterface;
+use Drutiny\Annotation\Param;
+
+/**
+ * Generic module is disabled check.
+ * @Param(
+ *  name = "foo",
+ *  type = "string",
+ *  description = "A measure of foo to apply to denied llamas",
+ *  default = "baz",
+ * )
+ */
+class FooAssesor extends Audit implements RemediableInterface {
+```
+
+Parameters can be overwritten in policies:
 
 ```yaml
 # Parameters mentioned in bar.policy.yml
+class: \Drutiny\path\to\FooAssesor
 parameters:
   foo:
     type: string
     description: "A measure of foo to apply to denied llamas"
     default: bar
 ```
+
+Parameters are then used inside the audit and remediation methods to allow elements
+of the audit to be more configurable and extensible to other implementations:
 
 ```php
 
@@ -179,3 +210,46 @@ public function audit(Sandbox $sandbox) {
 ```
 
 You can use `$sandbox->setParameter()` to set parameters that maybe used to render the results of an audit or remediation.
+
+## Tokens
+Tokens are parameters that are available to render in the output messaging of the policy. E.g. success, failure, warning and description messages. All parameters are implicitly tokens, but in addition, an audit may set parameters not used for the purposes of the audit but purely for policy messaging.
+
+```php
+<?php
+
+namespace Path\to\Audit;
+use Drutiny\Audit;
+use Drutiny\Sandbox\Sandbox;
+use Drutiny\RemediableInterface;
+use Drutiny\Annotation\Param;
+use Drutiny\Annotation\Token;
+
+/**
+ * Generic module is disabled check.
+ * @Param(
+ *  name = "foo",
+ *  type = "string",
+ *  description = "A measure of foo to apply to denied llamas",
+ *  default = "baz",
+ * )
+ * @Token(
+ *  name = "actual_foo",
+ *  type = "string",
+ *  description = "Config setting for llamas.settings:foo"
+ * )
+ */
+class FooAssesor extends Audit implements RemediableInterface {
+/**
+ * @inheritDoc
+ */
+public function audit(Sandbox $sandbox) {
+  $foo = $sandbox->getParameter('foo');
+
+  $config = $sandbox->drush(['format' => 'json'])
+                    ->configGet('llamas.settings', 'foo');
+  $this->setParameter('actual_foo', $config['llamas.settings:foo']);
+
+  // Return TRUE/FALSE is the same as Audit::SUCCESS or Audit::FAILURE
+  return $foo == $config['llamas.settings:foo'];
+}
+```
