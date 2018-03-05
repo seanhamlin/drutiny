@@ -71,17 +71,11 @@ class ProfileRunCommand extends Command {
    * @inheritdoc
    */
   protected function execute(InputInterface $input, OutputInterface $output) {
-
-    // Setup the target.
-    list($target_name, $target_data) = Target::parseTarget($input->getArgument('target'));
-    $targets = Registry::targets();
-    if (!isset($targets[$target_name])) {
-      throw new InvalidArgumentException("$target_name is not a valid target.");
-    }
+    $registry = new Registry();
 
     // Setup the check.
     $profile = $input->getArgument('profile');
-    $profiles = Registry::profiles();
+    $profiles = $registry->profiles();
     if (!isset($profiles[$profile])) {
       throw new InvalidArgumentException("$profile is not a valid profile.");
     }
@@ -98,7 +92,7 @@ class ProfileRunCommand extends Command {
       $uris = ['default'];
     }
 
-    $checks = Registry::policies();
+    $checks = $registry->policies();
     $results = [];
 
     $progress_bar_enabled = TRUE;
@@ -113,17 +107,21 @@ class ProfileRunCommand extends Command {
     }
 
     // Establish a progress bar for reporting since this can take sometime.
-    $progress = new ProgressBar($output, count($profiles[$profile]->getChecks()) * count($uris));
+    $progress = new ProgressBar($output, count($profiles[$profile]->getPolicies()) * count($uris));
     $progress->setFormatDefinition('custom', " <comment>%message%</comment>\n %current%/%max% <info>[%bar%]</info> %percent:3s%% %memory:6s%");
     $progress->setFormat('custom');
     $progress->setMessage("Starting...");
     $progress->setBarWidth(80);
     $progress_bar_enabled && $progress->start();
 
+    // Setup the target.
+    list($target_name, $target_data) = Target::parseTarget($input->getArgument('target'));
+    $target_class = $registry->getTargetClass($target_name);
+
     foreach ($uris as $uri) {
-      foreach ($profiles[$profile]->getChecks() as $name => $parameters) {
+      foreach ($profiles[$profile]->getPolicies() as $name => $parameters) {
         $progress_bar_enabled && $progress->setMessage("[$uri] " . $checks[$name]->get('title'));
-        $sandbox = new Sandbox($targets[$target_name]->class, $checks[$name]);
+        $sandbox = new Sandbox($target_class, $checks[$name]);
         $sandbox->setParameters($parameters)
           ->setLogger(new ConsoleLogger($output))
           ->getTarget()
@@ -169,7 +167,21 @@ class ProfileRunCommand extends Command {
       $report->render($input, $output);
     }
     else {
-      $report = new Report\ProfileRunMultisiteReport($profiles[$profile], $sandbox->getTarget(), $result);
+      switch ($format) {
+        // case 'json':
+        //   $report = new Report\ProfileRunJsonReport($profiles[$profile], $sandbox->getTarget(), current($result));
+        //   break;
+
+        case 'html':
+          $report = new Report\ProfileRunMultisiteHTMLReport($profiles[$profile], $sandbox->getTarget(), $result);
+          break;
+
+        case 'console':
+        default:
+          $report = new Report\ProfileRunMultisiteReport($profiles[$profile], $sandbox->getTarget(), $result);
+          break;
+      }
+
       $report->render($input, $output);
     }
   }

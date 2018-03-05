@@ -1,0 +1,14 @@
+Target:
+  - Drutiny\Target\DrushTarget
+  - Drutiny\Target\TargetNone
+Command:
+  - Drutiny\Command\AuditGenerateCommand
+  - Drutiny\Command\AuditRunCommand
+  - Drutiny\Command\PolicyAuditCommand
+  - Drutiny\Command\PolicyInfoCommand
+  - Drutiny\Command\PolicyListCommand
+  - Drutiny\Command\ProfileGenerateCommand
+  - Drutiny\Command\ProfileListCommand
+  - Drutiny\Command\ProfileRunCommand
+Template:
+  - src/Report/templates

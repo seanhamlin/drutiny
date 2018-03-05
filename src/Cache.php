@@ -9,14 +9,12 @@ class Cache {
 
   static protected $cache = [];
 
-  static public function set($bin, $cid, $value)
-  {
+  static public function set($bin, $cid, $value) {
     self::$cache[$bin][$cid] = $value;
     return TRUE;
   }
 
-  static public function get($bin, $cid)
-  {
+  static public function get($bin, $cid) {
     if (!isset(self::$cache[$bin][$cid])) {
       return FALSE;
     }
@@ -33,11 +31,9 @@ class Cache {
     return TRUE;
   }
 
-  static public function delete($bin, $cid)
-  {
+  static public function delete($bin, $cid) {
     unset(self::$cache[$bin][$cid]);
     return TRUE;
   }
-}
 
- ?>
+}

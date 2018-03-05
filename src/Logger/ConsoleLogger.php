@@ -7,4 +7,4 @@ use Symfony\Component\Console\Logger\ConsoleLogger as SymfonyConsoleLogger;
 /**
  *
  */
-class ConsoleLogger extends SymfonyConsoleLogger implements LoggerInterface {}
+class ConsoleLogger extends SymfonyConsoleLogger {}

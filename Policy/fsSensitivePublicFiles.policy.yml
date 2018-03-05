@@ -1,8 +1,7 @@
-title: Risky public files
+title: Sensitive public files
 class: Drutiny\Audit\Filesystem\SensitivePublicFiles
-name: fs:RiskyFiles
+name: fs:SensitivePublicFiles
 tags:
-  - Best Practice
   - Security
 description: |
   Certain file extensions should never be in public files for security reasons.

@@ -2,7 +2,7 @@
 
 namespace Drutiny\Sandbox;
 
-use Drutiny\Logger\LoggerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  *

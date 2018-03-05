@@ -12,8 +12,8 @@ class CommandDiscovery {
    */
   public static function findCommands() {
     $commands = [];
-    foreach (Registry::commands() as $class => $info) {
-      $commands[] = new $class();
+    foreach ((new Registry())->commands() as $class_name) {
+      $commands[] = new $class_name();
     }
     return $commands;
   }

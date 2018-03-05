@@ -1,19 +1,36 @@
+# Support
+
+Please post an issue on the [GitHub issue queue](https://github.com/drutiny/drutiny/issues) including the following information:
+
+- Your version of Drutiny, `composer info drutiny/drutiny`
+- Your operating system
+- The **full** log output of your Drutiny command, wrapped in a [codeblock](https://help.github.com/articles/basic-writing-and-formatting-syntax/#quoting-code) (with sensitive information redacted).
+
+In seeking help, please keep the following points in mind:
+
+* Drutiny is distributed under the GPLv2 license; WITHOUT ANY WARRANTY.
+* The project maintainers are under no obligation to respond to support requests, feature requests, or pull requests.
+* All contributions to Drutiny will be reviewed for compliance with Drupal Coding Standards and best practices as defined by the project maintainer.
+
+
 # Contributing to Drutiny
 
 In general the Drutiny team will be looking to find ways to help people contribute. Pull requests are definitely appreciated.
 
+
 ## Small changes that will be accepted
 
 * New audits and policies that others can utilize. Ideally they will have arguments where needed to make this as easy as possible to adapt for other sites.
-* Spelling typos, grammar changes etc
+* Spelling typos, grammar fixes etc
 * Better comments and code style
 * Tests
 
-Please consider these libraries as appropriate:
+Please consider these libraries as good examples:
 
 * [Drupal 7 Plugin](https://github.com/drutiny/plugin-drupal-7)
 * [Drupal 8 Plugin](https://github.com/drutiny/plugin-drupal-8)
 * [Drupal Distribution](https://github.com/drutiny/plugin-distro-common)
+
 
 ## Larger changes that will be accepted
 
@@ -23,6 +40,7 @@ Please consider these libraries as appropriate:
 * Anything that involves making the codebase more testible
 * Removing technical debt
 
+
 ## Changes that will be (most likely) rejected
 
 * Anything that requires special sauce in order to run
@@ -30,9 +48,11 @@ Please consider these libraries as appropriate:
 
 These types of changes are better off in third-party libraries.
 
+
 # Coding standards
 
 This project adheres to the same coding standards as the Drupal project.
+
 
 ## How to check code style
 
@@ -51,7 +71,6 @@ This project adheres to the same coding standards as the Drupal project.
 # Tests
 
 PHPunit is being used in Drutiny, and ideally every check should have a simple test class to accompany it.
-
 
 
 ## How to run PHPunit

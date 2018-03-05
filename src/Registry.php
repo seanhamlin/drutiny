@@ -12,88 +12,129 @@ use Symfony\Component\Yaml\Yaml;
  */
 class Registry {
 
-  const CHECK_DIRECTORY = __DIR__ . '/Check';
-
   /**
-   * Retrieve a list of Check classes.
+   *
    */
-  public static function load($path, $type, $key_by = 'class') {
-    $registry = [];
-    $reader = new AnnotationReader();
-    $map = ClassMapGenerator::createMap($path);
-
-    foreach ($map as $class => $filepath) {
-      $reflect = new \ReflectionClass($class);
-      if ($reflect->isAbstract()) {
-        continue;
-      }
-      if (!$reflect->isSubClassOf($type)) {
-        continue;
-      }
-      $info = $reader->getClassAnnotations($reflect);
-
-      if ($key_by == "class") {
-        $registry[$class] = $class;
-      }
-      else {
-        $info[0]->class = $class;
-        $registry[$info[0]->{$key_by}] = $info[0];
-      }
+  public function targets() {
+    $targets = [];
+    foreach ($this->config()->Target as $class) {
+      $info = $this->loadClassInfo($class, '\Drutiny\Target\Target');
+      $info->class = $class;
+      $targets[$info->name] = $info;
     }
-    return $registry;
+    return $targets;
+  }
+
+  public function getTargetClass($name) {
+    $targets = $this->targets();
+    if (!isset($targets[$name])) {
+      throw new \InvalidArgumentException("Cannot find a registered target with the name: $name.");
+    }
+    return $targets[$name]->class;
+  }
+
+  protected function config() {
+    static $config;
+
+    if (!empty($config)) {
+      return (object) $config;
+    }
+
+    $finder = new Finder();
+    $finder->files()
+      ->in('.')
+      ->name('drutiny.config.yml');
+
+    $config = [];
+    foreach ($finder as $file) {
+      $conf = Yaml::parse(file_get_contents($file->getRealPath()));
+
+      // Templates are in filepaths which need to be translated into absolute filepaths.
+      if (isset($conf['Template'])) {
+        foreach ($conf['Template'] as &$directory) {
+          $directory = dirname($file->getRealPath()) . '/' . $directory;
+        }
+      }
+      $config[] = $conf;
+    }
+    $config = call_user_func_array('array_merge_recursive', $config);
+    return (object) $config;
+  }
+
+  protected function loadClassInfo($class, $type) {
+    $reflect = new \ReflectionClass($class);
+    $reader = new AnnotationReader();
+    if ($reflect->isAbstract()) {
+      throw new \InvalidArgumentException("$class: Annotations are not supported on abstract classes.");
+    }
+    if (!$reflect->isSubClassOf($type)) {
+      throw new \InvalidArgumentException("$class is not of type $type.");
+    }
+    $info = $reader->getClassAnnotations($reflect);
+    $info = empty($info) ? new \stdClass : $info[0];
+
+    $info->class = $class;
+    return $info;
   }
 
   /**
    *
    */
-  public static function targets() {
-    return self::load(__DIR__ . '/Target', 'Drutiny\Target\Target', 'name');
-  }
-
-  /**
-   *
-   */
-  public static function policies() {
+  public function policies() {
     static $registry;
 
     if ($registry) {
       return $registry;
     }
 
-    // $dirs = new Finder();
-    // $dirs->directories()
-    //        ->in('.')
-    //        ->name('Policy');
-
     $finder = new Finder();
-    $finder->files()->in('.');
-
-    // foreach ($dirs as $dir) {
-    //   $finder->in($dir->getRealPath());
-    // }
-
-    $finder->name('*.policy.yml');
+    $finder->files()
+      ->in('.')
+      ->name('*.policy.yml');
 
     $registry = [];
     foreach ($finder as $file) {
       $policy = Yaml::parse(file_get_contents($file->getRealPath()));
+      $policy['filepath'] = $file->getRealPath();
       $registry[$policy['name']] = new Policy($policy);
     }
     return $registry;
   }
 
-  /**
-   *
-   */
-  public static function commands() {
-    return self::load(__DIR__ . '/Command', 'Symfony\Component\Console\Command\Command');
+  public function getPolicy($name)
+  {
+    $r = $this->policies();
+    if (!isset($r[$name])) {
+      throw new \InvalidArgumentException("No such policy exists: $name");
+    }
+    return $r[$name];
   }
 
   /**
    *
    */
-  public static function profiles() {
+  public function commands() {
+    $commands = [];
+    foreach ($this->config()->Command as $class) {
+      $info = $this->loadClassInfo($class, '\Symfony\Component\Console\Command\Command');
+      $commands[] = $info->class;
+    }
+    return $commands;
+  }
 
+  public function templateDirs() {
+    return array_filter($this->config()->Template, 'file_exists');
+  }
+
+  /**
+   *
+   */
+  public function profiles() {
+    static $registry;
+
+    if (!empty($registry)) {
+      return $registry;
+    }
 
     $finder = new Finder();
     $finder->files();
@@ -102,9 +143,16 @@ class Registry {
     $finder->name('*.profile.yml');
 
     $registry = [];
+    $profiles = [];
     foreach ($finder as $file) {
       $profile = Yaml::parse(file_get_contents($file->getRealPath()));
       $profile['name'] = str_replace('.profile.yml', '', $file->getFilename());
+      $profiles[] = $profile;
+      $registry[$profile['name']] = new ProfileInformation($profile, TRUE);
+    }
+
+    // Rebuild profile information with dependencies.
+    foreach ($profiles as $profile) {
       $registry[$profile['name']] = new ProfileInformation($profile);
     }
     return $registry;

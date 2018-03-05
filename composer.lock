@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "b86894ffa0101d89ac1d445f3d440e87",
+    "content-hash": "f3d5bf7fe3a5ea5739d15f82f752af63",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -129,129 +129,49 @@
             "time": "2014-09-09T13:34:57+00:00"
         },
         {
-            "name": "league/commonmark",
-            "version": "0.15.3",
+            "name": "erusev/parsedown",
+            "version": "1.6.4",
             "source": {
                 "type": "git",
-                "url": "https://github.com/thephpleague/commonmark.git",
-                "reference": "c8b43ee5821362216f8e9ac684f0f59de164edcc"
+                "url": "https://github.com/erusev/parsedown.git",
+                "reference": "fbe3fe878f4fe69048bb8a52783a09802004f548"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/c8b43ee5821362216f8e9ac684f0f59de164edcc",
-                "reference": "c8b43ee5821362216f8e9ac684f0f59de164edcc",
+                "url": "https://api.github.com/repos/erusev/parsedown/zipball/fbe3fe878f4fe69048bb8a52783a09802004f548",
+                "reference": "fbe3fe878f4fe69048bb8a52783a09802004f548",
                 "shasum": ""
             },
             "require": {
-                "ext-mbstring": "*",
-                "php": ">=5.4.8"
-            },
-            "replace": {
-                "colinodell/commonmark-php": "*"
+                "php": ">=5.3.0"
             },
             "require-dev": {
-                "cebe/markdown": "~1.0",
-                "erusev/parsedown": "~1.0",
-                "jgm/commonmark": "0.27",
-                "michelf/php-markdown": "~1.4",
-                "mikehaertl/php-shellcommand": "~1.2.0",
-                "phpunit/phpunit": "~4.3|~5.0",
-                "scrutinizer/ocular": "~1.1",
-                "symfony/finder": "~2.3|~3.0"
+                "phpunit/phpunit": "^4.8.35"
             },
-            "suggest": {
-                "league/commonmark-extras": "Library of useful extensions including smart punctuation"
-            },
-            "bin": [
-                "bin/commonmark"
-            ],
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "0.16-dev"
-                }
-            },
             "autoload": {
-                "psr-4": {
-                    "League\\CommonMark\\": "src/"
+                "psr-0": {
+                    "Parsedown": ""
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "BSD-3-Clause"
+                "MIT"
             ],
             "authors": [
                 {
-                    "name": "Colin O'Dell",
-                    "email": "colinodell@gmail.com",
-                    "homepage": "https://www.colinodell.com",
-                    "role": "Lead Developer"
+                    "name": "Emanuil Rusev",
+                    "email": "hello@erusev.com",
+                    "homepage": "http://erusev.com"
                 }
             ],
-            "description": "Markdown parser for PHP based on the CommonMark spec",
-            "homepage": "https://github.com/thephpleague/commonmark",
+            "description": "Parser for Markdown.",
+            "homepage": "http://parsedown.org",
             "keywords": [
-                "commonmark",
                 "markdown",
                 "parser"
             ],
-            "time": "2016-12-19T00:11:43+00:00"
-        },
-        {
-            "name": "league/commonmark-extras",
-            "version": "0.1.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/thephpleague/commonmark-extras.git",
-                "reference": "c1506d9fee5ad0f087d8123a1d916a9111d2c067"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/commonmark-extras/zipball/c1506d9fee5ad0f087d8123a1d916a9111d2c067",
-                "reference": "c1506d9fee5ad0f087d8123a1d916a9111d2c067",
-                "shasum": ""
-            },
-            "require": {
-                "league/commonmark": "^0.13|^0.14|^0.15",
-                "php": ">=5.4.8"
-            },
-            "require-dev": {
-                "jgm/smartpunct": "0.26",
-                "phpunit/phpunit": "~4.3|~5.0",
-                "scrutinizer/ocular": "~1.1"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "0.2-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "League\\CommonMark\\Extras\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Colin O'Dell",
-                    "email": "colinodell@gmail.com",
-                    "homepage": "http://www.colinodell.com",
-                    "role": "Lead Developer"
-                }
-            ],
-            "description": "Useful extensions for customizing the league/commonmark parser",
-            "homepage": "https://github.com/thephpleague/commonmark-extras",
-            "keywords": [
-                "Extras",
-                "commonmark",
-                "extensions",
-                "markdown"
-            ],
-            "time": "2016-09-19T22:04:06+00:00"
+            "time": "2017-11-14T20:44:03+00:00"
         },
         {
             "name": "mustache/mustache",
@@ -1046,14 +966,8 @@
             "version": "8.2.12",
             "source": {
                 "type": "git",
-                "url": "https://github.com/klausi/coder.git",
+                "url": "https://git.drupal.org/project/coder.git",
                 "reference": "984c54a7b1e8f27ff1c32348df69712afd86b17f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/klausi/coder/zipball/984c54a7b1e8f27ff1c32348df69712afd86b17f",
-                "reference": "984c54a7b1e8f27ff1c32348df69712afd86b17f",
-                "shasum": ""
             },
             "require": {
                 "ext-mbstring": "*",
@@ -1077,6 +991,131 @@
                 "standards"
             ],
             "time": "2017-03-18T10:28:49+00:00"
+        },
+        {
+            "name": "league/commonmark",
+            "version": "0.15.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/commonmark.git",
+                "reference": "c8b43ee5821362216f8e9ac684f0f59de164edcc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/c8b43ee5821362216f8e9ac684f0f59de164edcc",
+                "reference": "c8b43ee5821362216f8e9ac684f0f59de164edcc",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": ">=5.4.8"
+            },
+            "replace": {
+                "colinodell/commonmark-php": "*"
+            },
+            "require-dev": {
+                "cebe/markdown": "~1.0",
+                "erusev/parsedown": "~1.0",
+                "jgm/commonmark": "0.27",
+                "michelf/php-markdown": "~1.4",
+                "mikehaertl/php-shellcommand": "~1.2.0",
+                "phpunit/phpunit": "~4.3|~5.0",
+                "scrutinizer/ocular": "~1.1",
+                "symfony/finder": "~2.3|~3.0"
+            },
+            "suggest": {
+                "league/commonmark-extras": "Library of useful extensions including smart punctuation"
+            },
+            "bin": [
+                "bin/commonmark"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.16-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "League\\CommonMark\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Colin O'Dell",
+                    "email": "colinodell@gmail.com",
+                    "homepage": "https://www.colinodell.com",
+                    "role": "Lead Developer"
+                }
+            ],
+            "description": "Markdown parser for PHP based on the CommonMark spec",
+            "homepage": "https://github.com/thephpleague/commonmark",
+            "keywords": [
+                "commonmark",
+                "markdown",
+                "parser"
+            ],
+            "time": "2016-12-19T00:11:43+00:00"
+        },
+        {
+            "name": "league/commonmark-extras",
+            "version": "0.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/commonmark-extras.git",
+                "reference": "c1506d9fee5ad0f087d8123a1d916a9111d2c067"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/commonmark-extras/zipball/c1506d9fee5ad0f087d8123a1d916a9111d2c067",
+                "reference": "c1506d9fee5ad0f087d8123a1d916a9111d2c067",
+                "shasum": ""
+            },
+            "require": {
+                "league/commonmark": "^0.13|^0.14|^0.15",
+                "php": ">=5.4.8"
+            },
+            "require-dev": {
+                "jgm/smartpunct": "0.26",
+                "phpunit/phpunit": "~4.3|~5.0",
+                "scrutinizer/ocular": "~1.1"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.2-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "League\\CommonMark\\Extras\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Colin O'Dell",
+                    "email": "colinodell@gmail.com",
+                    "homepage": "http://www.colinodell.com",
+                    "role": "Lead Developer"
+                }
+            ],
+            "description": "Useful extensions for customizing the league/commonmark parser",
+            "homepage": "https://github.com/thephpleague/commonmark-extras",
+            "keywords": [
+                "Extras",
+                "commonmark",
+                "extensions",
+                "markdown"
+            ],
+            "time": "2016-09-19T22:04:06+00:00"
         },
         {
             "name": "myclabs/deep-copy",

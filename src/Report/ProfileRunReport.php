@@ -7,7 +7,6 @@ use Drutiny\Target\Target;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableSeparator;
 
 /**
@@ -15,17 +14,21 @@ use Symfony\Component\Console\Helper\TableSeparator;
  */
 class ProfileRunReport implements ProfileRunReportInterface {
 
-  const EMOJI_PASS = "\xe2\x9c\x85";
+  const EMOJI_PASS = "✅";
 
-  const EMOJI_FAIL = "\xE2\x9D\x8C";
+  const EMOJI_FAIL = "❌";
+
+  const EMOJI_INFO = "ℹ️";
+
+  const EMOJI_WARN = "⚠️";
 
   /**
-   * @var Drutiny\ProfileInformation
+   * @var \Drutiny\ProfileInformation
    */
   protected $info;
 
   /**
-   * @var Drutiny\Target\Target
+   * @var \Drutiny\Target\Target
    */
   protected $target;
 
@@ -38,9 +41,24 @@ class ProfileRunReport implements ProfileRunReportInterface {
    * @inheritdoc
    */
   public function __construct(ProfileInformation $info, Target $target, array $result_set) {
+    usort($result_set, [$this, 'usort']);
     $this->info = $info;
     $this->resultSet = $result_set;
     $this->target = $target;
+  }
+
+  public function usort($a, $b)
+  {
+    if ($a->isSuccessful() && !$b->isSuccessful()) {
+      return 1;
+    }
+    elseif (!$a->isSuccessful() && $b->isSuccessful()) {
+      return -1;
+    }
+    elseif ($a->getSeverity() == $a->getSeverity()) {
+      return 0;
+    }
+    return $a->getSeverityCode() > $b->getSeverityCode() ? 1 : 0;
   }
 
   /**
@@ -48,35 +66,38 @@ class ProfileRunReport implements ProfileRunReportInterface {
    */
   public function render(InputInterface $input, OutputInterface $output) {
     $io = new SymfonyStyle($input, $output);
-    $io->text('');
     $io->title($this->info->get('title'));
 
     $table_rows = [];
     $pass = [];
     foreach ($this->resultSet as $response) {
       $pass[] = $response->isSuccessful();
+
+      if ($response->isNotice()) {
+        $icon = self::EMOJI_INFO;
+      }
+      elseif ($response->hasWarning()) {
+        $icon = self::EMOJI_WARN;
+      }
+      else {
+        $icon = $response->isSuccessful() ? self::EMOJI_PASS : self::EMOJI_FAIL;
+      }
+
       $table_rows[] = [
-        $response->isSuccessful() ? self::EMOJI_PASS : self::EMOJI_FAIL,
+        $icon,
         $response->getTitle(),
-        $response->getSummary(),
+        $response->getSeverity(),
+        $response->getSummary() . (
+          $response->isSuccessful() ? '' : PHP_EOL . PHP_EOL . $response->getRemediation()
+        ),
       ];
       $table_rows[] = new TableSeparator();
     }
 
-    $table = new Table($output);
-    $table
-      ->setHeaders(array('', 'Check', 'Summary'))
-      ->setRows($table_rows)
-      ->getStyle()
-      ->setVerticalBorderChar('')
-      ->setHorizontalBorderChar(' ')
-      ->setCrossingChar('');
-
-    $table->render();
-
     $total_tests = count($this->resultSet);
     $total_pass = count(array_filter($pass));
-    $io->text("$total_pass/$total_tests Passed.");
+    $table_rows[] = ['', "$total_pass/$total_tests passed", ''];
+    $io->table(['', 'Policy', 'Severity', 'Summary'], $table_rows);
   }
 
 }

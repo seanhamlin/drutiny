@@ -34,7 +34,7 @@ class DatabaseSize extends Audit {
     }
 
     if ($sandbox->getParameter('warning_size') < $size) {
-      return AuditResponse::WARNING;
+      return Audit::WARNING;
     }
 
     return TRUE;

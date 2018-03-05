@@ -34,7 +34,7 @@ class PolicyInfoCommand extends Command {
    * @inheritdoc
    */
   protected function execute(InputInterface $input, OutputInterface $output) {
-    $checks = Registry::policies();
+    $checks = (new Registry)->policies();
 
     $check_name = $input->getArgument('policy');
     if (!isset($checks[$check_name])) {
@@ -51,6 +51,8 @@ class PolicyInfoCommand extends Command {
     $rows[] = ['Remediable', $info->get('remediable') ? 'Yes' : 'No'];
     $rows[] = new TableSeparator();
     $rows[] = ['Parameters', $this->formatParameters($info->get('parameters'))];
+    $rows[] = new TableSeparator();
+    $rows[] = ['Location', $info->get('filepath')];
 
     $io = new SymfonyStyle($input, $output);
     $io->table([], $rows);

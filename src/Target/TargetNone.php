@@ -4,10 +4,10 @@ namespace Drutiny\Target;
 
 /**
  * @Drutiny\Annotation\Target(
- *  name = "stub"
+ *  name = "none"
  * )
  */
-class TargetStub extends Target {
+class TargetNone extends Target {
 
   /**
    *

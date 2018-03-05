@@ -6,12 +6,17 @@ php:
   - '7.0'
   - '7.1'
 
+before_script:
+  - sudo rm -f /etc/localtime
+  - sudo ln -s /usr/share/zoneinfo/UTC /etc/localtime
+
 install:
   - travis_retry composer install --no-interaction
   - composer info -i
 
 script:
   - ./vendor/bin/phpunit
+  - ./bin/drutiny policy:list
 
 # Configure email notifications
 notifications:

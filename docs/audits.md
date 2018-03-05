@@ -23,16 +23,16 @@ class FooAssesor extends Audit {
 
 ```
 
-An `Audit` class requires a single method also called `audit`. Its passed in a `Drutiny\Sandbox` object which holds all tools for running an audit.
+An `Audit` class requires a single method also called `audit`. Its passed in a `Drutiny\Sandbox\Sandbox` object which holds all tools available to running an audit.
 
 ```php
 <?php
 
-use Drutiny\Sandbox;
+use Drutiny\Sandbox\Sandbox;
 
 // ...
 
-public function audit (Sandbox $sandbox)
+public function audit(Sandbox $sandbox)
 {
 
 }
@@ -55,21 +55,75 @@ public function audit(Sandbox $sandbox) {
   // Confirm llamas have not accessed the site.
   $lama_access = $sandbox->exec('grep llamas /var/log/apache/access.log | grep -v 403');
 
+  // Return TRUE/FALSE is the same as Audit::SUCCESS or Audit::FAILURE
   return $denied && empty($lama_access);
 }
 ```
 
-## Remediation
-Remediation is an optional capability your `Audit` can support.
-To do so, it must implement `Drutiny\RemediableInterface`.
+## Return values
+The audit expects a returned value to indicate the outcome of the audit. The follow table describes the return options and their meaning.
 
-When policies and profiles are run, they can optionally opt into to auto-remediation which will call the remediation method if the audit method returns FALSE.
+Return Value                    | Purpose
+------------------------------- | ----------------------------------------------------
+`Drutiny\Audit::SUCCESS`        | The policy successfully passed the audit.
+`Drutiny\Audit::PASS`           | Same as `Audit::SUCCESS`
+`Drutiny\Audit::FAILURE`        | The policy failed to pass the audit.
+`Drutiny\Audit::FAIL`           | Same as `Audit::FAILURE`
+`Drutiny\Audit::NOTICE`         | An audit returned non-assertive information.
+`Drutiny\Audit::WARNING`        | An audit returned **successful** but with a warning.
+`Drutiny\Audit::WARNING_FAIL`   | An audit returned a **failure** but with a warning.
+`Drutiny\Audit::ERROR`          | An audit did not complete and returned an error.
+`Drutiny\Audit::NOT_APPLICABLE` | An audit was not applicable to the target.
+
+In addition to using Return Values, audits can also return `TRUE`, `FALSE` and
+`NULL` values which correlate to `Drutiny\Audit::SUCCESS`, `Drutiny\Audit::FAILURE`
+and `Drutiny\Audit::NOT_APPLICABLE` respectively.
+
+## Audit Prerequisites
+In order to keep audit methods as lean as possible and to focus on evaluating the
+success/failure of the task at hand, Drutiny Audit classess support the ability
+to validate prerequisites before attempting an audit. These are called **require**
+methods.
+
+Any protected method on an Audit class that starts with the term "require" will
+be considered a prerequisite to pass prior to an audit being run.
 
 ```php
 <?php
 
 namespace Path\to\Audit;
 use Drutiny\Audit;
+use Drutiny\Sandbox\Sandbox;
+use Drutiny\Target\DrushTarget;
+
+class DrushVersionCheck extends Audit {
+
+  /**
+   * This will be called before audit().
+   *
+   * Must return TRUE to continue audit.
+   */
+  protected function requireDrushTarget(Sandbox $sandbox)
+  {
+    return $sandbox->getTarget() instanceof DrushTarget;
+  }
+
+  public function audit(Sandbox $sandbox) {
+
+```
+
+## Remediation
+Remediation is an optional capability your `Audit` can support.
+To do so, it must implement `Drutiny\RemediableInterface`.
+
+When policies and profiles are run, they can optionally opt into to auto-remediation which will call the `remediation` method if the audit method returns FALSE.
+
+```php
+<?php
+
+namespace Path\to\Audit;
+use Drutiny\Audit;
+use Drutiny\Sandbox\Sandbox;
 use Drutiny\RemediableInterface;
 
 /**
@@ -87,7 +141,7 @@ public function remediate(Sandbox $sandbox) {
   $sandbox->drush()->configSet('-y', 'llamas.settings', 'allowed', 0);
 
   // Re-check now the config should have changed.
-  return $this->check($sandbox);
+  return $this->audit($sandbox);
 }
 ```
 
@@ -118,6 +172,8 @@ public function audit(Sandbox $sandbox) {
   $config = $sandbox->drush(['format' => 'json'])
                     ->configGet('llamas.settings', 'foo');
   $this->setParameter('actual_foo', $config['llamas.settings:foo']);
+
+  // Return TRUE/FALSE is the same as Audit::SUCCESS or Audit::FAILURE
   return $foo == $config['llamas.settings:foo'];
 }
 ```

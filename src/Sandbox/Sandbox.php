@@ -4,7 +4,9 @@ namespace Drutiny\Sandbox;
 
 use Drutiny\Target\Target;
 use Drutiny\AuditInterface;
-use Drutiny\Check\RemediableInterface;
+use Drutiny\Audit;
+use Drutiny\AuditValidationException;
+use Drutiny\RemediableInterface;
 use Drutiny\AuditResponse\AuditResponse;
 use Drutiny\Policy;
 use Drutiny\Cache;
@@ -13,11 +15,12 @@ use Drutiny\Cache;
  * Run check in an isolated environment.
  */
 class Sandbox {
+
   use DrushDriverTrait;
   use ExecTrait;
   use ParameterTrait;
   use LoggerTrait;
-
+  use RegistryTrait;
 
   /**
    * @var \Drutiny\Target\Target
@@ -39,9 +42,9 @@ class Sandbox {
    *
    * @param string $target
    *   The class name of the target to create.
+   * @param Policy $policy
    *
-   * @param Drutiny\CheckInformation $check
-   *   The class name of the target to create.
+   * @throws \Exception
    */
   public function __construct($target, Policy $policy) {
     $object = new $target($this);
@@ -66,12 +69,19 @@ class Sandbox {
     $response = new AuditResponse($this->getPolicy());
 
     try {
+      // Run the audit over the policy.
       $outcome = $this->getAuditor()->execute($this);
+
+      // Set the response.
       $response->set($outcome, $this->getParameterTokens());
     }
-    catch (\Exception $e) {
+    catch (AuditValidationException $e) {
       $this->setParameter('exception', $e->getMessage());
-      $response->set(AuditResponse::ERROR, $this->getParameterTokens());
+      $response->set(Audit::NOT_APPLICABLE, $this->getParameterTokens());
+    }
+    catch (\Exception $e) {
+      $this->setParameter('exception', $e->getMessage() . PHP_EOL . $e->getTraceAsString());
+      $response->set(Audit::ERROR, $this->getParameterTokens());
     }
 
     return $response;
@@ -93,13 +103,10 @@ class Sandbox {
       Cache::purge();
       $outcome = $this->getAuditor()->remediate($this);
       $response->set($outcome, $this->getParameterTokens());
-      if ($response->isSuccessful()) {
-        $response->set(AuditResponse::REMEDIATED, $this->getParameterTokens());
-      }
     }
     catch (\Exception $e) {
       $this->setParameter('exception', $e->getMessage());
-      $response->set(AuditResponse::ERROR, $this->getParameterTokens());
+      $response->set(Audit::ERROR, $this->getParameterTokens());
     }
 
     return $response;
@@ -129,8 +136,8 @@ class Sandbox {
   /**
    * A wrapper function for traits to use.
    */
-  public function sandbox()
-  {
+  public function sandbox() {
     return $this;
   }
+
 }

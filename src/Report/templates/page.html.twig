@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{ profile.title }} Report</title>
+  <title>{{ title | raw }} - {{ domain }}</title>
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/drutiny/drutiny/2.x/assets/favicon-32x32.png" sizes="32x32">
   <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/drutiny/drutiny/2.x/assets/favicon-16x16.png" sizes="16x16">
@@ -31,26 +31,12 @@
       .result-group {
         page-break-inside: avoid;
       }
-    }
-    @media print {
+      h2, h3 {
+        page-break-inside: avoid;
+      }
       .display-filters {
         display: none !important;
       }
-      /*.table .danger td,
-      .table td.danger,
-      .table .danger th {
-        background-color: #f2dede !important;
-      }
-      .table .warning td,
-      .table td.warning,
-      .table .warning th {
-        background-color: #fcf8e3 !important;
-      }
-      .table .success td,
-      .table td.success,
-      .table .success th {
-        background-color: #dff0d8 !important;
-      }*/
     }
   </style>
 </head>
@@ -66,7 +52,7 @@
       </button>
       <a class="navbar-brand" href="#">
         <img src="https://raw.githubusercontent.com/drutiny/drutiny/2.x/assets/logo.png" alt="Drutiny logo" style="float: left; width: 22px; margin-right: 10px;"/>
-        {{ title | raw }} report
+        {{ title | raw }}
       </a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -74,3 +60,34 @@
     </div><!--/.navbar-collapse -->
   </div>
 </nav>
+
+<a id="top"></a>
+<!-- Main jumbotron for a primary marketing message or call to action -->
+<div class="jumbotron">
+  <div class="container">
+    <p>{{ "now"|date("H:i - F jS, Y") }}</p>
+    <h1>{{ title }}</h1>
+    <p>{{ summary | raw }}</p>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    {{ description | raw }}
+  </div>
+</div>
+{{ content | raw }}
+
+<div class="container">
+  <footer>
+    <p>&copy; Drutiny {{ 'now' | date('Y') }} | {{ "now"|date("F jS, Y") }}</p>
+  </footer>
+</div>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+</body>
+</html>

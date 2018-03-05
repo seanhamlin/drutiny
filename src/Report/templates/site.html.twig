@@ -1,75 +1,19 @@
-{% include 'includes/header.html.twig' %}
-
-<!-- Main jumbotron for a primary marketing message or call to action -->
-<div class="jumbotron">
-  <div class="container">
-    <h1>{{ title | raw }}</h1>
-    <p>Report run across {{ domain }}<br/>
-      {{ 'now' | date('Y-m-d h:i a (T)') }}
-    </p>
-  </div>
-</div>
-
 <div class="container">
+  <div class="row">
+    <h2>Table of Contents</h2>
+    <ul>
+    {% for id, heading in toc %}
+      <li><a href="#{{ id }}">{{heading}}</a></li>
+    {% endfor %}
+    </ul>
+  </div>
   <!-- Example row of columns -->
   <div class="row">
 
-    <div class="col-sm-12">
-      <h2>Overview</h2>
-      <p>These are the results of the report conducted against <a href="{{ domain }}">{{ domain }}</a>.</p>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Check</th>
-            <th>Result</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for result in results %}
-          <tr class="{% if result.status %}has-success{% else %}has-error{% endif %}">
-            <th>{{ result.title }}</th>
-            <td class="control-label">{% if result.status %}Passed{% else %}Failed{% endif %}</td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-
-    </div>
-
-    {% for result in results %}
-    <div class="row result-group">
-
-      <div class="col-sm-12">
-        <h2>{{ result.title }} <small><span class="glyphicon {% if result.status %}glyphicon-ok{% else %}glyphicon-remove{% endif %}" aria-hidden="true"></span></small></h2>
-        <p>{{ result.description | raw }}</p>
-        <div class="alert alert-{% if result.status %}success{% else %}danger{% endif %}" role="alert">
-          {% if result.status %}
-            {{ result.success | raw }}
-          {% else %}
-            {{ result.failure | raw }}
-          {% endif %}
-        </div>
-
-        {% if not result.status %}
-        <div class="panel panel-default">
-          <div class="panel-heading">Remediation</div>
-          <div class="panel-body">
-            {{ result.remediation | raw }}
-          </div>
-        </div>
-
-        {% endif %}
-      </div>
-    </div>
+    {% for section in sections %}
+      {{ section | raw }}
     {% endfor %}
 
   </div>
-
   <hr>
-
-  <footer>
-    <p>&copy; Drutiny {{ 'now' | date('Y') }}</p>
-  </footer>
 </div> <!-- /container -->
-
-{% include 'includes/footer.html.twig' %}

@@ -27,11 +27,11 @@ class ProfileListCommand extends Command {
    * @inheritdoc
    */
   protected function execute(InputInterface $input, OutputInterface $output) {
-    $profiles = Registry::profiles();
+    $profiles = (new Registry())->profiles();
 
     $rows = array();
     foreach ($profiles as $name => $info) {
-      $checks = array_keys($info->getChecks());
+      $checks = array_keys($info->getPolicies());
       $checks = implode(', ', $checks);
       $checks = wordwrap($checks, 80);
       $rows[] = [

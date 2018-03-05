@@ -1,0 +1,34 @@
+title: Module updates
+class: \Drutiny\Audit\Drupal\ModuleUpdateStatus
+name: Drupal:moduleUpdates
+tags:
+  - Drupal 8
+  - Drupal 7
+  - Best Practice
+  - Security
+description: |
+  Throughout the lifetime of your site, the Drupal project and its community
+  contributed modules will release new versions that contain bug fixes, new features
+  and security updates. It important to keep your site up to date and patched
+  from known security vulnerabilities.
+
+  Note that upgrading modules, especially between major versions can introduce
+  regressions into your site. While its important to maintain a continual update
+  schedule for your site, regression testing changes is of equal importance.
+remediation: |
+  Please review the table below and consider updating the following modules.
+
+  Module | Current Version | Recommended Version | Status
+  ------ | --------------- | ------------------- | ------
+  {{#updates}}
+    {{title}} | {{existing_version}} | {{recommended}} | {{status_msg}}
+  {{/updates}}
+success: No security updates were found.
+failure: |
+  You codebase contains known security vulnerabilities. Its recommended that you
+  update your vulnerable modules as soon as possible.
+
+warning: |
+  There are modules with available updates. Please consider upgrading as it
+  reduces the chance of introducing regressions when more urgent security updates
+  are required.

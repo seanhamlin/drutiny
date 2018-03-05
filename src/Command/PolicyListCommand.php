@@ -34,7 +34,7 @@ class PolicyListCommand extends Command {
    * @inheritdoc
    */
   protected function execute(InputInterface $input, OutputInterface $output) {
-    $checks = Registry::policies();
+    $checks = (new Registry)->policies();
 
     $filters = $input->getOption('filter');
 
