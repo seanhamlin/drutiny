@@ -16,8 +16,8 @@ install:
   - composer info -i
 
 script:
-  - export PATH="$PATH:$PWD/bin"
-  - ls $PWD/bin
+  - export PATH="$PATH:$PWD/vendor/bin"
+  - ls $PWD/vendor/bin
   - which drush
   - ./vendor/bin/phpunit
   - ./bin/drutiny policy:list
