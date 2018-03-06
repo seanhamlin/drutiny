@@ -23,6 +23,8 @@ pages:
       - Profiles: 'profiles.md'
       - Policy: 'policy.md'
       - Audits: 'audits.md'
+      - Reports: 'reports.md'
+      - Plugins: 'plugins.md'
     - Contributing:
       - Sandbox: 'sandbox.md'
       - Support & Contribution: 'CONTRIBUTING.md'
