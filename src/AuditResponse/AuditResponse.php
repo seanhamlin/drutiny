@@ -25,8 +25,8 @@ class AuditResponse {
   /**
    * AuditResponse constructor.
    *
-   * @param mixed $state
-   *   A bool|int|null indicating the outcome of a Drutiny\Check\Check.
+   * @param Policy $info
+   *   A policy object of type Drutiny\Policy.
    */
   public function __construct(Policy $info) {
     $this->info = $info;
