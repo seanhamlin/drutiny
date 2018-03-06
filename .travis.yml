@@ -17,8 +17,8 @@ install:
 script:
   - ./vendor/bin/phpunit
   - ./bin/drutiny policy:list
-  - ./bin/drutiny policy:audit test @none
-  - ./bin/drutiny policy:audit test @none --uri=site1.test --uri=site2.test -f html -o multisite.test
+  - ./bin/drutiny profile:run test @none
+  - ./bin/drutiny profile:run test @none --uri=site1.test --uri=site2.test -f html -o multisite.test
 
 # Configure email notifications
 notifications:
