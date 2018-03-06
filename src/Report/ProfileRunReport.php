@@ -41,24 +41,9 @@ class ProfileRunReport implements ProfileRunReportInterface {
    * @inheritdoc
    */
   public function __construct(ProfileInformation $info, Target $target, array $result_set) {
-    usort($result_set, [$this, 'usort']);
     $this->info = $info;
     $this->resultSet = $result_set;
     $this->target = $target;
-  }
-
-  public function usort($a, $b)
-  {
-    if ($a->isSuccessful() && !$b->isSuccessful()) {
-      return 1;
-    }
-    elseif (!$a->isSuccessful() && $b->isSuccessful()) {
-      return -1;
-    }
-    elseif ($a->getSeverity() == $a->getSeverity()) {
-      return 0;
-    }
-    return $a->getSeverityCode() > $b->getSeverityCode() ? 1 : 0;
   }
 
   /**
