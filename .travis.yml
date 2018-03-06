@@ -12,9 +12,12 @@ before_script:
 
 install:
   - travis_retry composer install --no-interaction
+  - composer require drush/drush:^8.1.0
   - composer info -i
 
 script:
+  - export PATH="$PATH:$PWD/bin"
+  - which drush
   - ./vendor/bin/phpunit
   - ./bin/drutiny policy:list
   - ./bin/drutiny profile:run test @none
