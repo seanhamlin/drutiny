@@ -76,6 +76,15 @@ class ProfileRunCommand extends Command {
     // Setup the check.
     $profile = $input->getArgument('profile');
     $profiles = $registry->profiles();
+
+    // Grab the optional type variable from profile yml.
+    try {
+      $profile_type = $profiles[$profile]->get('type');
+    }
+    catch (\Exception $e) {
+      $profile_type = NULL;
+    }
+
     if (!isset($profiles[$profile])) {
       throw new InvalidArgumentException("$profile is not a valid profile.");
     }
@@ -156,7 +165,13 @@ class ProfileRunCommand extends Command {
           break;
 
         case 'html':
-          $report = new Report\ProfileRunHtmlReport($profiles[$profile], $sandbox->getTarget(), current($result));
+          if ($profile_type == 'analysis') {
+            $report = new Report\ProfileRunHtmlAnalysisReport($profiles[$profile], $sandbox->getTarget(), current($result));
+          }
+          else {
+            $report = new Report\ProfileRunHtmlReport($profiles[$profile], $sandbox->getTarget(), current($result));
+          }
+
           break;
 
         case 'console':

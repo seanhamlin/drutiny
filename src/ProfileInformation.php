@@ -14,6 +14,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 class ProfileInformation {
 
   protected $title;
+  protected $type;
   protected $policies = [];
   protected $registry;
   protected $template = 'page';
