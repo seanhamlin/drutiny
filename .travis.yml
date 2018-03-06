@@ -17,6 +17,8 @@ install:
 
 script:
   - export PATH="$PATH:$PWD/bin"
+  - echo $PATH
+  - echo $PWD/bin
   - which drush
   - ./vendor/bin/phpunit
   - ./bin/drutiny policy:list
