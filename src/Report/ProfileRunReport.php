@@ -41,13 +41,12 @@ class ProfileRunReport implements ProfileRunReportInterface {
    * @inheritdoc
    */
   public function __construct(ProfileInformation $info, Target $target, array $result_set) {
-    usort($result_set, [$this, 'usort']);
     $this->info = $info;
     $this->resultSet = $result_set;
     $this->target = $target;
   }
 
-  public function usort($a, $b)
+  public function usort(\Drutiny\AuditResponse\AuditResponse $a, \Drutiny\AuditResponse\AuditResponse $b)
   {
     if ($a->isSuccessful() && !$b->isSuccessful()) {
       return 1;
@@ -65,6 +64,7 @@ class ProfileRunReport implements ProfileRunReportInterface {
    * @inheritdoc
    */
   public function render(InputInterface $input, OutputInterface $output) {
+    usort($this->resultSet, [$this, 'usort']);
     $io = new SymfonyStyle($input, $output);
     $io->title($this->info->get('title'));
 
