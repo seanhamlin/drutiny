@@ -58,3 +58,10 @@
     production of this report and their associated outcomes.
 
     {{{ appendix_table }}}
+
+    {{#passes}}
+    ### Appendix - Successful Assessments
+    {{# output_success }}
+      {{{.}}}
+    {{/ output_success }}
+    {{/passes}}
