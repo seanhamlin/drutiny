@@ -1,6 +1,7 @@
 # Profiles
 Profiles are a collection of policies that aim to audit a target against a
 specific context or purpose. Some examples of profile use cases are:
+
 - Production-ready Drupal 8 site
 - Organizational policy compliance
 - Security or performance audit
