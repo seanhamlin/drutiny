@@ -4,7 +4,26 @@ namespace Drutiny\Audit\DNS;
 
 use Drutiny\Audit;
 use Drutiny\Sandbox\Sandbox;
+use Drutiny\Annotation\Param;
 
+/**
+ * @Param(
+ *  name = "type",
+ *  description = "The type of DNS record to lookup",
+ *  type = "string",
+ *  default = "A"
+ * )
+ * @Param(
+ *  name = "zone",
+ *  description = "A list of fields returned from the query to be available globally (outside of a row).",
+ *  type = "array"
+ * )
+ * @Param(
+ *  name = "matching_value",
+ *  description = "A value that should be present the queried DNS record.",
+ *  type = "string"
+ * )
+ */
 class SPF extends Audit {
   public function audit(Sandbox $sandbox)
   {

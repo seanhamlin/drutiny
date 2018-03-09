@@ -124,5 +124,9 @@ class AuditRunCommand extends Command {
 
     $report = new ProfileRunReport($profile, $sandbox->getTarget(), [$response]);
     $report->render($input, $output);
+    
+    if ($output->getVerbosity() >= $output::VERBOSITY_VERBOSE) {
+      $output->writeln(Yaml::dump($sandbox->getParameterTokens()));
+    }
   }
 }

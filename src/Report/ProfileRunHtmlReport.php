@@ -15,6 +15,7 @@ class ProfileRunHtmlReport extends ProfileRunJsonReport {
    * @inheritdoc
    */
   public function render(InputInterface $input, OutputInterface $output) {
+    usort($this->resultSet, [$this, 'usort']);
     // Check YAML supports markdown and needs to be converted into HTML before
     // we pass it into our report template.
     $parsedown = new \Parsedown();

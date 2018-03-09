@@ -77,6 +77,29 @@ class Registry {
     return $info;
   }
 
+  public function getAuditMedtadata($class) {
+    $reflect = new \ReflectionClass($class);
+    $reader = new AnnotationReader();
+    if (!$reflect->isSubClassOf('\Drutiny\Audit')) {
+      throw new \InvalidArgumentException("$class is not of type \Drutiny\Audit.");
+    }
+    $annotations = $reader->getClassAnnotations($reflect);
+    $info = new \StdClass;
+    $info->params = [];
+    $info->tokens = [];
+    $info->class = $class;
+
+    foreach ($annotations as $annotation) {
+      if ($annotation instanceof \Drutiny\Annotation\Token) {
+        $info->tokens[$annotation->name] = $annotation;
+      }
+      if ($annotation instanceof \Drutiny\Annotation\Param) {
+        $info->params[$annotation->name] = $annotation;
+      }
+    }
+    return $info;
+  }
+
   /**
    *
    */

@@ -14,6 +14,7 @@ class ProfileRunJsonReport extends ProfileRunReport {
    * @inheritdoc
    */
   public function render(InputInterface $input, OutputInterface $output) {
+    usort($this->resultSet, [$this, 'usort']);
     $render_vars = $this->getRenderVariables();
     $content = json_encode($render_vars);
 

@@ -12,14 +12,20 @@ use Symfony\Component\Validator\Constraints\Type;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Drutiny\Item\Item;
+use Drutiny\Logger\ConsoleLogger;
+
+
 
 /**
  *
  */
 class Policy extends Item {
   use \Drutiny\Item\ContentSeverityTrait;
-  use \Drutiny\Item\ParameterizedContentTrait;
+  use \Drutiny\Item\ParameterizedContentTrait {
+    getParameterDefaults as public useTraitgetParameterDefaults;
+  }
 
   /**
    * @string A written recommendation of what remediation to take if the policy fails.
@@ -50,6 +56,11 @@ class Policy extends Item {
    * @boolean Determine if a policy is remediable.
    */
   protected $remediable;
+
+  /**
+   * @string Absolute location of the YAML policy file.
+   */
+  protected $filepath;
 
   /**
    * Retrieve a property value and token replacement.
@@ -101,5 +112,35 @@ class Policy extends Item {
       ),
     )));
     $metadata->addPropertyConstraint('tags', new Optional());
+  }
+
+  /**
+   * Override ParameterizedContentTrait::getParameterDefaults.
+   */
+  public function getParameterDefaults()
+  {
+      $defaults = $this->useTraitgetParameterDefaults();
+
+      $audit = (new Registry)->getAuditMedtadata($this->class);
+
+      // Validation. Look for parameters specificed by the policy and not the
+      // audit.
+      foreach (array_keys($defaults) as $name) {
+        if (!isset($audit->params[$name])) {
+          (new ConsoleLogger(new ConsoleOutput()))->warning(strtr('Policy :name documents parameter ":param" not documented by :class.', [
+            ':name' => $this->name,
+            ':param' => $name,
+            ':class' => $this->class,
+          ]));
+        }
+      }
+
+      foreach ($audit->params as $param) {
+        if (!isset($defaults[$param->name])) {
+          $defaults[$param->name] = isset($param->default) ? $param->default : null;
+        }
+      }
+
+      return $defaults;
   }
 }

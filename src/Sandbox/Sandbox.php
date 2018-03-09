@@ -68,6 +68,7 @@ class Sandbox {
   public function run() {
     $response = new AuditResponse($this->getPolicy());
 
+    $this->logger()->info('Auditing ' . $this->getPolicy()->get('name'));
     try {
       // Run the audit over the policy.
       $outcome = $this->getAuditor()->execute($this);

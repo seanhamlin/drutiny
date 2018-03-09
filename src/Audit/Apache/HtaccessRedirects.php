@@ -5,9 +5,24 @@ namespace Drutiny\Audit\Apache;
 use Drutiny\Audit;
 use Drutiny\Sandbox\Sandbox;
 use Symfony\Component\Yaml\Yaml;
+use Drutiny\Annotation\Param;
+use Drutiny\Annotation\Token;
 
 /**
  * .htaccess redirects
+ *
+ * @Param(
+ *  name = "max_redirects",
+ *  description = "The maximum number of redirects to allow.",
+ *  type = "integer",
+ *  default = 10
+ * )
+ * @Token(
+ *  name = "total_redirects",
+ *  description = "The number of redirects counted.",
+ *  type = "integer",
+ *  default = 10
+ * )
  */
 class HtaccessRedirects extends Audit {
 
