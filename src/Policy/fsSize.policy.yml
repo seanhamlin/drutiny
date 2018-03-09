@@ -1,0 +1,25 @@
+title: Filesystem size
+class: Drutiny\Audit\Filesystem\SystemSize
+name: fs:size
+tags:
+  - Information
+description: |
+  The files folder should have a size, that allows you to backup and restore.
+remediation: |
+  Either delete some files if they are not needed, or look to house them in a
+  more appropriate location.
+success: |
+  The size of the files folder is less than {{max_size}}MB, currently {{size}}MB.
+warning: |
+  The size of the files folder is nearing {{max_size}}MB, currently {{size}}MB.
+failure: |
+  The size of the files folder is over {{max_size}}MB, currently {{size}}MB.
+parameters:
+  max_size:
+    type: integer
+    description: The maximum size in megabytes the database should be.
+    default: 3000
+  warning_size:
+    type: integer
+    description: The size in megabytes this check will issues a warning at.
+    default: 1100
