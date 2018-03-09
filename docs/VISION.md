@@ -25,4 +25,4 @@ This tool is different, all checks are from the outside looking in, and require 
 If a particular check pertains to just Drupal 7 or Drupal 8 then it will be namespaced as such. In this fashion you are able to run site audits against either Drupal 7 or Drupal 8 sites using the same Drutiny codebase.
 
 ## What does Drutiny mean?
-Drutiny stands for Drupal and Security
+Drutiny stands for Drupal and Scrutiny
