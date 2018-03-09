@@ -16,22 +16,22 @@
     ### Issue Summary
     {{{ summary_table }}}
 
-    {{#output_failure}}
+    {{#failures}}
       ### Issues
       {{# output_failure }}
         {{{.}}}
       {{/ output_failure }}
-    {{/output_failure}}
+    {{/failures}}
 
-    {{#output_warning}}
+    {{#warnings}}
       ### Warnings
       {{# output_warning }}
         {{{.}}}
       {{/ output_warning }}
-    {{/output_warning}}
+    {{/warnings}}
 - heading: Appendix
   body: |
-    {{#output_data}}
+    {{#notices}}
       ### Appendix - Analysis
 
       The various appendices provides more detailed data regarding the health of
@@ -40,18 +40,18 @@
       {{# output_data }}
         {{{.}}}
       {{/ output_data }}
-    {{/output_data}}
+    {{/notices}}
 
-    {{#output_error}}
+    {{#errors}}
       ### Appendix - Errors
 
       During the production of this report, not all report policies were able to
       be carried out due to errors encounted.
 
-      {{# output_error }}
+      {{#output_error}}
         {{{.}}}
-      {{/ output_error }}
-    {{/output_error}}
+      {{/output_error}}
+    {{/errors}}
 
     ### Appendix - Summary
     The below table describes all audit and analysis work completed for the
@@ -59,9 +59,9 @@
 
     {{{ appendix_table }}}
 
-    {{#output_success}}
+    {{#passes}}
     ### Appendix - Successful Assessments
     {{# output_success }}
       {{{.}}}
     {{/ output_success }}
-    {{/output_success}}
+    {{/passes}}
