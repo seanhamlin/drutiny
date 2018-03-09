@@ -10,9 +10,8 @@ extra_javascript:
   - js/fix_search.js
 
 pages:
-  - Home: 'index.md'
   - Overview: 'README.md'
-  - Vision: 'VISION.md'
+  - Vision & Background: 'VISION.md'
   - Getting started:
     - Installation:
        - System requirements:  'INSTALL.md'

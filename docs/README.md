@@ -1,4 +1,4 @@
-# Drutiny (Drupal Scrutiny)
+# Drutiny - automated site auditing
 
 <img src="https://github.com/drutiny/drutiny/raw/2.x/assets/logo.png" alt="Drutiny logo" align="right"/>
 
