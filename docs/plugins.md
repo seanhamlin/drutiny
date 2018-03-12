@@ -18,7 +18,9 @@ Acquia | xxx | xxx
 
 ### Install plugins via Packagist (default)
 
-
+```
+composer require drutiny/acquia 2.x-dev
+```
 
 ### Install plugins from a VCS repository
 
@@ -29,35 +31,15 @@ To do so, update the Drutiny composer.json and add your repository.
 
 ```
 {
-    "require": {
-        "vendor/my-private-repo": "dev-master"
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url":  "git@bitbucket.org:vendor/my-private-repo.git"
-        }
-    ]
-}
-
-{
     "require-dev": {
-        "drutiny/drutiny": "2.x-dev",
-        "drutiny/plugin-cs": "dev-Drutiny-Plugin"
+        "drutiny/plugin-name": "dev-Drutiny-Plugin"
 
-    },
-    "require": {
-        "drutiny/plugin-drupal-8": "2.x-dev",
-        "drutiny/plugin-drupal-7": "2.x-dev",
-        "drutiny/http": "2.x-dev",
-        "drutiny/acquia": "2.x-dev"
     },
     "repositories": [
         {
             "type": "vcs",
-            "url":  "eecsteiger@svn-3224.prod.hosting.acquia.com:eecsteiger.git",
+            "url":  "git@bitbucket.org:vendor/my-private-repo.git",
             "reference": "Drutiny-Plugin"
-
         }
     ]
 }
@@ -74,26 +56,19 @@ As the minimum requirement for an plugin, we need a folder with the name of the 
 
 ```
 {
-    "name": "drutiny/plugin-cs",
+    "name": "drutiny/plugin-name",
     "type": "library",
-    "description": "Christian Steiger's plugin for Drutiny",
+    "description": "Plugin for Drutiny",
     "keywords": ["drupal", "audit", "drush", "ssh", "report"],
     "authors": [
-        {"name": "Christian Steiger", "email": "chr.steiger@gmail.com"}
+        {"name": "Bruce Wayne", "email": "bruce.wayne@example.com"}
     ],
     "require": {
         "drutiny/drutiny": "2.x-dev",
         "symfony/yaml": "^3.2"
     },
-    "autoload": {
-        "psr-4": {
-            "Drutiny\\Plugin\\CS\\": "src/",
-            "DrutinyTests\\Plugin\\CS\\": "tests/src/"
-        }
-    }
 }
 ``` 
-
 
 #### Create custom commands and configuration
 Drutiny is extensible through a config file where you can add commands,
