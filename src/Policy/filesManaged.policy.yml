@@ -1,0 +1,19 @@
+title: Files Managed
+class: \Drutiny\Audit\Drupal\FilesManaged
+name: Drupal:FilesManaged
+tags:
+  - Performance
+description: |
+  Identify orphan files that have not been deleted when their corresponding node was removed.
+remediation: |
+  Remove the orphan files.
+success: There are no orphan files.
+failure: |
+  There {{prefix}} {{files}} orphan/ unmanaged file{{plural}}:
+  {{issues}}
+exception: Could not determine the amount of orphan files.
+parameters:
+  excludes:
+    type: string
+    description: Folders to exclude, in the form of "folder1|folder3|folder55".
+    default: '/js/|/css/css_|/php/twig/|/styles/|/xmlsitemap/|*htaccess'
