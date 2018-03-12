@@ -12,11 +12,15 @@ before_script:
 
 install:
   - travis_retry composer install --no-interaction
+  - composer require drush/drush:^8.1.0
   - composer info -i
 
 script:
+  - export PATH="$PATH:$PWD/vendor/bin"
   - ./vendor/bin/phpunit
   - ./bin/drutiny policy:list
+  - ./bin/drutiny profile:run test @none
+  - ./bin/drutiny profile:run test @none --uri=site1.test --uri=site2.test -f html -o multisite.test
 
 # Configure email notifications
 notifications:

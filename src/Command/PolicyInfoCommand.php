@@ -10,6 +10,8 @@ use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Drutiny\Registry;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
+use Doctrine\Common\Annotations\AnnotationReader;
+use Drutiny\Annotation\Param;
 
 /**
  *
@@ -42,6 +44,26 @@ class PolicyInfoCommand extends Command {
     }
 
     $info = $checks[$check_name];
+    $class = $info->get('class');
+
+    // This validates the parameters against the audit class.
+    $info->getParameterDefaults();
+
+    $audit = (new Registry)->getAuditMedtadata($info->get('class'));
+
+    $policy_parameters = $info->get('parameters');
+    foreach ($audit->params as $param) {
+      if (isset($policy_parameters[$param->name])) {
+        $policy_parameters[$param->name] = array_merge($param->toArray(), $policy_parameters[$param->name]);
+      }
+      else {
+        $policy_parameters[$param->name] = $param->toArray();
+      }
+    }
+
+    $tokens = array_map(function ($token) {
+      return $token->toArray();
+    }, $audit->tokens);
 
     $rows = array();
     $rows[] = ['Check', $info->get('title')];
@@ -50,7 +72,9 @@ class PolicyInfoCommand extends Command {
     $rows[] = new TableSeparator();
     $rows[] = ['Remediable', $info->get('remediable') ? 'Yes' : 'No'];
     $rows[] = new TableSeparator();
-    $rows[] = ['Parameters', $this->formatParameters($info->get('parameters'))];
+    $rows[] = ['Parameters', $this->formatParameters($policy_parameters)];
+    $rows[] = new TableSeparator();
+    $rows[] = ['Tokens', $this->formatParameters($tokens)];
     $rows[] = new TableSeparator();
     $rows[] = ['Location', $info->get('filepath')];
 

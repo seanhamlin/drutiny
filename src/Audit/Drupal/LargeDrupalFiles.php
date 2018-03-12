@@ -5,9 +5,38 @@ namespace Drutiny\Audit\Drupal;
 use Drutiny\Audit;
 use Drutiny\Sandbox\Sandbox;
 use Drutiny\AuditResponse\AuditResponse;
+use Drutiny\Annotation\Param;
+use Drutiny\Annotation\Token;
 
 /**
  * Large files
+ * @Param(
+ *  name = "max_size",
+ *  description = "Report files larger than this value measured in megabytes.",
+ *  type = "integer",
+ *  default = 20
+ * )
+ * @Token(
+ *  name = "total",
+ *  description = "Total number of large files found",
+ *  type = "integer"
+ * )
+ * @Token(
+ *  name = "too_many_files",
+ *  description = "Text to display if there are more than 10 files found.",
+ *  type = "integer"
+ * )
+ * @Token(
+ *  name = "files",
+ *  description = "A list of up to 10 files that are too large.",
+ *  type = "integer"
+ * )
+ * @Token(
+ *  name = "plural",
+ *  description = "This variable will contain an 's' if there is more than one issue found.",
+ *  type = "string",
+ *  default = ""
+ * )
  */
 class LargeDrupalFiles extends Audit {
 

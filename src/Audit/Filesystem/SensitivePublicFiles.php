@@ -5,9 +5,28 @@ namespace Drutiny\Audit\Filesystem;
 use Drutiny\Audit;
 use Drutiny\Sandbox\Sandbox;
 use Drutiny\AuditResponse\AuditResponse;
+use Drutiny\Annotation\Param;
+use Drutiny\Annotation\Token;
 
 /**
  * Sensitive public files
+ *
+ * @Param(
+ *  name = "extensions",
+ *  description = "The sensitive file extensions to look for.",
+ *  type = "string"
+ * )
+ * @Token(
+ *  name = "issues",
+ *  description = "A list of files that reach the max file size.",
+ *  type = "array"
+ * )
+ * @Token(
+ *  name = "plural",
+ *  description = "This variable will contain an 's' if there is more than one issue found.",
+ *  type = "string",
+ *  default = ""
+ * )
  */
 class SensitivePublicFiles extends Audit {
 

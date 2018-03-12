@@ -1,4 +1,4 @@
-# Drutiny (Drupal Scrutiny)
+# Drutiny - automated site auditing
 
 <img src="https://github.com/drutiny/drutiny/raw/2.x/assets/logo.png" alt="Drutiny logo" align="right"/>
 
@@ -47,7 +47,7 @@ Drutiny comes with a `policy:list` command that lists all the policies available
 
 Policies provided by other packages such as [drutiny/plugin-distro-common](https://github.com/drutiny/plugin-distro-common) will also appear here if they are installed.
 
-### Installing Drutiny Libraries
+### Installing Drutiny Plugins
 
 Additional Drutiny policies, audits, profiles and commands can be installed from composer.
 
@@ -58,7 +58,7 @@ $ composer search drutiny
 For Drupal 8 sites, `drutiny/plugin-drupal-8` would be a good plugin to add.
 
 ```
-$ composer require drutiny/plugin-drupal-8
+$ composer require drutiny/plugin-drupal-8 2.x-dev
 ```
 
 ### Running an Audit

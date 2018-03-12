@@ -10,9 +10,8 @@ extra_javascript:
   - js/fix_search.js
 
 pages:
-  - Home: 'index.md'
   - Overview: 'README.md'
-  - Vision: 'VISION.md'
+  - Vision & Background: 'VISION.md'
   - Getting started:
     - Installation:
        - System requirements:  'INSTALL.md'
@@ -23,6 +22,8 @@ pages:
       - Profiles: 'profiles.md'
       - Policy: 'policy.md'
       - Audits: 'audits.md'
+      - Reports: 'reports.md'
+      - Plugins: 'plugins.md'
     - Contributing:
       - Sandbox: 'sandbox.md'
       - Support & Contribution: 'CONTRIBUTING.md'
