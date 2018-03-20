@@ -41,4 +41,4 @@ notifications:
     on_failure: always
 before_install:
 - openssl aes-256-cbc -K $encrypted_9472126ed793_key -iv $encrypted_9472126ed793_iv
-  -in docs/drutiny_travis-id_rsa.enc -out ~\/.ssh/drutiny_travis-id_rsa -d
+  -in docs/drutiny_travis-id_rsa.enc -out docs/drutiny_travis-id_rsa -d
