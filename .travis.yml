@@ -1,29 +1,44 @@
 language: php
-sudo: false
+sudo: required
 dist: trusty
 php:
-  - '5.6'
-  - '7.0'
-  - '7.1'
-
+- '5.6'
+- '7.0'
+- '7.1'
 before_script:
-  - sudo rm -f /etc/localtime
-  - sudo ln -s /usr/share/zoneinfo/UTC /etc/localtime
-
+- sudo rm -f /etc/localtime
+- sudo ln -s /usr/share/zoneinfo/UTC /etc/localtime
 install:
-  - travis_retry composer install --no-interaction
-  - composer require drush/drush:^8.1.0
-  - composer info -i
-
+- travis_retry composer install --no-interaction
+- composer require drush/drush:^8.1.0
+- composer info -i
 script:
-  - export PATH="$PATH:$PWD/vendor/bin"
-  - ./vendor/bin/phpunit
-  - ./bin/drutiny policy:list
-  - ./bin/drutiny profile:run test @none
-  - ./bin/drutiny profile:run test @none --uri=site1.test --uri=site2.test -f html -o multisite.test
-
-# Configure email notifications
+- export PATH="$PATH:$PWD/vendor/bin"
+- "./vendor/bin/phpunit"
+- "./bin/drutiny policy:list"
+- "./bin/drutiny profile:run test @none"
+- "./bin/drutiny profile:run test @none --uri=site1.test --uri=site2.test -f html
+  -o multisite.test"
+after_success:
+- sudo pip install -r docs/requirements.txt
+- composer config minimum-stability dev
+- composer require --prefer-stable  drutiny/plugin-distro-common drutiny/acquia drutiny/sumologic
+  drutiny/http drutiny/plugin-drupal-7 drutiny/plugin-drupal-8 drutiny/cloudflare
+- "./bin/build_docs"
+- mkdocs build --clean
+- ssh-add ~/.ssh/drutiny_travis-id_rsa
+- git clone git@github.com:drutiny/drutiny.github.io.git ghp
+- rsync -av docs_html/ ghp/
+- cd gh-pages
+- git config user.name "Travis CI"
+- git config user.email "drutiny@travis.ci"
+- git add .
+- git commit -m "Deploy from Travis CI"
+- git push
 notifications:
   email:
     on_success: never
     on_failure: always
+before_install:
+- openssl aes-256-cbc -K $encrypted_9472126ed793_key -iv $encrypted_9472126ed793_iv
+  -in docs/drutiny_travis-id_rsa.enc -out docs/drutiny_travis-id_rsa -d
