@@ -11,3 +11,7 @@ domains-*.yml
 reports/*
 !reports/README.md
 .DS_Store
+docs/index.md
+docs/policies
+docs/policy-library.md
+docs_html

@@ -1,0 +1,36 @@
+#!/usr/bin/env php
+<?php
+
+use Symfony\Component\Console\Application;
+use Composer\Autoload\ClassLoader;
+use Doctrine\Common\Annotations\AnnotationRegistry;
+
+// Set the timezone to the local OS if supported.
+if (file_exists('/etc/localtime')) {
+  $systemZoneName = readlink('/etc/localtime');
+  $city = basename($systemZoneName);
+  if ($city == 'UTC') {
+    $systemZoneName = $city;
+  }
+  else {
+    $country = basename(dirname($systemZoneName));
+    $systemZoneName = implode('/', [$country, $city]);
+  }
+  date_default_timezone_set($systemZoneName);
+}
+// Fallback to UTC.
+else {
+  date_default_timezone_set('UTC');
+}
+
+
+/**
+ * @var ClassLoader $loader
+ */
+$loader = require 'vendor/autoload.php';
+AnnotationRegistry::registerLoader([$loader, 'loadClass']);
+
+$application = new Application();
+$application->add(new Drutiny\Docs\BuildDocsCommand());
+$application->setDefaultCommand('docs:build');
+$application->run();

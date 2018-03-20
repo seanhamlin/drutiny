@@ -1,29 +1,44 @@
-site_name: Drutiny Documentation
-
-repo_url: https://github.com/drutiny/drutiny
-site_description: 'Drutiny - A generic Drupal 7 and Drupal 8 site auditing and optional remediation tool.'
-theme: readthedocs
-strict: true
-docs_dir: docs
-
-extra_javascript:
-  - js/fix_search.js
-
+site_name: Drutiny
+site_dir: docs_html
+repo_url: 'https://github.com/drutiny/drutiny'
+site_description: 'This is a generic Drupal site auditing and optional remediation tool.'
+theme: material
+extra_css:
+    - css/tweaks.css
 pages:
-  - Overview: 'README.md'
-  - Vision & Background: 'VISION.md'
-  - Getting started:
-    - Installation:
-       - System requirements:  'INSTALL.md'
-    - Create a new project: 'creating-new-project.md'
-    - Updating Drutiny: 'updating-drutiny.md'
-  - Project documentation:
-    - How to use it:
-      - Profiles: 'profiles.md'
-      - Policy: 'policy.md'
-      - Audits: 'audits.md'
-      - Reports: 'reports.md'
-      - Plugins: 'plugins.md'
-    - Contributing:
-      - Sandbox: 'sandbox.md'
-      - Support & Contribution: 'CONTRIBUTING.md'
+    -
+        Home: index.md
+    -
+        Usage:
+            -
+                Reports: reports.md
+            -
+                Plugins: plugins.md
+            -
+                Contributing: CONTRIBUTING.md
+    -
+        'API Documentation':
+            -
+                Audit: audits.md
+            -
+                Sandbox: sandbox.md
+            -
+                Policy: policy.md
+            -
+                Profile: profiles.md
+    -
+        'Policy Library':
+            -
+                Overview: policy-library.md
+            -
+                drutiny/drutiny: policies/drutiny-drutiny.md
+            -
+                drutiny/acquia: policies/drutiny-acquia.md
+            -
+                drutiny/plugin-drupal-8: policies/drutiny-plugin-drupal-8.md
+            -
+                drutiny/plugin-drupal-7: policies/drutiny-plugin-drupal-7.md
+            -
+                drutiny/plugin-distro-common: policies/drutiny-plugin-distro-common.md
+            -
+                drutiny/http: policies/drutiny-http.md
