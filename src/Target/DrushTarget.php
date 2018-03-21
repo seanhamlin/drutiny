@@ -25,7 +25,7 @@ class DrushTarget extends Target implements DrushInterface, ExecInterface {
    */
   public function parse($target_data) {
     $this->alias = $target_data;
-    $data = $this->sandbox()->exec('drush site-alias @alias --format=json', [
+    $data = $this->sandbox()->exec('drush sa @alias --format=json', [
       '@alias' => $target_data,
     ]);
     $options = json_decode($data, TRUE);
