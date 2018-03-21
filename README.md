@@ -131,7 +131,7 @@ In particular, if you use the `-vvv` argument, then you will see all the drush c
 
 ## Documentation
 
-You can find more documentation in the [docs](http://drutiny.readthedocs.io/en/latest/) folder.
+You can find more documentation in the [docs](https://drutiny.github.io/) folder.
 
 
 # Credits
