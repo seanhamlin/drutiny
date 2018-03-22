@@ -5,6 +5,8 @@ namespace Drutiny\Report;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Drutiny\Registry;
+use TOC\MarkupFixer;
+use TOC\TocGenerator;
 
 /**
  *
@@ -80,12 +82,10 @@ class ProfileRunHtmlReport extends ProfileRunJsonReport {
 
     $sections = [];
     $render_engine = new \Mustache_Engine();
-    $toc = [];
     foreach ($this->info->get('content') as $idx => $section) {
-      $id = 'section-' . $idx . '-' . preg_replace('[^a-z]', '', strtolower($section['heading']));
-      $toc[$id] = $section['heading'];
+      // $id = 'section-' . $idx . '-' . preg_replace('[^a-z]', '', strtolower($section['heading']));
       try {
-         $section = '<h2 id="' . $id . '">' . $section['heading'] . '</h2>' . PHP_EOL . $section['body'];
+         $section = '## ' . $section['heading'] . PHP_EOL . $section['body'];
          $section = $render_engine->render($section, $render_vars);
       }
       catch (\Mustache_Exception $e) {
@@ -93,12 +93,24 @@ class ProfileRunHtmlReport extends ProfileRunJsonReport {
       }
       $sections[] = $parsedown->text($section);
     }
-    $render_vars['toc'] = $toc;
 
     $render_vars['sections'] = $sections;
 
+    // Preperation to generate Toc
+    $markupFixer  = new MarkupFixer();
+    $tocGenerator = new TocGenerator();
+
     // Render the site report.
-    $content = $this->renderTemplate('site', $render_vars);
+    $content = $markupFixer->fix(
+      $this->renderTemplate('site', $render_vars)
+    );
+
+    $toc = $this->renderTemplate('toc', [
+      'table_of_contents' => $tocGenerator->getHtmlMenu($content, 2, 3)
+    ]);
+
+    // Table of Contents is late to the game. Replace any usage of it.
+    $content = str_replace('#table_of_contents#', $toc, $content);
 
     // Render the header/footer etc.
     $render_vars['content'] = $content;
