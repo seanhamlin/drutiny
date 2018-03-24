@@ -1,4 +1,34 @@
-<div class="row">
+<div class="row" id="table_of_contents">
   <h2>Table of Contents</h2>
   {{ table_of_contents | raw }}
 </div>
+<style type="text/css">
+#table_of_contents ul
+{
+  list-style-type: lower-roman;
+  margin-left: 0;
+  padding-left: 20px;
+}
+#table_of_contents ul ul ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+#table_of_contents li a
+{
+  line-height: 180%;
+}
+#table_of_contents > ul > li
+{
+  list-style-type: decimal-leading-zero;
+  margin-top: 20px;
+}
+#table_of_contents > ul > li > a
+{
+  display: block;
+  border-bottom-style: inset;
+  border-bottom-color: #eee;
+  font-size: 110%;
+  font-weight: bold;
+  line-height: 200%;
+}
+</style>
