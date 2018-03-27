@@ -3,32 +3,52 @@
   {{ table_of_contents | raw }}
 </div>
 <style type="text/css">
+
 #table_of_contents ul
 {
   list-style-type: lower-roman;
   margin-left: 0;
   padding-left: 20px;
 }
-#table_of_contents ul ul ul {
-  list-style-type: none;
-  padding-left: 0;
-}
+
 #table_of_contents li a
 {
   line-height: 180%;
 }
-#table_of_contents > ul > li
+#table_of_contents ul li
 {
-  list-style-type: decimal-leading-zero;
-  margin-top: 20px;
+  list-style-type: none;
 }
+
+#table_of_contents ul ul li
+{
+  border-left: 2px dotted #ccc;
+  padding-left: 5px;
+  margin-bottom: 2px;
+}
+
+/*H2 heading links*/
 #table_of_contents > ul > li > a
 {
   display: block;
-  border-bottom-style: inset;
-  border-bottom-color: #eee;
-  font-size: 110%;
+  font-size: 120%;
   font-weight: bold;
+  line-height: 200%;
+  border-left: none;
+  padding-left: 0px;
+  margin-bottom: 5px;
+}
+/*H3 heading links*/
+#table_of_contents ul.menu_level_1 > li > a
+{
+  font-size: 110%;
+  line-height: 200%;
+}
+/*H4 heading links*/
+#table_of_contents ul.menu_level_2 > li > a
+{
+  font-size: 100%;
+  font-weight: lighter;
   line-height: 200%;
 }
 </style>
