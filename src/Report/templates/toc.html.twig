@@ -20,7 +20,7 @@
   list-style-type: none;
 }
 
-#table_of_contents ul ul li
+#table_of_contents ul ul.menu_level_1 > li
 {
   border-left: 2px dotted #ccc;
   padding-left: 5px;
@@ -45,9 +45,17 @@
   line-height: 200%;
 }
 /*H4 heading links*/
+#table_of_contents ul.menu_level_2
+{
+  padding-left: 0px;
+}
+#table_of_contents ul.menu_level_2 li.last
+{
+  padding-bottom: 5px;
+}
 #table_of_contents ul.menu_level_2 > li > a
 {
-  font-size: 100%;
+  font-size: 90%;
   font-weight: lighter;
   line-height: 200%;
 }
