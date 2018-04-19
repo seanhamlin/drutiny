@@ -6,9 +6,9 @@
 
 #table_of_contents ul
 {
-  list-style-type: lower-roman;
+  list-style-type: none;
   margin-left: 0;
-  padding-left: 20px;
+  padding-left: 0;
 }
 
 #table_of_contents li a
@@ -18,45 +18,25 @@
 #table_of_contents ul li
 {
   list-style-type: none;
-}
-
-#table_of_contents ul ul.menu_level_1 > li
-{
-  border-left: 2px dotted #ccc;
   padding-left: 5px;
   margin-bottom: 2px;
 }
 
+#table_of_contents > ul ul
+{
+  padding-left: 5px;
+  padding-bottom: 5px;
+}
 /*H2 heading links*/
 #table_of_contents > ul > li > a
 {
-  display: block;
-  font-size: 120%;
   font-weight: bold;
-  line-height: 200%;
-  border-left: none;
-  padding-left: 0px;
-  margin-bottom: 5px;
-}
-/*H3 heading links*/
-#table_of_contents ul.menu_level_1 > li > a
-{
-  font-size: 110%;
+  font-size: 19px; /* Same as H4 */
   line-height: 200%;
 }
-/*H4 heading links*/
-#table_of_contents ul.menu_level_2
+
+#table_of_contents ul.menu_level_2 a
 {
-  padding-left: 0px;
-}
-#table_of_contents ul.menu_level_2 li.last
-{
-  padding-bottom: 5px;
-}
-#table_of_contents ul.menu_level_2 > li > a
-{
-  font-size: 90%;
   font-weight: lighter;
-  line-height: 200%;
 }
 </style>
