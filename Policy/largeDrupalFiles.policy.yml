@@ -4,10 +4,12 @@ name: Drupal:largeFiles
 tags:
   - Drupal 8
   - Drupal 7
+  - Health Analysis
 description: |
-  Large static assets should be optimized for online display or ideally be housed in other services, e.g.
+    Large static assets should be optimized for online display or ideally be housed in other services, e.g.
     Amazon S3 (for files) or Youtube (for videos). Storing large files can consume storage volumes,
-    increase page load time and contribute to a higher than desired cache eviction rate.
+    increase page load time and contribute to a higher than desired cache eviction rate. Varnish, on Acquia Cloud,
+    does not cache files larger than 10 Mb.
 
     This policy identifies files managed by Drupal that are larger than {{readable_max_size}}.
 remediation: |
@@ -29,6 +31,6 @@ failure: |
     {{too_many_files}}
 parameters:
   max_size:
-    default: 20000000
+    default: 10000000
     description: 'Report files larger than this value measured in bytes.'
     type: integer
