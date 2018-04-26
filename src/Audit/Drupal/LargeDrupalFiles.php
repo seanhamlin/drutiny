@@ -12,9 +12,9 @@ use Drutiny\Annotation\Token;
  * Identify files larger than a specfied size. Pass if no matching files found.
  * @Param(
  *  name = "max_size",
- *  description = "Report files larger than this value measured in megabytes.",
+ *  description = "Report files larger than this value measured in bytes.",
  *  type = "integer",
- *  default = 20
+ *  default = 10000000
  * )
  * @Token(
  *  name = "total",
@@ -49,7 +49,7 @@ class LargeDrupalFiles extends Audit {
     $query = "SELECT fm.uri, fm.filesize, (SELECT COUNT(*) FROM file_usage fu WHERE fu.fid = fm.fid) as 'usage' FROM file_managed fm WHERE fm.filesize >= @size ORDER BY fm.filesize DESC";
     $query = strtr($query, ['@size' => $max_size]);
     $output = $sandbox->drush()->sqlQuery($query);
-print_r($output);
+
     if (empty($output)) {
       return TRUE;
     }
