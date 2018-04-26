@@ -9,11 +9,11 @@ description: |
     Large static assets should be optimized for online display or ideally be housed in other services, e.g.
     Amazon S3 (for files) or Youtube (for videos). Storing large files can consume storage volumes,
     increase page load time and contribute to a higher than desired cache eviction rate. Varnish, on Acquia Cloud,
-    does not cache files larger than 10 Mb.
+    does not cache files larger than 10 MB.
 
     This policy identifies files managed by Drupal that are larger than {{readable_max_size}}.
 remediation: |
-  Either delete the large Drupal files found, over {{max_size}} bytes, if they are not needed, compress or optimize them,
+  Either delete the large Drupal files found that exceed {{readable_max_size}} if they are not needed, compress or optimize them,
   or look to house them in a more appropriate location.
 success: No large files found.
 failure: |
@@ -32,5 +32,3 @@ failure: |
 parameters:
   max_size:
     default: 10000000
-    description: 'Report files larger than this value measured in bytes.'
-    type: integer
