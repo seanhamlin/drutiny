@@ -7,6 +7,7 @@ use Drutiny\Profile;
 use Drutiny\Target\Target;
 use TOC\MarkupFixer;
 use TOC\TocGenerator;
+use Drutiny\Report\Format\Menu\Renderer;
 use Symfony\Component\Yaml\Yaml;
 
 
@@ -104,13 +105,27 @@ class HTML extends Markdown {
     // Render the site report.
     $content = $markupFixer->fix($content);
 
+    // Insert span infront of headers to address navbar positioning.
+    $content = preg_replace(
+      '/(<h[2-4] id="([^"]+)")/',
+      '<span class="navbar-pad"></span>$1', 
+      $content);
+
     // Table of Contents.
     $toc = self::renderTemplate('toc', [
-      'table_of_contents' => $tocGenerator->getHtmlMenu($content, 2, 3)
+      'table_of_contents' => $tocGenerator->getHtmlMenu($content, 2, 2)
     ]);
 
     // Render the header/footer etc.
     $render['content'] = $content;
+
+    $options = [
+      'branch_class'  => 'dropdown'
+    ];
+
+    $menu_renderer = new Renderer(new \Knp\Menu\Matcher\Matcher(), $options);
+
+    $render['navbar'] = $tocGenerator->getHtmlMenu($content, 2, 3, $menu_renderer);
     $content = self::renderTemplate($this->getTemplate(), $render);
 
     // Hack to fix table styles in bootstrap theme.
