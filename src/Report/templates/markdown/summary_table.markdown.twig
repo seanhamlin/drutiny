@@ -1,5 +1,7 @@
+```
 Policy | Severity | Audit
 ------ | -------- | -----
 {% for result in results if result.has_warning or result.has_error or not result.status and not result.is_not_applicable %}
 {{ result.title }} | {{ result.severity }} | {{ result.status_title }}
 {% endfor %}
+```
