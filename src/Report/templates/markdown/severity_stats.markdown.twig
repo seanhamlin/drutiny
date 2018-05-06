@@ -1,6 +1,8 @@
+```
 Severity | Pass | Fail | Error | Warning | Not Applicable
 -------- | ---- | ---- | ----- | ------- | --------------
 {% for severity, row in stats  %}
 {{ severity }} ({{ totals[severity] }}) | {% if row.success %}{{ (row.success / totals[severity] * 100) | round(2) }}% ({{ row.success }}){% else %} - {% endif %} | {% if row.failure %}{{ (row.failure / totals[severity] * 100) | round(2) }}% ({{ row.failure }}){% else %} - {% endif %} | {% if row.error %}{{ (row.error / totals[severity] * 100) | round(2) }}% ({{ row.error }}){% else %} - {% endif %} | {% if row.warning %}{{ (row.warning / totals[severity] * 100) | round(2) }}% ({{ row.warning }}){% else %} - {% endif %} | {% if row.not_applicable %}{{ (row.not_applicable / totals[severity] * 100) | round(2) }}% ({{ row.not_applicable }}){% else %} - {% endif %}
 
 {% endfor %}
+```
