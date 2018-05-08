@@ -15,7 +15,7 @@
     "require": {
         "caseyamcl/toc": "~1.0",
         "composer/semver": "^1.4.2",
-        "doctrine/annotations": "^1.2",
+        "doctrine/annotations": "^v1.2",
         "erusev/parsedown": "^1.6.3",
         "fiasco/symfony-console-style-markdown": "~1.0",
         "mustache/mustache": "^2.11",
