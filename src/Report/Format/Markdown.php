@@ -133,7 +133,7 @@ class Markdown extends JSON {
     $render['content'] = $content;
     $content = $this->renderTemplate($this->getTemplate(), $render);
 
-    return self::formatTables($content);
+    return $this->formatTables($content);
   }
 
   public static function formatTables($markdown)
