@@ -39,6 +39,7 @@ Drutiny is a command line tool that can be called from the composer vendor bin d
 ```
 ./vendor/bin/drutiny
 ```
+If using the standalone project, substitute `./bin/drutiny`.
 
 ### Finding policies available to run
 
