@@ -46,7 +46,11 @@ class DatabaseSize extends Audit {
             WHERE table_schema='{$name}'
             GROUP BY table_schema;";
 
-    $size = (float) $sandbox->drush()->sqlq($sql);
+    $resultLines = $sandbox->drush()->sqlq($sql);
+    $resultLines = array_filter($resultLines, function($line) {
+      return $line !== 'DB Size in MB';
+    });
+    $size = (float) reset($resultLines);
 
     $sandbox->setParameter('db', $name)
             ->setParameter('size', $size);
