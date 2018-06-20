@@ -7,6 +7,7 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 use Drutiny\Container;
 use Drutiny\Sandbox\Sandbox;
 use Drutiny\Target\DrushTargetInterface;
+use Drutiny\Target\DrushExecutableTargetInterface;
 use Drutiny\Target\TargetInterface;
 
 /**
@@ -95,6 +96,10 @@ class DrushDriver {
    * Run the drush command.
    */
   protected function runCommand($method, $args, $pipe = '') {
+    // Hand task off to Target directly if it supports it.
+    if ($this->target instanceof DrushExecutableTargetInterface) {
+      return $this->target->runDrushCommand($method, $args, $this->getOptions(), $pipe);
+    }
     return $this->target->exec('@pipe @bin @alias @options @method @args', [
       '@method' => $method,
       '@alias' => $this->getAlias(),

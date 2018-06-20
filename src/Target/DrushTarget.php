@@ -9,7 +9,7 @@ use Drutiny\Driver\Exec;
  *  name = "drush"
  * )
  */
-class DrushTarget extends Target implements DrushTargetInterface {
+class DrushTarget extends Target implements DrushTargetInterface, DrushExecutableTargetInterface {
 
   protected $alias;
 
@@ -55,13 +55,13 @@ class DrushTarget extends Target implements DrushTargetInterface {
   /**
    * {@inheritdoc}
    */
-  public function runCommand($method, $args, $pipe = '') {
+  public function runDrushCommand($method, array $args, array $options, $pipe = '') {
     $process = new Exec();
     return $process->exec('@pipe drush @alias @options @method @args', [
       '@method' => $method,
       '@args' => implode(' ', $args),
-      '@options' => implode(' ', $this->drushOptions),
-      '@alias' => $this->alias,
+      '@options' => implode(' ', $options),
+      '@alias' => $this->getAlias(),
       '@pipe' => $pipe,
     ]);
   }
