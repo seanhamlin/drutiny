@@ -8,7 +8,7 @@
 [![Latest Unstable Version](https://poser.pugx.org/drutiny/drutiny/v/unstable)](https://packagist.org/drutiny/drutiny)
 [![License](https://poser.pugx.org/drutiny/drutiny/license)](https://packagist.org/drutiny/drutiny)
 
-This is a generic Drupal site auditing and optional remediation tool.
+A generic Drupal site auditing and optional remediation tool. _Fun Fact:_ The name is a [portmanteau](https://en.wikipedia.org/wiki/Portmanteau) of "Drupal" and "scrutiny."
 
 
 ## Installation
@@ -19,13 +19,13 @@ You can install Drutiny into your project with [composer](https://getcomposer.or
 composer require --dev drutiny/drutiny 2.1.*@dev
 ```
 
-Alternately, Drutiny can be built as a standalone tool:
+Alternately, Drutiny can be built as a standalone tool.
 
 ```
 composer create-project --no-interaction --prefer-source -s dev drutiny/project-dev drutiny-dev
 ```
 
-[Drush](http://docs.drush.org/en/master/) is also required. Its not specifically marked as a dependency as the version of Drush to use will depend on the site you're auditing.
+[Drush](http://docs.drush.org/en/master/) is also required. It's not specifically marked as a dependendy as the version of Drush to use will depend on the site you're auditing.
 
 ```
 composer require --global drush/drush
@@ -39,7 +39,8 @@ Drutiny is a command line tool that can be called from the composer vendor bin d
 ```
 ./vendor/bin/drutiny
 ```
-(Substitute `./bin/drutiny` if using Drutiny as a standalone tool.)
+If you're running Drutiny as a standalone tool, substitute `./bin/drutiny`.
+
 
 ### Finding policies available to run
 
@@ -49,11 +50,12 @@ Drutiny comes with a `policy:list` command that lists all the policies available
 ./vendor/bin/drutiny policy:list
 ```
 
-Policies provided by other packages such as [drutiny/plugin-distro-common](https://github.com/drutiny/plugin-distro-common) will also appear here if they are installed.
+Policies provided by other packages such as [drutiny/plugin-distro-common](https://github.com/drutiny/plugin-distro-common) will also appear here, if they are installed.
+
 
 ### Installing Drutiny Plugins
 
-Additional Drutiny policies, audits, profiles and commands can be installed from composer.
+Additional Drutiny policies, audits, profiles and commands can be installed with composer.
 
 ```
 $ composer search drutiny
@@ -81,7 +83,7 @@ Some policies have parameters you can specify which can be passed in at call tim
 ./vendor/bin/drutiny policy:audit -p max_age=600 Drupal-8:PageCacheExpiry @drupalvm.dev
 ```
 
-Audits are simple self contained classes that are simple to read and understand. Policies are simple YAML files that determine how to use Audit classes. Drutiny can be extended very easily to audit for your own unique requirements. Pull requests are welcome as well, please see the [contributing guide](https://drutiny.github.io/2.2.x/CONTRIBUTING/).
+Audits are self-contained classes that are simple to read and understand. Policies are simple YAML files that determine how to use Audit classes. Therefore, Drutiny can be extended very easily to audit for your own unique requirements. Pull requests are welcome as well, please see the [contributing guide](https://drutiny.github.io/2.2.x/CONTRIBUTING/).
 
 ### Remediation
 Some checks have redemptive capability. Passing the `--remediate` flag into the call with "auto-heal" the site if the check fails on first pass.
