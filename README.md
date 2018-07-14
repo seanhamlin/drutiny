@@ -80,7 +80,7 @@ The command above would audit the site that resolved to the `@drupalvm.dev` drus
 Some policies have parameters you can specify which can be passed in at call time. Use `policy:info` to find out more about the parameters available for a check.
 
 ```
-./vendor/bin/drutiny policy:audit -p max_age=600 Drupal-8:PageCacheExpiry @drupalvm.dev
+./vendor/bin/drutiny policy:audit -p value=600 Drupal-8:PageCacheExpiry @drupalvm.dev
 ```
 
 Audits are self-contained classes that are simple to read and understand. Policies are simple YAML files that determine how to use Audit classes. Therefore, Drutiny can be extended very easily to audit for your own unique requirements. Pull requests are welcome as well, please see the [contributing guide](https://drutiny.github.io/2.2.x/CONTRIBUTING/).
@@ -89,7 +89,7 @@ Audits are self-contained classes that are simple to read and understand. Polici
 Some checks have redemptive capability. Passing the `--remediate` flag into the call with "auto-heal" the site if the check fails on first pass.
 
 ```
-./vendor/bin/drutiny policy:audit -p max_age=600 --remediate Drupal-8:PageCacheExpiry @drupalvm.dev
+./vendor/bin/drutiny policy:audit -p value=600 --remediate Drupal-8:PageCacheExpiry @drupalvm.dev
 ```
 
 ### Running a profile of checks
