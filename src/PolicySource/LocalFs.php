@@ -9,8 +9,7 @@ use Drutiny\Policy;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 
-class LocalFs implements PolicySourceInterface
-{
+class LocalFs implements PolicySourceInterface {
 
   /**
    * {@inheritdoc}
