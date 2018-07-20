@@ -28,9 +28,11 @@ class ProfileSourceLocalFs implements ProfileSourceInterface {
     if ($cache->isHit()) {
       return $cache->get();
     }
+
+    $directories = array('.', getenv('HOME') . '/.drutiny/');
     $finder = new Finder();
     $finder->files()
-      ->in('.')
+      ->in($directories)
       ->name('*.profile.yml');
 
     $list = [];
