@@ -28,9 +28,10 @@ class LocalFs implements PolicySourceInterface {
     if ($cache->isHit()) {
       return $cache->get();
     }
+    $directories = array('.', getenv('HOME') . '/.drutiny/');
     $finder = new Finder();
     $finder->files()
-      ->in('.')
+      ->in($directories)
       ->name('*.policy.yml');
 
     $list = [];
