@@ -32,6 +32,7 @@ class AuditListCommand extends Command {
     $finder = new Finder();
     $finder->directories()
       ->in('.')
+      ->exclude('./deploy')
       ->name('Audit');
 
     $files = new Finder();
