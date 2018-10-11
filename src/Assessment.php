@@ -106,6 +106,16 @@ class Assessment {
   {
     return $this->results;
   }
+
+  /**
+   * Get the uri of Assessment object.
+   *
+   * @return string uri.
+   */
+  public function uri()
+  {
+    return $this->uri;
+  }
 }
 
  ?>

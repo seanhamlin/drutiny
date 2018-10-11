@@ -44,8 +44,8 @@ class JSON extends Format {
     // Report Title.
     $schema['title'] = $profile->getTitle();
     $schema['profile'] = $profile->getName();
-    $schema['domain'] = $target->uri();
-    $schema['summary'] = $target->uri();
+    $schema['domain'] = $profile->reportPerSite() === true ? $assessment->uri() : $target->uri();
+    $schema['summary'] = $profile->reportPerSite() === true ? $assessment->uri() : $target->uri();
     $schema['description'] = $profile->getDescription();
     $schema['remediations'] = [];
     $schema['reporting_period_start'] = $profile->getReportingPeriodStart()->format('Y-m-d H:i:s e');
