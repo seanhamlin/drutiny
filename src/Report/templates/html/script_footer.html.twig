@@ -206,6 +206,10 @@
       var pieish = ['pie', 'doughnut'].indexOf(data.chartType) > 0;
 
       // Build color palette.
+      // Change the delimiter from a comma to a semi colon 
+      data.chartColors = data.chartColors.replace(/\),/g, ');');
+
+      // Merge the various color palette lists together
       data.chartColors = $.merge(data.chartColors.split(';'), $.merge(c, colors))
           .filter(function (i) {
             return i.length;
