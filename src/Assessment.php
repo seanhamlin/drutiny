@@ -18,6 +18,29 @@ class Assessment {
    */
   protected $results = [];
 
+  /**
+   * @var int exitcode
+   */
+  protected $exitcode = 0;
+
+  /**
+   * Returns to validated exit code from the assessment.
+   *
+   * @return int
+   */
+  public function getExitCode() {
+    return $this->exitcode;
+  }
+
+  /**
+   * Sets a exitcode for this assessment.
+   *
+   * @param int $exitcode
+   */
+  public function setExitCode($exitcode = 0) {
+    $this->exitcode = $exitcode;
+  }
+
   public function __construct($uri = 'default')
   {
     $this->uri = $uri;
@@ -65,6 +88,10 @@ class Assessment {
 
       if ($is_progress_bar) {
         $log->advance();
+      }
+
+      if (!$response->isSuccessful() && $response->getSeverity() === 'critical') {
+        $this->setExitCode(1);
       }
     }
 

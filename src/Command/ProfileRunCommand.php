@@ -272,5 +272,7 @@ class ProfileRunCommand extends Command {
     foreach ($files as $filepath) {
       $console->success('Report written to ' . $filepath);
     }
+
+    exit($assessment->getExitCode());
   }
 }
