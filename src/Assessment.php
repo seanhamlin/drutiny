@@ -8,6 +8,8 @@ use Drutiny\Target\TargetInterface;
 use Drutiny\Sandbox\Sandbox;
 
 class Assessment {
+  use \Drutiny\Policy\ContentSeverityTrait;
+
   /**
    * @var string URI
    */
@@ -18,28 +20,9 @@ class Assessment {
    */
   protected $results = [];
 
-  /**
-   * @var int exitcode
-   */
-  protected $exitcode = 0;
+  protected $successful = TRUE;
 
-  /**
-   * Returns to validated exit code from the assessment.
-   *
-   * @return int
-   */
-  public function getExitCode() {
-    return $this->exitcode;
-  }
-
-  /**
-   * Sets a exitcode for this assessment.
-   *
-   * @param int $exitcode
-   */
-  public function setExitCode($exitcode = 0) {
-    $this->exitcode = $exitcode;
-  }
+  protected $severity;
 
   public function __construct($uri = 'default')
   {
@@ -89,10 +72,6 @@ class Assessment {
       if ($is_progress_bar) {
         $log->advance();
       }
-
-      if (!$response->isSuccessful() && $response->getSeverity() === 'critical') {
-        $this->setExitCode(1);
-      }
     }
 
     return $this;
@@ -108,6 +87,25 @@ class Assessment {
   public function setPolicyResult(AuditResponse $response)
   {
     $this->results[$response->getPolicy()->get('name')] = $response;
+
+    // Set the overall success state of the Assessment. Considered
+    // a success if all policies pass.
+    $this->successful = $this->successful && $response->isSuccessful();
+
+    // If the policy failed its assessment and the severity of the Policy
+    // is higher than the current severity of the assessment, then increase
+    // the severity of the overall assessment.
+    $severity = $response->getPolicy()->getSeverity();
+    if (!$response->isSuccessful() && ($this->severity < $severity)) {
+      $this->setSeverity($severity);
+    }
+  }
+
+  /**
+   * Get the overall outcome of the assessment.
+   */
+  public function isSuccessful() {
+    return $this->successful;
   }
 
   /**

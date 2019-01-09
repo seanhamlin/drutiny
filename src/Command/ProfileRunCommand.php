@@ -25,6 +25,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  *
  */
 class ProfileRunCommand extends Command {
+  use \Drutiny\Policy\ContentSeverityTrait;
 
   /**
    * @inheritdoc
@@ -70,6 +71,13 @@ class ProfileRunCommand extends Command {
         InputOption::VALUE_OPTIONAL,
         'Override the title of the profile with the specified value.',
         false
+      )
+      ->addOption(
+        'exit-on-severity',
+        'x',
+        InputOption::VALUE_OPTIONAL,
+        'Send an exit code to the console if a policy of a given severity fails. Defaults to none (exit code 0). (Options: none, low, normal, high, critical)',
+        'none'
       )
       ->addOption(
         'report-filename',
@@ -273,6 +281,33 @@ class ProfileRunCommand extends Command {
       $console->success('Report written to ' . $filepath);
     }
 
-    exit($assessment->getExitCode());
+    $this->setSeverity($input->getOption('exit-on-severity'));
+
+    // Do not use a non-zero exit code when no severity is set (Default).
+    if (!$this->getSeverity()) {
+      return;
+    }
+
+    $bad_results = 0;
+
+    foreach ($results as $assessment) {
+      if ($assessment->isSuccessful()) {
+        continue;
+      }
+
+      // Increase the exit severity to match the highest assessment severity.
+      if ($assessment->getSeverity() >= $this->getSeverity()) {
+        $this->setSeverity($assessment->getSeverity());
+        $bad_results++;
+      }
+    }
+
+    // Zero exit code when no bad results.
+    if (!$bad_results) {
+      return;
+    }
+
+    // Return the highest found severity as exit code.
+    return $this->getSeverity();
   }
 }
