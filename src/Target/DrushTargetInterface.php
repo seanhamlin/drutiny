@@ -26,4 +26,10 @@ interface DrushTargetInterface extends TargetInterface {
    * @Metadata(name = "php_version")
    */
   public function metadataPhpVersion();
+
+  /**
+   * Get the active theme path of a Drupal site.
+   * @Metadata(name = "theme_path")
+   */
+  public function metadataThemePath();
 }

@@ -110,4 +110,24 @@ abstract class Target implements TargetInterface {
     }
     return $item->get();
   }
+
+  /**
+   * Expose metadata to Audit.
+   */
+  public function getProperty($name)
+  {
+   $metadata = $this->getMetadata();
+   if (!isset($metadata[$name])) {
+     throw new \Exception("'$name' is not a known property of " . get_class($this));
+   }
+   return call_user_func([$this, $metadata[$name]]);
+  }
+
+   /**
+    * Get a list of available properties.
+    */
+  public function getPropertyList()
+  {
+    return array_keys($this->getMetadata());
+  }
 }
