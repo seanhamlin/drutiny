@@ -66,7 +66,7 @@ abstract class Format {
         foreach ($results as $uri => $result) {
           $variables = $this->preprocessResult($profile, $target, $result);
 
-          $info['uri'] = $uri;
+          $info['uri'] = str_replace("/", "_", $uri);
           $filepath = strtr('dirname/filename/uri.extension', $info);
 
           // Ensure the directory is available or continue.
