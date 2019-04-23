@@ -70,7 +70,7 @@ class DrushTarget extends Target implements DrushTargetInterface, DrushExecutabl
     // Do not use a locally sourced alias if the command will be executed remotely.
     if (isset($this->options['remote-host'])) {
       $parameters['@root'] = $this->options['root'];
-      $this->exec('@pipe @drush -r @root @options @method @args', $parameters);
+      return $this->exec('@pipe @drush -r @root @options @method @args', $parameters);
     }
     return $this->exec('@pipe @drush @alias @options @method @args', $parameters);
   }
