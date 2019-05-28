@@ -66,6 +66,8 @@ abstract class Format {
         foreach ($results as $uri => $result) {
           $variables = $this->preprocessResult($profile, $target, $result);
 
+          // Some website uri may contain slashes, ex http://domain.com/path1/path2/
+          // Uri is used to generate the filepath, slashes must be replaced to avoid conflict
           $info['uri'] = str_replace("/", "_", $uri);
           $filepath = strtr('dirname/filename/uri.extension', $info);
 
