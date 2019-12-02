@@ -67,7 +67,7 @@ $ composer search drutiny
 For Drupal 8 sites, `drutiny/plugin-drupal-8` would be a good plugin to add.
 
 ```
-$ composer require drutiny/plugin-drupal-8 2.x-dev
+$ composer require --dev drutiny/plugin-drupal-8 2.x-dev
 ```
 
 ### Running an Audit
