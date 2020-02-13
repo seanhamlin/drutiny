@@ -25,7 +25,9 @@
       var config = {
         data: {},
         type: data.chartType,
-        options: {}
+        options: {
+          maintainAspectRatio: data.chartMaintainAspectRatio
+        }
       };
 
       // Labels == X-Axis labels.
@@ -71,7 +73,8 @@
           scales: {
             xAxes: [],
             yAxes: []
-          }
+          },
+          maintainAspectRatio: data.chartMaintainAspectRatio
         }
       };
 
@@ -200,7 +203,8 @@
         chartWidth: '100%',
         chartHeight: '100%',
         chartColors: '',
-        chartTableIndex: 0
+        chartTableIndex: 0,
+        maintainAspectRatio: true
       }, $(this).data());
 
       var pieish = ['pie', 'doughnut'].indexOf(data.chartType) > 0;
