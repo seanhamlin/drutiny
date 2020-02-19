@@ -59,6 +59,11 @@
           config.options.legend.position = data.chartLegend;
         }
       }
+      
+      // maintainAspectRatio is TRUE by default, make it FALSE if need be.
+      if (data.chartMaintainAspectRatio == false) {
+        config.options.maintainAspectRatio = false;
+      }
 
       return config;
     }
@@ -158,6 +163,12 @@
           config.options.legend.position = data.chartLegend;
         }
       }
+      
+      // maintainAspectRatio is TRUE by default, make it FALSE if need be.
+      if (data.chartMaintainAspectRatio == false) {
+        config.options.maintainAspectRatio = false;
+      }
+      
       return config;
     }
 
@@ -200,7 +211,8 @@
         chartWidth: '100%',
         chartHeight: '100%',
         chartColors: '',
-        chartTableIndex: 0
+        chartTableIndex: 0,
+        chartMaintainAspectRatio: true
       }, $(this).data());
 
       var pieish = ['pie', 'doughnut'].indexOf(data.chartType) > 0;
