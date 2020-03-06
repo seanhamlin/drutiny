@@ -1,25 +1,20 @@
+<!-- Drutiny key/value data object -->
+<div id="data" data-timezone="{{ timezone }}"></div>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.23/moment-timezone-with-data-2012-2022.min.js"></script>
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
 <script type="text/javascript">
-  (function ($, c) {
+  (function ($, c, Drutiny, moment) {
     function formatDate(date) {
-    var hours = date.getHours();
-    var minutes = date.getMinutes();
-    var ampm = hours >= 12 ? 'pm' : 'am';
-    hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
-    minutes = minutes < 10 ? '0'+minutes : minutes;
-    var strTime = hours + ':' + minutes + ' ' + ampm;
-
-    var yyyy = date.getFullYear(),
-        mm   = ((date.getMonth()+1)+"").padStart(2, '0'),
-        dd   = (date.getDate()+"").padStart(2, '0');
-
-    return yyyy + "-" + mm + "-" + dd + " " + strTime;
-  }
+      var format = 'YYYY/MM/DD HH:mm:ss';
+      return moment(date, format)
+        .tz(Drutiny.timezone)
+        .format(format);
+    }
 
     function getPieishConfig(data, series, table) {
       var config = {
@@ -249,7 +244,7 @@
       }
     });
 
-  })(jQuery, window.chartColors || []);
+  })(jQuery, window.chartColors || [], jQuery('#data').data(), moment);
 </script>
 
 <script>

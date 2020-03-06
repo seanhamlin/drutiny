@@ -48,6 +48,7 @@ class JSON extends Format {
     $schema['remediations'] = [];
     $schema['reporting_period_start'] = $profile->getReportingPeriodStart()->format('Y-m-d H:i:s e');
     $schema['reporting_period_end'] = $profile->getReportingPeriodEnd()->format('Y-m-d H:i:s e');
+    $schema['timezone'] = $profile->getReportingPeriodStart()->format('e');
     $outcomes = [
       'success' => 0,
       'failure' => 0,
