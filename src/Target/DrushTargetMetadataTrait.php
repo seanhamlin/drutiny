@@ -25,6 +25,17 @@ trait DrushTargetMetadataTrait {
       return phpversion();
     });
   }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function metadataThemePath()
+  {
+    $drush = DrushRouter::createFromTarget($this);
+    return $drush->evaluate(function () {
+      return \Drupal::theme()->getActiveTheme();
+    });
+  }
 }
 
  ?>
