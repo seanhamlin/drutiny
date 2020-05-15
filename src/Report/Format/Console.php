@@ -36,7 +36,7 @@ class Console extends Format {
           $summary[] = $line;
           continue;
         }
-        $words = explode(' ', $line);
+        $words = preg_split('/ +/', $line);
         $phrase = [];
         while ($word = array_shift($words)) {
           $compound_line = $phrase;
