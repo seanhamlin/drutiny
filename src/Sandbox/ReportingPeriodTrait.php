@@ -101,6 +101,7 @@ trait ReportingPeriodTrait {
         10800, // 3 hours
         18000, // 5 hours
         21600, // 6 hours
+        28800, // 8 hours
         43200, // 12 hours
         86400, // 1 day
         172800, // 2 days
