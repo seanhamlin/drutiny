@@ -92,6 +92,7 @@ trait ReportingPeriodTrait {
         30, // 30 seconds
         60, // 1 minute
         120, // 2 minutes
+        180, // 3 minutes
         300, // 5 minutes
         600, // 10 minutes
         900, // 15 minutes
@@ -99,12 +100,13 @@ trait ReportingPeriodTrait {
         3600, // 1 hour
         7200, // 2 hours
         10800, // 3 hours
-        18000, // 5 hours
+        14400, // 4 hours
         21600, // 6 hours
         28800, // 8 hours
         43200, // 12 hours
         86400, // 1 day
         172800, // 2 days
+        259200, // 3 days
         432000, // 5 days
         604800, // 7 days
       ];
@@ -120,14 +122,14 @@ trait ReportingPeriodTrait {
       $duration = $this->getReportingPeriodDuration();
 
       $steps = array_map(function ($interval) use ($duration) {
-        return (int) round($duration / $interval);
+        return (int) ceil($duration / $interval);
       }, $this->_getReportingPeriodIntervals());
 
       $steps = array_combine($this->_getReportingPeriodIntervals(), $steps);
 
       $steps = array_filter($steps, function ($step) {
-        // 60 < X > 100;
-        return $step >= 60 && $step <= 100;
+        // Filter intervals to those resulting in 51 to 100 steps.
+        return $step > 50 && $step <= 100;
       });
 
       if (empty($steps)) {
@@ -139,6 +141,7 @@ trait ReportingPeriodTrait {
         throw new \Exception("Could not find a number of steps suitable for reporting period.");
       }
 
+      // Return the key from the first element in the steps array, which should be the largest number of steps.
       return key($steps);
     }
 
