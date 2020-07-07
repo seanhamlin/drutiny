@@ -52,6 +52,16 @@ abstract class Target implements TargetInterface {
   }
 
   /**
+   * Set root option.
+   */
+  final public function setRoot($root) {
+    if (!empty($root)) {
+      $this->options['root'] = $root;
+    }
+    return $this;
+  }
+
+  /**
    * @inheritdoc
    * Implements ExecInterface::exec().
    */

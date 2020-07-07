@@ -43,6 +43,12 @@ class ProfileRunCommand extends AbstractReportingCommand {
         'The target to run the policy collection against.'
       )
       ->addOption(
+        'root',
+        null,
+        InputOption::VALUE_OPTIONAL,
+        'Root path for the Drush alias.'
+      )
+      ->addOption(
         'remediate',
         'r',
         InputOption::VALUE_NONE,
@@ -181,6 +187,7 @@ class ProfileRunCommand extends AbstractReportingCommand {
 
     // Setup the target.
     $target = TargetRegistry::loadTarget($input->getArgument('target'));
+    $target->setRoot($input->getOption('root'));
 
     // Get the URLs.
     $uris = $input->getOption('uri');
