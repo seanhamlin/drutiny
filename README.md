@@ -31,7 +31,7 @@ composer require --dev drutiny/drutiny 2.3.*@dev
 [Drush](http://docs.drush.org/en/master/) is also required. It's not specifically marked as a dependency as the version of Drush to use will depend on the site you're auditing.
 
 ```
-composer require --global drush/drush
+composer global require drush/drush:dev-master
 ```
 
 
