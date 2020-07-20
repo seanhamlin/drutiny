@@ -33,7 +33,9 @@ class ProfileSourceLocalFs implements ProfileSourceInterface {
 
     $list = [];
     foreach ($finder as $file) {
-      $filename = $file->getRealPath();
+      if (FALSE === $filename = $file->getRealPath()) {
+        $filename = $file->getPathname();
+      }
       $name = str_replace('.profile.yml', '', pathinfo($filename, PATHINFO_BASENAME));
       $profile = Yaml::parse($file->getContents());
       $profile['filepath'] = $filename;
