@@ -31,7 +31,7 @@ class IniGet extends AbstractComparison {
    */
   public function audit(Sandbox $sandbox)
   {
-    $ini = $this->sandbox->drush()->evaluate(function () {
+    $ini = $sandbox->drush()->evaluate(function () {
       return ini_get_all();
     });
     $setting = $sandbox->getParameter('setting');
