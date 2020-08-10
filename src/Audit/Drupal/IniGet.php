@@ -5,6 +5,7 @@ namespace Drutiny\Audit\Drupal;
 use Drutiny\Audit\AbstractComparison;
 use Drutiny\Sandbox\Sandbox;
 use Drutiny\Annotation\Param;
+use Drutiny\Annotation\Token;
 
 /**
  * Evaluate a PHP ini setting.
@@ -23,6 +24,11 @@ use Drutiny\Annotation\Param;
  *  description = "The comparison operator to use for the comparison.",
  *  type = "string"
  * )
+ * @Token(
+ *  name = "local_value",
+ *  description = "The local value from the php.ini file.",
+ *  type = "mixed"
+ * )
  */
 class IniGet extends AbstractComparison {
 
@@ -39,6 +45,8 @@ class IniGet extends AbstractComparison {
     if (!isset($ini[$setting])) {
       return FALSE;
     }
+    
+    $sandbox->setParameter('local_value', $ini[$setting]['local_value']);
 
     return $this->compare($sandbox->getParameter('value'), $ini[$setting]['local_value'], $sandbox);
   }
