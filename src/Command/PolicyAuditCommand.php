@@ -43,6 +43,12 @@ class PolicyAuditCommand extends AbstractReportingCommand {
         'The target to run the check against.'
       )
       ->addOption(
+        'root',
+        null,
+        InputOption::VALUE_OPTIONAL,
+        'Root path for the Drush alias.'
+      )
+      ->addOption(
         'set-parameter',
         'p',
         InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
@@ -111,6 +117,7 @@ class PolicyAuditCommand extends AbstractReportingCommand {
     // Setup the target.
     $target = TargetRegistry::loadTarget($input->getArgument('target'));
     $target->setUri($input->getOption('uri'));
+    $target->setRoot($input->getOption('root'));
 
     $assessment = new Assessment($input->getOption('uri'));
     $result = [];
