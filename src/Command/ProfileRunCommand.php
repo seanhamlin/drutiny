@@ -110,7 +110,7 @@ class ProfileRunCommand extends AbstractReportingCommand {
       }
 
       $this->addOption(
-        'domain-source-blacklist',
+        'domain-source-denylist',
         null,
         InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
         'Exclude domains that match this regex filter',
