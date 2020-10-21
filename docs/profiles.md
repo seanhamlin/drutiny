@@ -36,7 +36,7 @@ A list of policies that make up the profile.
 policies:
   Drupal-7:NoDuplicateModules: {}
   Drupal-7:OverlayModuleDisabled: {}
-  Drupal-7:BlackListPermissions: {}
+  Drupal-7:ExcludedPermissions: {}
   Drupal-7:PhpModuleDisabled: {}
 ```
 
@@ -70,7 +70,7 @@ in an included profile defined in the `include` directive.
 
 ```yaml
 excluded_policies:
-  - Drupal-7:BlackListPermissions
+  - Drupal-7:ExcludedPermissions
   - Drupal-7:CSSAggregation
 ```
 

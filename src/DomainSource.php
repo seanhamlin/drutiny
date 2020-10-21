@@ -25,14 +25,14 @@ class DomainSource {
 
     $target = TargetRegistry::loadTarget($input->getArgument('target'));
 
-    $whitelist = $input->getOption('domain-source-whitelist');
-    $blacklist = $input->getOption('domain-source-blacklist');
+    $allowlist = $input->getOption('domain-source-allowlist');
+    $denylist = $input->getOption('domain-source-denylist');
 
-    // Filter domains by whitelist and blacklist.
-    $filter = function ($domain) use ($whitelist, $blacklist) {
+    // Filter domains by allowlist and denylist.
+    $filter = function ($domain) use ($allowlist, $denylist) {
       // Whitelist priority.
-      if (!empty($whitelist)) {
-        foreach ($whitelist as $regex) {
+      if (!empty($allowlist)) {
+        foreach ($allowlist as $regex) {
           if (preg_match("/$regex/", $domain)) {
             return TRUE;
           }
@@ -40,8 +40,8 @@ class DomainSource {
         // Did not pass the whitelist.
         return FALSE;
       }
-      if (!empty($blacklist)) {
-        foreach ($blacklist as $regex) {
+      if (!empty($denylist)) {
+        foreach ($denylist as $regex) {
           if (preg_match("/$regex/", $domain)) {
             return FALSE;
           }
