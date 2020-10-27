@@ -27,12 +27,27 @@ use Drutiny\Annotation\Param;
 class IniGet extends AbstractComparison
 {
 
-  /**
-   *
-   */
+    public function configure() {
+      $this->addParameter(
+        'setting',
+        static::PARAMETER_OPTIONAL,
+        'The name of the ini setting to check.'
+      );
+      $this->addParameter(
+        'value',
+        static::PARAMETER_OPTIONAL,
+        'The local value of the ini setting to compare for.'
+      );
+      $this->addParameter(
+        'comp_type',
+        static::PARAMETER_OPTIONAL,
+        'The comparison operator to use for the comparison.'
+      );
+    }
+
     public function audit(Sandbox $sandbox)
     {
-        $ini = $this->sandbox->drush()->evaluate(function () {
+        $ini = $this->target->getService('drush')->runtime(function () {
             return ini_get_all();
         });
         $setting = $sandbox->getParameter('setting');
@@ -40,6 +55,8 @@ class IniGet extends AbstractComparison
         if (!isset($ini[$setting])) {
             return false;
         }
+
+        $this->set('local_value', $ini[$setting]['local_value']);
 
         return $this->compare($sandbox->getParameter('value'), $ini[$setting]['local_value'], $sandbox);
     }
