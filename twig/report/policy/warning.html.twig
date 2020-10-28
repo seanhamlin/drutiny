@@ -4,7 +4,7 @@
     {{ include(template_from_string(audit_response.policy.description | mustache2twig )) | markdown_to_html }}
 
     <div class="card border-warning mb-3">
-      <div class="card-header">Warning</div>
+      <div class="card-header alert-warning">Warning</div>
       <div class="card-body">
         <div class="card-text">
         {% with audit_response.tokens %}

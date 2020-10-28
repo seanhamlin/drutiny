@@ -23,10 +23,10 @@
   .page-header {
     border-bottom: none;
   }
-  .alert-success, .alert-danger {
+  /* .alert-success, .alert-danger {
     background-color: transparent;
     color: #333333;
-  }
+  } */
   .navbar-pad {
     margin-bottom: -45px;
     display:block;

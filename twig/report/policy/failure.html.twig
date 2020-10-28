@@ -5,7 +5,7 @@
     {{ include(template_from_string(audit_response.policy.description | mustache2twig)) | markdown_to_html }}
 
     <div class="card border-danger mb-3">
-      <div class="card-header">Failure</div>
+      <div class="card-header alert-primary">Failure</div>
       <div class="card-body">
         <div class="card-text">
         {% with audit_response.tokens %}
@@ -17,7 +17,7 @@
 
     {% if audit_response.hasWarning %}
     <div class="card border-warning mb-3">
-      <div class="card-header">Warning</div>
+      <div class="card-header alert-warning">Warning</div>
       <div class="card-body">
         <div class="card-text">
         {% with audit_response.tokens %}
@@ -29,7 +29,7 @@
     {% endif %}
 
     <div class="card border-info mb-3">
-      <div class="card-header">Remediation</div>
+      <div class="card-header alert-info">Remediation</div>
       <div class="card-body">
         <div class="card-text">
         {% with audit_response.tokens %}
