@@ -1,4 +1,4 @@
-<div class="row result-group">
+<div class="row result-group py-2">
   <div class="col">
     <h4 id="{{ audit_response.policy.name }}"><span class="text-warning">&#9888;</span> {{ audit_response.policy.title }}</h4>
     {{ include(template_from_string(audit_response.policy.description | mustache2twig )) | markdown_to_html }}
