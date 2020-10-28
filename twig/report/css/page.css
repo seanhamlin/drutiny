@@ -83,6 +83,11 @@
       -moz-border-radius: 6px 0 6px 6px;
       border-radius: 6px 0 6px 6px;
   }
+
+  .assessement-uri {
+    font-size: x-large;
+  }
+
   @page
   {
       size: auto;   /* auto is the initial value */
