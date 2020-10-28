@@ -1,28 +1,43 @@
 <div class="row result-group">
   <div class="col-sm-12 col-md-10 py-3">
-    <h4 id="{{ audit_response.policy.name }}">{{ audit_response.policy.title }} <span class="text-danger glyphicon glyphicon-remove" aria-hidden="true"></span></h4>
+    <h4 id="{{ audit_response.policy.name }}"><span class="text-danger">&#10008;</span> {{ audit_response.policy.title }}</h4>
 
     {{ include(template_from_string(audit_response.policy.description | mustache2twig)) | markdown_to_html }}
 
-    <div>
-      <h5 class="text-danger">Failure</h5>
-      {% with audit_response.tokens %}
-      {{ include(template_from_string(audit_response.policy.failure | mustache2twig)) | markdown_to_html }}
-      {% endwith %}
+    <div class="card border-danger mb-3">
+      <div class="card-header">Failure</div>
+      <div class="card-body">
+        <div class="card-text">
+        {% with audit_response.tokens %}
+        {{ include(template_from_string(audit_response.policy.failure | mustache2twig)) | markdown_to_html }}
+        {% endwith %}
+        </div>
+      </div>
     </div>
 
     {% if audit_response.hasWarning %}
-    <div class="alert alert-warning" role="alert">
-      {% with audit_response.tokens %}
-      {{ include(template_from_string(audit_response.policy.warning | mustache2twig)) | markdown_to_html }}
-      {% endwith %}
+    <div class="card border-warning mb-3">
+      <div class="card-header">Warning</div>
+      <div class="card-body">
+        <div class="card-text">
+        {% with audit_response.tokens %}
+        {{ include(template_from_string(audit_response.policy.warning | mustache2twig)) | markdown_to_html }}
+        {% endwith %}
+        </div>
+      </div>
     </div>
     {% endif %}
-    <div>
-    <h5 class="text-info">Remediation</h5>
-    {% with audit_response.tokens %}
-    {{ include(template_from_string(audit_response.policy.remediation | mustache2twig)) | markdown_to_html }}
-    {% endwith %}
+
+    <div class="card border-info mb-3">
+      <div class="card-header">Remediation</div>
+      <div class="card-body">
+        <div class="card-text">
+        {% with audit_response.tokens %}
+        {{ include(template_from_string(audit_response.policy.remediation | mustache2twig)) | markdown_to_html }}
+        {% endwith %}
+        </div>
+      </div>
     </div>
+
   </div>
 </div>

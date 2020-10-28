@@ -3,10 +3,16 @@
   <div class="col-sm-12 col-md-10">
     <h4 id="{{ audit_response.id }}">{{ audit_response.policy.title }}</h4>
     {{ include(template_from_string(audit_response.policy.description | mustache2twig)) | markdown_to_html }}
-    <div class="panel panel-info">
-      <div class="panel-body">
-        {{ audit_response.success | markdown_to_html }}
+
+    <div class="card border-dark mb-3">
+      <div class="card-body">
+        <div class="card-text">
+        {% with audit_response.tokens %}
+        {{ include(template_from_string(audit_response.success | mustache2twig, "success field on data.html.twig")) | markdown_to_html }}
+        {% endwith %}
+        </div>
       </div>
     </div>
+    
   </div>
 </div>

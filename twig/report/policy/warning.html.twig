@@ -1,13 +1,16 @@
 <div class="row result-group">
   <div class="col-sm-12 col-md-10">
-    <h4 id="{{ audit_response.policy.name }}">{{ audit_response.policy.title }} <small class="label label-{{ audit_response.type }}">{{ audit_response.type|split('-')|join(' ')|title  }} <span class="glyphicon {% if audit_response.isSuccessful %}glyphicon-ok{% else %}glyphicon-remove{% endif %}" aria-hidden="true"></span></small></h4>
+    <h4 id="{{ audit_response.policy.name }}"><span class="text-warning">&#9888;</span> {{ audit_response.policy.title }}</h4>
     {{ include(template_from_string(audit_response.policy.description | mustache2twig )) | markdown_to_html }}
-    <div class="panel panel-success">
-      <div class="panel-heading">{{ audit_response.type|split('-')|join(' ')|title  }}</div>
-      <div class="panel-body">
+
+    <div class="card border-warning mb-3">
+      <div class="card-header">Warning</div>
+      <div class="card-body">
+        <div class="card-text">
         {% with audit_response.tokens %}
-        {{ include(template_from_string(audit_response.policy.success | mustache2twig)) | markdown_to_html }}
+        {{ include(template_from_string(audit_response.policy.warning | mustache2twig)) | markdown_to_html }}
         {% endwith %}
+
         {% if audit_response.hasWarning %}
         <div class="alert alert-warning" role="alert">
           {% with audit_response.tokens %}
@@ -15,7 +18,9 @@
           {% endwith %}
         </div>
         {% endif %}
+        </div>
       </div>
     </div>
+
   </div>
 </div>

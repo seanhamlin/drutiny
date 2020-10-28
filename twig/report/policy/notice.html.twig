@@ -1,9 +1,17 @@
 <div class="row result-group">
   <div class="col">
     <h4 id="{{ audit_response.policy.name }}">{{ audit_response.policy.title }}</h4>
-    {% with audit_response.tokens %}
     {{ include(template_from_string(audit_response.policy.description | mustache2twig)) | markdown_to_html }}
-    {{ include(template_from_string(audit_response.policy.success | mustache2twig)) | markdown_to_html }}
-    {% endwith %}
+
+    <div class="card border-dark mb-3">
+      <div class="card-body">
+        <div class="card-text">
+        {% with audit_response.tokens %}
+        {{ include(template_from_string(audit_response.policy.success | mustache2twig, "success field on notice.html.twig")) | markdown_to_html }}
+        {% endwith %}
+        </div>
+      </div>
+    </div>
+    
   </div>
 </div>

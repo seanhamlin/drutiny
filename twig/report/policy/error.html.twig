@@ -1,17 +1,24 @@
 
 <div class="row result-group">
   <div class="col-sm-12 col-md-10">
-    <h4 id="{{ audit_response.policy.name }}">{{ audit_response.policy.title }} <small class="label label-{{ audit_response.type }}">{{ audit_response.type|split('-')|join(' ')|title  }} <span class="glyphicon {% if audit_response.isSuccessful %}glyphicon-ok{% else %}glyphicon-remove{% endif %}" aria-hidden="true"></span></small></h4>
+    <h4 id="{{ audit_response.policy.name }}"><span class="text-danger">&#9785;</span> {{ audit_response.policy.title }}</h4>
     {{ include(template_from_string(audit_response.policy.description | mustache2twig, "Policy description for error.html.twig.")) | markdown_to_html }}
-    <div class="alert alert-{{ audit_response.type }}" role="alert">
-      This policy was unable to determine the state of {{ audit_response.policy.title }}.
+
+    <div class="card text-white bg-primary mb-3"">
+      <div class="card-header">Error</div>
+      <div class="card-body">
+        <p class="card-text">
+        This policy was unable to determine the state of {{ audit_response.policy.title }}.
+        </p>
+        {% if audit_response.tokens.exception is defined %}
+        <pre>
+          <code class="text-white">
+            {{ audit_response.tokens.exception }}
+          </code>
+        </pre>
+        {% endif %}
+      </div>
     </div>
-    {% if audit_response.tokens.exception is defined %}
-    <code>
-      <pre>
-        {{ audit_response.tokens.exception }}
-      </pre>
-    </code>
-    {% endif %}
+
   </div>
 </div>
