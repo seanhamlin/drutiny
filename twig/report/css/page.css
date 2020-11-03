@@ -9,7 +9,10 @@
   .assessement-uri {
     font-size: x-large;
   }
-  .toc-list {
+  ul.toc-list {
+    font-size: 1rem;
+  }
+  ul.toc-list ul {
     font-size: 0.875rem;
   }
   .toc-list .toc-list-item {

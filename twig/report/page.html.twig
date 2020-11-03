@@ -22,11 +22,11 @@
       <a id="top"></a>
       <div class="jumbotron">
         <div class="container">
-          <div class="float-right"><strong>{{ "now"|date("F jS, Y") }}</strong></div>
           <h1>{{ profile.title }}</h1>
-          <p class="text-muted assessment-uri">{{ assessment.uri }}</p>
+          <p class="text-muted"><span class="assessment-uri">Prepared for <strong>{{ assessment.uri }}</strong></span><br> on <em>{{ "now"|date("F jS, Y") }}</em></p>
+
         </div>
-      </div>
+      </div> <!-- /jumbotron -->
 
       <div class="container">
         <div class="row">
@@ -34,13 +34,13 @@
         </div>
 
         <div class="row">
+          <div class="col-lg-9">
+          {% include 'report/page/sections.html.twig' %}
+          </div> <!-- /col-lg-9 -->
           <div class="sidebar col-lg-3">
             <!-- #table_of_contents# -->
             <nav id="toc" data-toggle="toc" class="sticky-top"></nav>
           </div> <!-- /sidebar -->
-          <div class="col-lg-9">
-          {% include 'report/page/sections.html.twig' %}
-          </div> <!-- /col-lg-9 -->
         </div>
       </div> <!-- /container -->
 
