@@ -1,39 +1,45 @@
-<div class="chart-unprocessed" data-chart-type="horizontalBar" data-chart-title="Audit outcome by severity" data-chart-hide-table="true" data-chart-labels="tbody th" data-chart-series="tr td:nth-child(2), tr td:nth-child(3), tr td:nth-child(4), tr td:nth-child(5), tr td:nth-child(6), tr td:nth-child(7)" data-chart-series-labels="thead th:nth-child(2), thead th:nth-child(3), thead th:nth-child(4), thead th:nth-child(5), thead th:nth-child(6), thead th:nth-child(7)" data-chart-stacked="true" data-chart-height="250" data-chart-legend="bottom" data-chart-x-axis="Policies Audited" data-chart-colors="rgba(46, 204, 113,1.0);rgba(192, 57, 43,1.0);rgba(230, 126, 34,1.0);rgba(241, 196, 15,1.0);rgba(52, 73, 94,1.0)"></div>
-<table class="table">
-  <thead>
-    <tr>
-      <th>Severity</th>
-      <th>Pass</th>
-      <th>Fail</th>
-      <th>Error</th>
-      <th>Warning</th>
-      <th>Not Applicable</th>
-      <th>Notice</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for severity, row in assessment.statsBySeverity  %}
-    <tr>
-      <th>{{ severity }} ({{ row | sum }})</th>
-      <td>
-        {{row.success is defined ? row.success }}
-      </td>
-      <td>
-        {{ row.failure is defined ? row.failure }}
-      </td>
-      <td>
-        {{ row.error is defined ? row.error }}
-      </td>
-      <td>
-        {{ row.warning is defined ? row.warning }}
-      </td>
-      <td>
-        {{ row["not-applicable"] is defined ? row["not-applicable"] }}
-      </td>
-      <td>
-        {{row.notice is defined ? row.notice }}
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+<div class="row result-group py-3">
+  <div class="col">
+
+    <div class="chart-unprocessed" data-chart-type="horizontalBar" data-chart-title="Audit outcome by severity" data-chart-hide-table="true" data-chart-labels="tbody th" data-chart-series="tr td:nth-child(2), tr td:nth-child(3), tr td:nth-child(4), tr td:nth-child(5), tr td:nth-child(6), tr td:nth-child(7)" data-chart-series-labels="thead th:nth-child(2), thead th:nth-child(3), thead th:nth-child(4), thead th:nth-child(5), thead th:nth-child(6), thead th:nth-child(7)" data-chart-stacked="true" data-chart-height="250" data-chart-legend="bottom" data-chart-x-axis="Policies Audited" data-chart-colors="rgba(46, 204, 113,1.0);rgba(192, 57, 43,1.0);rgba(230, 126, 34,1.0);rgba(241, 196, 15,1.0);rgba(52, 73, 94,1.0)"></div>
+    <table class="table">
+      <thead>
+        <tr class="table-active">
+          <th scope="col">Severity</th>
+          <th scope="col">Pass</th>
+          <th scope="col">Fail</th>
+          <th scope="col">Error</th>
+          <th scope="col">Warning</th>
+          <th scope="col">Not Applicable</th>
+          <th scope="col">Notice</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for severity, row in assessment.statsBySeverity  %}
+        <tr>
+          <th>{{ severity }} ({{ row | sum }})</th>
+          <td>
+            {{row.success is defined ? row.success }}
+          </td>
+          <td>
+            {{ row.failure is defined ? row.failure }}
+          </td>
+          <td>
+            {{ row.error is defined ? row.error }}
+          </td>
+          <td>
+            {{ row.warning is defined ? row.warning }}
+          </td>
+          <td>
+            {{ row["not-applicable"] is defined ? row["not-applicable"] }}
+          </td>
+          <td>
+            {{row.notice is defined ? row.notice }}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+  </div>
+</div>

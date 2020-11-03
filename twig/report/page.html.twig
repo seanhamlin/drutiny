@@ -13,40 +13,18 @@
       <link rel="mask-icon" href="https://raw.githubusercontent.com/drutiny/drutiny/2.2.x/assets/safari-pinned-tab.svg" color="#00a9e3">
       <meta name="theme-color" content="#ffffff">
       {% endblock %}
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/yeti/bootstrap.min.css">
-      <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css"> -->
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/simplex/bootstrap.min.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.11.1/tocbot.css">
       {% include 'report/css/page.css' %}
       {% block extra_css %}{% endblock %}
     </head>
-    <body>
-      <body data-spy="scroll" data-target="#navbar">
-      <!-- <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-        <div class="container">
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">
-              <img src="https://raw.githubusercontent.com/drutiny/drutiny/2.2.x/assets/logo.png" alt="Drutiny logo" style="float: left; width: 22px; margin-right: 10px;"/>
-              {{ profile.title }}
-            </a>
-          </div>
-          <div id="navbar" class="navbar-collapse collapse">
-            {# navbar | raw #}
-          </div>
-        </div>
-      </nav> -->
-
+    <body data-spy="scroll" data-target="#toc">
       <a id="top"></a>
-      <!-- Main jumbotron for a primary marketing message or call to action -->
       <div class="jumbotron">
         <div class="container">
-          <p>{{ "now"|date("H:i - F jS, Y") }}</p>
+          <div class="float-right"><strong>{{ "now"|date("F jS, Y") }}</strong></div>
           <h1>{{ profile.title }}</h1>
-          <p>{{ assessment.uri }}</p>
+          <p class="text-muted assessment-uri">{{ assessment.uri }}</p>
         </div>
       </div>
 
@@ -54,14 +32,22 @@
         <div class="row">
           {{ profile.description }}
         </div>
-      </div>
-      {% include 'report/page/sections.html.twig' %}
 
-      <div class="container">
-        <footer>
-          <p>&copy; Drutiny {{ 'now' | date('Y') }} | {{ "now"|date("F jS, Y") }}</p>
-        </footer>
-      </div>
+        <div class="row">
+          <div class="sidebar col-lg-3">
+            <!-- #table_of_contents# -->
+            <nav id="toc" data-toggle="toc" class="sticky-top"></nav>
+          </div> <!-- /sidebar -->
+          <div class="col-lg-9">
+          {% include 'report/page/sections.html.twig' %}
+          </div> <!-- /col-lg-9 -->
+        </div>
+      </div> <!-- /container -->
+
+      <footer>
+        <p>&copy; Drutiny {{ 'now' | date('Y') }} | {{ "now"|date("F jS, Y") }}</p>
+      </footer>
       {% include 'report/page/footer.html.twig' %}
+
     </body>
 </html>

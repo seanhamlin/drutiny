@@ -1,18 +1,24 @@
-<table class="table table-hover">
-  <thead>
-    <tr>
-      <th>Policy</th>
-      <th>Severity</th>
-      <th>Audit</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for result in assessment.results %}
-    <tr class="{% if result.isNotice %}{% elseif result.isSuccessful %}has-success{% elseif result.hasWarning %}has-warning{% else %}has-error{% endif %}">
-      <th><a href="#{{ result.policy.name }}">{{ result.policy.title }}</a></th>
-      <td>{{ result.policy.severity }}</td>
-      <td class="control-label">{{ result.type|split('-')|join(' ')|title  }}</td>
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
+<div class="row result-group py-3">
+  <div class="col">
+
+    <table class="table table-hover">
+      <thead>
+        <tr class="table-active">
+          <th scope="col">Policy</th>
+          <th scope="col">Severity</th>
+          <th scope="col">Audit</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for result in assessment.results %}
+        <tr class="{% if result.isNotice %}{% elseif result.isSuccessful %}has-success{% elseif result.hasWarning %}has-warning{% else %}has-error{% endif %}">
+          <th><a href="#{{ result.policy.name }}">{{ result.policy.title }}</a></th>
+          <td>{{ result.policy.severity }}</td>
+          <td class="control-label">{{ result.type|split('-')|join(' ')|title  }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+  </div>
+</div>

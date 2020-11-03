@@ -1,5 +1,4 @@
-<div id="report" class="container">
-  <!-- #table_of_contents# -->
+<div id="report">
   <!-- Example row of columns -->
 
 
@@ -7,7 +6,7 @@
 
       {% for section in sections %}
       <div class="row">
-        <section class="col py-1">
+        <div class="col py-1">
         {% if section.heading is defined %}
         <h2 class="section-title" id="section_{{ section.heading|u.snake }}">{{ section.heading }}</h2>
         {{ section.body | raw }}
@@ -15,7 +14,7 @@
           <!-- no heading -->
           {{ section | raw }}
         {% endif %}
-      </section>
+        </div>
       </div>
       {% endfor %}
       {% else %}
@@ -24,5 +23,4 @@
       </div>
     {% endif %}
 
-  <hr>
-</div> <!-- /container -->
+</div> <!-- /report -->
