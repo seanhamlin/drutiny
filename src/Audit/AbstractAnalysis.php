@@ -75,7 +75,7 @@ class AbstractAnalysis extends Audit
             }
         }
 
-        foreach ($this->getParameter('variables') as $key => $value) {
+        foreach ($this->getParameter('variables',[]) as $key => $value) {
           $this->set($key, $this->evaluate($value, $syntax));
         }
 
