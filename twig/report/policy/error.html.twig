@@ -1,10 +1,11 @@
 <div class="row result-group py-3">
   <div class="col">
+
     <h3 id="{{ audit_response.policy.name }}">{{ audit_response.policy.title }}</h3>
     {{ include(template_from_string(audit_response.policy.description | mustache2twig, "Policy description for error.html.twig.")) | markdown_to_html }}
 
-    <div class="card text-white bg-primary mb-3">
-      <div class="card-header">Error</div>
+    <div class="card text-white bg-primary mb-3 assessment-card">
+      <div class="badge badge-primary"><span class="fa fa-ban" aria-hidden="true"></span> Error</div>
       <div class="card-body alert-primary">
         <p class="card-text">
         This policy was unable to determine the state of {{ audit_response.policy.title }}.
@@ -17,7 +18,7 @@
         </pre>
         {% endif %}
       </div>
-    </div>
+    </div> <!-- /assessment-card -->
 
-  </div>
-</div>
+  </div> <!-- /col -->
+</div> <!-- /row -->

@@ -1,26 +1,18 @@
 <div class="row result-group py-3">
   <div class="col">
-    <h3 id="{{ audit_response.policy.name }}"><span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span> {{ audit_response.policy.title }}</h3>
-    {{ include(template_from_string(audit_response.policy.description | mustache2twig )) | markdown_to_html }}
 
-    <div class="card border-warning mb-3">
-      <div class="card-header alert-warning">Warning</div>
+    <h3 id="{{ audit_response.policy.name }}">{{ audit_response.policy.title }}</h3>
+    {{ include(template_from_string(audit_response.policy.description | mustache2twig, "description field on warning.html.twig" )) | markdown_to_html }}
+
+    <div class="card border-warning mb-3 assessment-card">
+      <div class="badge badge-warning"><span class="fa fa-exclamation-triangle" aria-hidden="true"></span> Warning</div>
+      <!-- <div class="badge badge-warning"><span class="fa fa-exclamation-triangle" aria-hidden="true"></span></div> -->
       <div class="card-body">
-        <div class="card-text">
         {% with audit_response.tokens %}
-        {{ include(template_from_string(audit_response.policy.warning | mustache2twig)) | markdown_to_html }}
+        {{ include(template_from_string(audit_response.policy.warning | mustache2twig, "warning field on warning.html.twig")) | markdown_to_html }}
         {% endwith %}
-
-        {% if audit_response.hasWarning %}
-        <div class="alert alert-warning" role="alert">
-          {% with audit_response.tokens %}
-          {{ include(template_from_string(audit_response.policy.warning | mustache2twig)) | markdown_to_html }}
-          {% endwith %}
-        </div>
-        {% endif %}
-        </div>
       </div>
-    </div>
+    </div> <!-- /assessment-card -->
 
-  </div>
-</div>
+  </div> <!-- /col -->
+</div> <!-- /row -->

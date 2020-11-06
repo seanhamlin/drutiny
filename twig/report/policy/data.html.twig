@@ -2,17 +2,14 @@
   <div class="col">
 
     <h3 id="{{ audit_response.policy.name }}">{{ audit_response.policy.title }}</h3>
-    {{ include(template_from_string(audit_response.policy.description | mustache2twig)) | markdown_to_html }}
-
-    <div class="card border-dark mb-3">
-      <div class="card-body">
-        <div class="card-text">
+    {{ include(template_from_string(audit_response.policy.description | mustache2twig, "description field on data.html.twig" )) | markdown_to_html }}
+    <div class="alert alert-secondary py-1 px-2">
+      <p class="mb-0">
         {% with audit_response.tokens %}
-        {{ include(template_from_string(audit_response.success | mustache2twig, "success field on data.html.twig")) | markdown_to_html }}
+        {{ include(template_from_string(audit_response.policy.success | mustache2twig, "success field on data.html.twig")) | markdown_to_html }}
         {% endwith %}
-        </div>
-      </div>
-    </div>
+      </p>
+    </div> <!-- /alert -->
 
-  </div>
-</div>
+  </div> <!-- /col -->
+</div> <!-- /row -->
