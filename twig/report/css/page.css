@@ -1,5 +1,4 @@
 <style>
-
   .page-header {
     border-bottom: none;
   }
@@ -24,19 +23,43 @@
   ul.is-collapsed {
     display: none;
   }
-  .card-text p {
-    margin-bottom: 0;
+  .table th {
+    padding: 0.50rem;
   }
-  .card-text tr.table-active {
-    background-color: #FFF;
+  .table td {
+    padding: 0.25rem 0.50rem;
   }
-  .card-text .table-active th {
+  .card-body .table-active {
     background-color: #FFF;
     border-top: none;
   }
-  .card-text .table td {
+  .card-body .table td {
     padding: 0.325rem;
   }
+  .assessment-card {
+    border-left-width: .625rem;
+  }
+  .assessment-card .badge {
+    position: absolute;
+    right: 0;
+    font-size: small;
+    border-radius: 0.15rem
+  }
+  .assessment-card p {
+    margin-bottom: 0;
+  }
+  .alert p {
+    margin-bottom: 0;
+  }
+  .alert {
+    display: flex;
+    flex-direction: row;
+  }
+  .alert .fa {
+      margin-right: 8px;
+      align-self: center;
+  }
+
   @page
   {
       size: auto;   /* auto is the initial value */
