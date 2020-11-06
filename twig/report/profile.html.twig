@@ -49,10 +49,8 @@
 {% endblock %}
 
 {% block appendix %}
-  {{ 'Appendix' | heading }}
-
   {% if assessment.results|filter(r => r.isNotice) is not empty %}
-    <h3 id="appendix_analysis">Appendix - Analysis</h3>
+    <h2 id="appendix_analysis">Analysis</h2>
 
     The various appendices provides more detailed data regarding the health of
     the site.
@@ -63,7 +61,7 @@
   {% endif %}
 
   {% if assessment.results|filter(r => r.hasError) is not empty %}
-    <h3 id="appendix_errors">Appendix - Errors</h3>
+    <h2 id="appendix_errors">Errors</h2>
 
     During the production of this report, not all report policies were able to
     be carried out due to errors encountered.
@@ -73,14 +71,14 @@
     {% endfor %}
   {% endif %}
 
-  <h3 id="appendix_summary">Appendix - Summary</h3>
+  <h2 id="appendix_summary">Summary</h2>
   The below table describes all audit and analysis work completed for the
   production of this report and their associated outcomes.
 
   {% include 'report/page/appendix_table.html.twig' %}
 
   {% if assessment.results|filter(r => r.isSuccessful and not r.hasWarning and not r.isNotice) is not empty %}
-    <h3 id="appendix_success">Appendix - Successful Assessments</h3>
+    <h2 id="appendix_success">Successes</h2>
     {% for response in assessment.results|filter(r => r.isSuccessful and not r.hasWarning and not r.isNotice) %}
       {{ policy_result(response, assessment) }}
     {% endfor %}
