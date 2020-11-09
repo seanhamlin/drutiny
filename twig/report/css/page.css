@@ -2,9 +2,6 @@
   .page-header {
     border-bottom: none;
   }
-  .chart {
-    float:left;
-  }
   .assessement-uri {
     font-size: x-large;
   }
@@ -20,6 +17,13 @@
   .toc-link::before {
     width: 4px;
   }
+  .toc-toggle {
+    margin-right: -25px;
+    font-size: medium;
+  }
+  .toc-toggle-open {
+    display:none;
+  }
   ul.is-collapsed {
     display: none;
   }
@@ -28,6 +32,9 @@
   }
   .table td {
     padding: 0.25rem 0.50rem;
+  }
+  .card-body {
+    overflow: scroll;
   }
   .card-body .table-active {
     background-color: #FFF;
