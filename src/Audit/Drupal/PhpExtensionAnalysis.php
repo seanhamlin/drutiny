@@ -52,18 +52,7 @@ class PhpExtensionAnalysis extends AbstractAnalysis
     $phpext = $this->target->getService('drush')->runtime(function () {
         return get_loaded_extensions();
     });
-// print_r($phpext);
-//     $extensions = [];
-//     foreach ( $phpext as $name => $values ) {
-//       $extensions[] = [
-//         'name' => $name,
-//         // 'global_value' => $values['global_value'],
-//         // 'local_value' => $values['local_value'],
-//         // 'access' => $values['access']
-//       ];
-//     }
 
     $this->set('phpextensions', $phpext);
-
   }
 }
