@@ -267,7 +267,7 @@ services:
       class: Twig\TwigFilter
       arguments:
         - 'heading'
-        - ['Drutiny\Report\Format\HTML', 'filterSectionHeading']
+        - ['Drutiny\Report\Twig\Helper', 'filterSectionHeading']
         - needs_environment: true
           is_safe: ['html']
 
