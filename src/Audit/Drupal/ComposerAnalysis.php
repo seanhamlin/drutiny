@@ -9,7 +9,7 @@ use Drutiny\Acquia\CloudApiV2;
 use Drutiny\Audit\AbstractAnalysis;
 
 /**
- * Adds the database size to the database result set.
+ * Adds the contents of composer.lock to the dataBag.
  */
 class ComposerAnalysis extends AbstractAnalysis {
 
