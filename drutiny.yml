@@ -275,7 +275,7 @@ services:
       class: Twig\TwigFilter
       arguments:
         - 'chart'
-        - ['Drutiny\Report\Format\HTML', 'filterChart']
+        - ['Drutiny\Report\Twig\Helper', 'filterChart']
         - is_safe: ['html']
 
     process.manager:
