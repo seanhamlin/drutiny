@@ -12,55 +12,33 @@ class CodeScanAnalysis extends AbstractAnalysis
 
     public function configure()
     {
-        $this->addParameter(
-            'directory',
-            static::PARAMETER_OPTIONAL,
-            'Absolute filepath to directory to scan',
-            '%root'
-        );
-        $this->addParameter(
-            'exclude',
-            static::PARAMETER_OPTIONAL,
-            'Absolute filepaths to directories omit from scanning',
-        );
-        $this->addParameter(
-            'filetypes',
-            static::PARAMETER_OPTIONAL,
-            'file extensions to include in the scan',
-        );
-        $this->addParameter(
-            'patterns',
-            static::PARAMETER_OPTIONAL,
-            'patterns to run over each matching file.',
-        );
-        $this->addParameter(
-            'whitelist',
-            static::PARAMETER_OPTIONAL,
-            'Whitelist patterns which the \'patterns\' parameter may yield false positives from',
-        );
-        $this->addParameter(
-            'expression',
-            static::PARAMETER_REQUIRED,
-            'The expression language to evaluate. See https://symfony.com/doc/current/components/expression_language/syntax.html'
-        );
-        $this->addParameter(
-            'variables',
-            static::PARAMETER_OPTIONAL,
-            'A keyed array of expressions to set variables before evaluating the passing expression.',
-            []
-        );
-        $this->addParameter(
-            'syntax',
-            static::PARAMETER_OPTIONAL,
-            'expression_language or twig',
-            'expression_language'
-        );
-        $this->addParameter(
-            'not_applicable',
-            static::PARAMETER_OPTIONAL,
-            'The expression language to evaludate if the analysis is not applicable. See https://symfony.com/doc/current/components/expression_language/syntax.html',
-            'false'
-        );
+      parent::configure();
+      $this->addParameter(
+          'directory',
+          static::PARAMETER_OPTIONAL,
+          'Absolute filepath to directory to scan',
+          '%root'
+      );
+      $this->addParameter(
+          'exclude',
+          static::PARAMETER_OPTIONAL,
+          'Absolute filepaths to directories omit from scanning',
+      );
+      $this->addParameter(
+          'filetypes',
+          static::PARAMETER_OPTIONAL,
+          'file extensions to include in the scan',
+      );
+      $this->addParameter(
+          'patterns',
+          static::PARAMETER_OPTIONAL,
+          'patterns to run over each matching file.',
+      );
+      $this->addParameter(
+          'allowlist',
+          static::PARAMETER_OPTIONAL,
+          'Patterns which the \'patterns\' parameter may yield false positives from',
+      );
     }
 
 
@@ -101,9 +79,9 @@ class CodeScanAnalysis extends AbstractAnalysis
         $command[] = '| (xargs grep -nE';
         $command[] = '"' . implode('|', $this->getParameter('patterns', [])) . '" || exit 0)';
 
-        $whitelist = $this->getParameter('whitelist', []);
-        if (!empty($whitelist)) {
-            $command[] = "| (grep -vE '" . implode('|', $whitelist) . "' || exit 0)";
+        $allowlist = $this->getParameter('allowlist', []);
+        if (!empty($allowlist)) {
+            $command[] = "| (grep -vE '" . implode('|', $allowlist) . "' || exit 0)";
         }
 
         $command = implode(' ', $command);
