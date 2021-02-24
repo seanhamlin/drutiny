@@ -42,9 +42,9 @@ class CodeScan extends Audit
             'patterns to run over each matching file.',
         );
         $this->addParameter(
-            'whitelist',
+            'allowlist',
             static::PARAMETER_OPTIONAL,
-            'Whitelist patterns which the \'patterns\' parameter may yield false positives from',
+            'Patterns which the \'patterns\' parameter may yield false positives from',
         );
     }
 
@@ -86,9 +86,9 @@ class CodeScan extends Audit
         $command[] = '| (xargs grep -nE';
         $command[] = '"' . implode('|', $this->getParameter('patterns', [])) . '" || exit 0)';
 
-        $whitelist = $this->getParameter('whitelist', []);
-        if (!empty($whitelist)) {
-            $command[] = "| (grep -vE '" . implode('|', $whitelist) . "' || exit 0)";
+        $allowlist = $this->getParameter('allowlist', []);
+        if (!empty($allowlist)) {
+            $command[] = "| (grep -vE '" . implode('|', $allowlist) . "' || exit 0)";
         }
 
 
