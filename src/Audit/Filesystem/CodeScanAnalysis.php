@@ -76,7 +76,7 @@ class CodeScanAnalysis extends AbstractAnalysis
             $command[] = "! -path '$filepath'";
         }
 
-        $command[] = '| (xargs grep -nE';
+        $command[] = '| (xargs grep -nEH';
         $command[] = '"' . implode('|', $this->getParameter('patterns', [])) . '" || exit 0)';
 
         $allowlist = $this->getParameter('allowlist', []);
