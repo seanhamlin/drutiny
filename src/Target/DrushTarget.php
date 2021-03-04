@@ -3,6 +3,7 @@
 namespace Drutiny\Target;
 
 use Drutiny\Target\Service\DrushService;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 /**
  * Target for parsing Drush aliases.
@@ -51,10 +52,26 @@ class DrushTarget extends Target implements TargetInterface
           $service->setUrl($url);
         }
 
-        $status = $service->status(['format' => 'json'])
-           ->run(function ($output) {
-             return json_decode($output, TRUE);
-           });
+        try {
+          $status = $service->status(['format' => 'json'])
+             ->run(function ($output) {
+               return json_decode($output, TRUE);
+             });
+
+          foreach ($status as $key => $value) {
+            $this['drush.'.$key] = $value;
+          }
+
+          $this['service.drush'] = $service;
+
+          $version = $this['service.exec']->run('php -v | head -1 | awk \'{print $2}\'');
+          $this['php_version'] = trim($version);
+
+          return $this;
+        }
+        catch (ProcessFailedException $e) {
+          throw new InvalidTargetException($e->getMessage());
+        }
 
         foreach ($status as $key => $value) {
           $this['drush.'.$key] = $value;
