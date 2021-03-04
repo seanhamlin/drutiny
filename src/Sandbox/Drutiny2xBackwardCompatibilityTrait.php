@@ -2,6 +2,8 @@
 
 namespace Drutiny\Sandbox;
 
+use Drutiny\Audit\AuditInterface;
+
 /**
  * Deprecated 2.x Drutiny functions on the Sandbox.
  */
@@ -9,26 +11,54 @@ trait Drutiny2xBackwardCompatibilityTrait {
 
   public function getTarget()
   {
-      $this->audit->getLogger()->warning(__METHOD__ . ' is deprecated. Please use Drutiny\Audit::$logger object property instead.');
+      foreach (debug_backtrace() as $trace) {
+        if (!isset($trace['class'])) continue;
+        if ($trace['object'] instanceof AuditInterface) {
+            $audit = $trace['class'];
+            break;
+        }
+      }
+      $this->audit->getLogger()->warning(__METHOD__ . ' is deprecated. Please use $this->target object property instead in ' . $audit);
       return $this->audit->getTarget();
   }
 
   public function logger()
   {
-      $this->audit->getLogger()->warning(__METHOD__ . ' is deprecated. Please use Drutiny\Audit::$logger object property instead.');
+      foreach (debug_backtrace() as $trace) {
+        if (!isset($trace['class'])) continue;
+        if ($trace['object'] instanceof AuditInterface) {
+            $audit = $trace['class'];
+            break;
+        }
+      }
+      $this->audit->getLogger()->warning(__METHOD__ . ' is deprecated. Please use $this->logger object property instead in ' . $audit);
       return $this->audit->getLogger();
   }
 
   public function exec($command)
   {
-    $this->logger()->warning(__METHOD__.' is a deprecated method. Please use $sandbox->getTarget()->getService("exec").');
+    foreach (debug_backtrace() as $trace) {
+      if (!isset($trace['class'])) continue;
+      if ($trace['object'] instanceof AuditInterface) {
+          $audit = $trace['class'];
+          break;
+      }
+    }
+    $this->logger()->warning(__METHOD__.' is a deprecated method. Please use $this->target->getService("exec"). In ' . $audit);
 
     return $this->getTarget()->getService('exec')->run($command);
   }
 
   public function drush($opts = [])
   {
-    $this->logger()->warning(__METHOD__.' is a deprecated method. Please use $sandbox->getTarget()->getService("drush").');
+    foreach (debug_backtrace() as $trace) {
+      if (!isset($trace['class'])) continue;
+      if ($trace['object'] instanceof AuditInterface) {
+          $audit = $trace['class'];
+          break;
+      }
+    }
+    $this->logger()->warning(__METHOD__.' is a deprecated method. Please use $sandbox->getTarget()->getService("drush"). Called by: ' . $audit);
     //return $this->getTarget()->getService('drush');
 
     return new class ($this->getTarget(), $opts) {
