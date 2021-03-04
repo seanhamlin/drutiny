@@ -3,15 +3,18 @@
 namespace Drutiny\PolicySource;
 
 use Drutiny\Policy;
+use Drutiny\Policy\UnavailablePolicyException;
 use Drutiny\LanguageManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Finder\Finder;
+use Psr\Log\LoggerInterface;
 
 class PolicyStorage implements PolicySourceInterface
 {
     protected PolicySourceInterface $source;
     protected LanguageManager $languageManager;
     protected string $list;
+    protected LoggerInterface $logger;
 
     public function __construct(PolicySourceInterface $source, ContainerInterface $container, LanguageManager $languageManager)
     {
@@ -26,6 +29,8 @@ class PolicyStorage implements PolicySourceInterface
       is_dir($this->store) || mkdir($this->store, 0744, true);
 
       $this->list = $this->store . '/list.json';
+
+      $this->logger = $container->get('Psr\Log\LoggerInterface');
     }
 
     /**
@@ -46,7 +51,12 @@ class PolicyStorage implements PolicySourceInterface
       foreach ($this->getList($this->languageManager) as $definition) {
         $filename = $this->policyLocation($definition);
         file_exists($filename) && unlink($filename);
-        yield $this->load($definition);
+        try {
+          yield $this->load($definition);
+        }
+        catch (UnavailablePolicyException $e) {
+          $this->logger->error($e->getMessage());
+        }
       }
     }
 
