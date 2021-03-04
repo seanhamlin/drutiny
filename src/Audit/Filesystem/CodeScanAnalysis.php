@@ -48,7 +48,10 @@ class CodeScanAnalysis extends AbstractAnalysis
     public function gather(Sandbox $sandbox)
     {
         $directory = $this->getParameter('directory', '%root');
-        $stat = $sandbox->drush(['format' => 'json'])->status();
+        $stat = $this->getTarget()->getService('drush')->status(['format' => 'json'])->run(function ($output) {
+          return json_decode($output, true);
+        });
+        //$stat = $sandbox->drush(['format' => 'json'])->status();
 
         // Backwards compatibility. %paths is no longer present since Drush 8.
         if (!isset($stat['%paths'])) {
@@ -85,7 +88,7 @@ class CodeScanAnalysis extends AbstractAnalysis
         }
 
         $command = implode(' ', $command);
-        $sandbox->logger()->info('[' . __CLASS__ . '] ' . $command);
+        $this->logger->info('[' . __CLASS__ . '] ' . $command);
         $output = $this->target->getService('exec')->run($command);
 
         $this->set('has_results', !empty($output));
