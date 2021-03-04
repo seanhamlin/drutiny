@@ -36,6 +36,7 @@ class PolicyUpdateCommand extends DrutinyBaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $progress = $this->getProgressBar();
+        $logger = $this->getLogger();
 
 
         $this->initLanguage($input);
@@ -52,11 +53,11 @@ class PolicyUpdateCommand extends DrutinyBaseCommand
         }, $sources)));
 
         foreach ($sources as $source) {
-            $progress->setMessage("Updating " . $source->getName());
+            $logger->notice("Updating " . $source->getName());
 
             foreach ($source->refresh() as $policy) {
               $progress->advance();
-              $progress->setMessage($source->getName() . ': Updated "' . $policy->title . '"');
+              $logger->notice($source->getName() . ': Updated "' . $policy->title . '"');
             }
         }
 
