@@ -5,6 +5,7 @@ namespace Drutiny\Console\Command;
 use Drutiny\Assessment;
 use Drutiny\AssessmentManager;
 use Drutiny\Report\FilesystemFormatInterface;
+use Drutiny\Target\InvalidTargetException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -21,6 +22,8 @@ class ProfileRunCommand extends DrutinyBaseCommand
     use ReportingCommandTrait;
     use DomainSourceCommandTrait;
     use LanguageCommandTrait;
+
+    const EXIT_INVALID_TARGET = 114;
 
   /**
    * @inheritdoc
@@ -143,8 +146,15 @@ class ProfileRunCommand extends DrutinyBaseCommand
         $excluded_policies = $input->getOption('exclude-policy') ?? [];
         $profile->setProperties(['excluded_policies' => $excluded_policies]);
 
-        // Setup the target.
-        $target = $this->getTargetFactory()->create($input->getArgument('target'));
+        try {
+          // Setup the target.
+          $target = $this->getTargetFactory()->create($input->getArgument('target'));
+        }
+        catch (InvalidTargetException $e) {
+          $console->error("Invalid target: " . $input->getArgument('target') . ': ' . $e->getMessage());
+          return self::EXIT_INVALID_TARGET;
+        }
+
         $this->getLogger()->debug("Target " . $input->getArgument('target') . ' loaded.');
 
         // Get the URLs.
