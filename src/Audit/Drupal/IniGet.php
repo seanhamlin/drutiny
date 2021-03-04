@@ -50,7 +50,7 @@ class IniGet extends AbstractComparison
         $ini = $this->target->getService('drush')->runtime(function () {
             return ini_get_all();
         });
-        $setting = $sandbox->getParameter('setting');
+        $setting = $this->getParameter('setting');
 
         if (!isset($ini[$setting])) {
             return false;
@@ -58,6 +58,6 @@ class IniGet extends AbstractComparison
 
         $this->set('local_value', $ini[$setting]['local_value']);
 
-        return $this->compare($sandbox->getParameter('value'), $ini[$setting]['local_value'], $sandbox);
+        return $this->compare($this->getParameter('value'), $ini[$setting]['local_value'], $sandbox);
     }
 }
