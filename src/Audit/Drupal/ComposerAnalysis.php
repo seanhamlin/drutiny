@@ -20,7 +20,7 @@ class ComposerAnalysis extends AbstractAnalysis {
   public function gather(Sandbox $sandbox) {
 
     try {
-      $composer_info = $this->target->getService('exec')->run('cat $DRUSH_ROOT/../composer.lock || cat $DRUSH_ROOT/composer.lock' , function($output){
+      $composer_info = $this->target->getService('exec')->run('cat $DRUSH_ROOT/../composer.lock || cat $DRUSH_ROOT/composer.lock || echo "[]"' , function($output){
         return json_decode($output, true);
       });
     }
