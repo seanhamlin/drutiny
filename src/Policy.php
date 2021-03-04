@@ -6,6 +6,7 @@ use Drutiny\Config\PolicyConfiguration;
 use Drutiny\Policy\Dependency;
 use Drutiny\Entity\DataBag;
 use Drutiny\Entity\ExportableInterface;
+use Drutiny\Policy\UnavailablePolicyException;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
@@ -90,8 +91,13 @@ class Policy implements ExportableInterface
         $this->propertyBag->add($policyData);
 
         if (isset($new_properties['class'])) {
-            $reflect = new \ReflectionClass($policyData['class']);
-            $this->remediable = $reflect->implementsInterface('\Drutiny\Audit\RemediableInterface');
+            try {
+              $reflect = new \ReflectionClass($policyData['class']);
+              $this->remediable = $reflect->implementsInterface('\Drutiny\Audit\RemediableInterface');
+            }
+            catch (\ReflectionException $e) {
+              throw new UnavailablePolicyException("Policy {$data['name']} is not available. Class {$policyData['class']} does not exist.");
+            }
         }
 
         if (isset($new_properties['depends'])) {
