@@ -68,6 +68,18 @@ class Application extends BaseApplication
             return parent::doRunCommand($command, $input, $output);
         }
 
+        switch ($output->getVerbosity()) {
+          case OutputInterface::VERBOSITY_VERBOSE:
+            $this->kernel->getContainer()->get('logger.logfile')->setLevel('NOTICE');
+            break;
+          case OutputInterface::VERBOSITY_VERY_VERBOSE:
+            $this->kernel->getContainer()->get('logger.logfile')->setLevel('INFO');
+            break;
+          case OutputInterface::VERBOSITY_DEBUG:
+            $this->kernel->getContainer()->get('logger.logfile')->setLevel('DEBUG');
+            break;
+        }
+
         $returnCode = parent::doRunCommand($command, $input, $output);
 
         if ($this->registrationErrors) {
