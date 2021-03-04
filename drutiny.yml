@@ -14,6 +14,7 @@ parameters:
   log.directory: '%user_home_dir%/.drutiny/logs'
   log.name: drutiny
   log.filepath: '%log.directory%/%log.name%.log'
+  log.level: WARNING
   log.max_files: 20
   twig.templates:
     - '%drutiny_core_dir%/twig'
@@ -182,6 +183,7 @@ services:
       class: Monolog\Handler\RotatingFileHandler
       calls:
         - [setFormatter,['@Monolog\Formatter\LineFormatter']]
+        - [setLevel, ['%log.level%']]
       arguments:
         - '%log.filepath%'
         - '%log.max_files%'
