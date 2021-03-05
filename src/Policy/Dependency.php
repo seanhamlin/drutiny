@@ -123,7 +123,7 @@ class Dependency
     {
         try {
           $return = $audit->evaluate($this->expression, $this->syntax);
-          if ($return === 1) {
+          if ($return == 1) {
             return true;
           }
         } catch (\Exception $e) {
