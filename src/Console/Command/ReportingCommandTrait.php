@@ -125,10 +125,18 @@ trait ReportingCommandTrait
          $range = strtolower($range);
          // Parse out format like: 09/02/2021 17:39:30 to 09/02/2021 18:39:30
          if (!preg_match('/([0-9]{2}\/[0-9]{2}\/[0-9]{4} [0-9]{2}:[0-9]{2}:[0-9]{2}) to ([0-9]{2}\/[0-9]{2}\/[0-9]{4} [0-9]{2}:[0-9]{2}:[0-9]{2})/', $range, $matches)) {
-          return false;
+          throw new \InvalidArgumentException("Invalid range given: $range.");
          }
-         $this->reportingPeriodStart = new \DateTime($matches[1]);
-         $this->reportingPeriodEnd = new \DateTime($matches[2]);
+
+         list($date, $time) = explode(' ', $matches[1]);
+         list($day, $month, $year) = explode('/', $date);
+         $datetime = "$year-$month-$day $time";
+         $this->reportingPeriodStart = new \DateTime($datetime);
+
+         list($date, $time) = explode(' ', $matches[2]);
+         list($day, $month, $year) = explode('/', $date);
+         $datetime = "$year-$month-$day $time";
+         $this->reportingPeriodEnd = new \DateTime($datetime);
          return true;
       }
 }
