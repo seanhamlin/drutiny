@@ -59,15 +59,6 @@ class Application extends BaseApplication
      */
     protected function doRunCommand(Command $command, InputInterface $input, OutputInterface $output)
     {
-        if (!$command instanceof ListCommand) {
-            if ($this->registrationErrors) {
-                $this->renderRegistrationErrors($input, $output);
-                $this->registrationErrors = [];
-            }
-
-            return parent::doRunCommand($command, $input, $output);
-        }
-
         switch ($output->getVerbosity()) {
           case OutputInterface::VERBOSITY_VERBOSE:
             $this->kernel->getContainer()->get('logger.logfile')->setLevel('NOTICE');
@@ -79,6 +70,16 @@ class Application extends BaseApplication
             $this->kernel->getContainer()->get('logger.logfile')->setLevel('DEBUG');
             break;
         }
+
+        if (!$command instanceof ListCommand) {
+            if ($this->registrationErrors) {
+                $this->renderRegistrationErrors($input, $output);
+                $this->registrationErrors = [];
+            }
+
+            return parent::doRunCommand($command, $input, $output);
+        }
+
 
         $returnCode = parent::doRunCommand($command, $input, $output);
 
