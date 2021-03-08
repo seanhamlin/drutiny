@@ -4,7 +4,6 @@ namespace Drutiny\Plugin\Drupal7\Audit;
 
 use Drutiny\Audit;
 use Drutiny\Sandbox\Sandbox;
-use Drutiny\Audit\RemediableInterface;
 use Drutiny\Annotation\Param;
 
 /**
@@ -26,7 +25,11 @@ use Drutiny\Annotation\Param;
  *  default = 1
  * )
  */
-class User1 extends Audit implements RemediableInterface {
+class User1 extends Audit {
+
+  public function configure() {
+    $this->setDeprecated();
+  }
 
   /**
    * @inheritdoc
@@ -59,25 +62,6 @@ class User1 extends Audit implements RemediableInterface {
 
     $sandbox->setParameter('errors', $errors);
     return empty($errors);
-  }
-
-  /**
-   * @inheritdoc
-   */
-  public function remediate(Sandbox $sandbox) {
-    $sandbox->drush()->evaluate(function ($status, $email) {
-      $user = user_load(1);
-      $user->status = $status;
-      $user->pass = user_password(32);
-      $user->mail = $email;
-      $user->name = user_password();
-      return user_save($user);
-    }, [
-      'status' => (int) (bool) $sandbox->getParameter('status'),
-      'email' => $sandbox->getParameter('email')
-    ]);
-
-    return $this->audit($sandbox);
   }
 
 }

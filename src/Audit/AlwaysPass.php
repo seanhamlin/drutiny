@@ -16,11 +16,7 @@ class AlwaysPass extends Audit
 {
     public function configure()
     {
-          $this->addParameter(
-              'custom_1',
-              static::PARAMETER_OPTIONAL,
-              ''
-          );
+          $this->setDeprecated();
     }
 
     public function audit(Sandbox $sandbox)

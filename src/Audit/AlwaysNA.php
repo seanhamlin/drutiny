@@ -11,6 +11,7 @@ use Drutiny\Sandbox\Sandbox;
  */
 class AlwaysNA extends Audit
 {
+
     public function audit(Sandbox $sandbox)
     {
         throw new AuditValidationException("This policy is not applicable.");

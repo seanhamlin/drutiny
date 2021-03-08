@@ -4,7 +4,6 @@ namespace Drutiny\Console\Command;
 
 use Drutiny\Assessment;
 use Drutiny\Profile;
-use Drutiny\Audit\RemediableInterface;
 use Drutiny\Report\Format;
 use Drutiny\Entity\PolicyOverride;
 use Symfony\Component\Console\Command\Command;

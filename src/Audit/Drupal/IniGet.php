@@ -43,6 +43,8 @@ class IniGet extends AbstractComparison
         static::PARAMETER_OPTIONAL,
         'The comparison operator to use for the comparison.'
       );
+
+      $this->setDeprecated();
     }
 
     public function audit(Sandbox $sandbox)

@@ -4,13 +4,12 @@ namespace Drutiny\Plugin\Drupal8\Audit;
 
 use Drutiny\Audit;
 use Drutiny\Sandbox\Sandbox;
-use Drutiny\Audit\RemediableInterface;
 use Composer\Semver\Comparator;
 
 /**
  * User #1
  */
-class User1 extends Audit implements RemediableInterface
+class User1 extends Audit
 {
 
 
@@ -31,6 +30,7 @@ class User1 extends Audit implements RemediableInterface
             static::PARAMETER_OPTIONAL,
             'Whether the account should be enabled or disabled.',
         );
+        $this->setDeprecated();
     }
 
   /**
@@ -88,61 +88,5 @@ class User1 extends Audit implements RemediableInterface
 
         $this->set('errors', $errors);
         return empty($errors) ? true : Audit::WARNING;
-    }
-
-    public function remediate(Sandbox $sandbox)
-    {
-
-      // Get the details for user #1.
-        $user = $sandbox->drush(['format' => 'json'])
-                    ->userInformation(1);
-
-        $user = (object) array_pop($user);
-
-        $output = $sandbox->drush()->evaluate(function ($uid, $status, $password, $email, $username) {
-            $user =  \Drupal\user\Entity\User::load($uid);
-            if ($status) {
-                $user->activate();
-            } else {
-                $user->block();
-            }
-            $user->setPassword($password);
-            $user->setEmail($email);
-            $user->setUsername($username);
-            $user->set('init', $email);
-            $user->save();
-            return true;
-        }, [
-        'uid' => $user->uid,
-        'status' => (int) (bool) $this->getParameter('status'),
-        'password' => $this->generateRandomString(),
-        'email' => $this->getParameter('email'),
-        'username' => $this->generateRandomString()
-        ]);
-
-        return $this->audit($sandbox);
-    }
-
-  /**
-   * Generate a random string.
-   *
-   * @param int $length
-   *   [optional]
-   *   the length of the random string.
-   *
-   * @return string
-   *   the random string.
-   */
-    public function generateRandomString($length = 32)
-    {
-
-      // Generate a lot of random characters.
-        $state = bin2hex(random_bytes($length * 2));
-
-      // Remove non-alphanumeric characters.
-        $state = preg_replace("/[^a-zA-Z0-9]/", '', $state);
-
-      // Trim it down.
-        return substr($state, 0, $length);
     }
 }

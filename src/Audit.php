@@ -4,7 +4,6 @@ namespace Drutiny;
 
 use Drutiny\Audit\AuditInterface;
 use Drutiny\Audit\AuditValidationException;
-use Drutiny\Audit\RemediableInterface;
 use Drutiny\AuditResponse\AuditResponse;
 use Drutiny\Entity\DataBag;
 use Drutiny\Policy\DependencyException;
@@ -37,6 +36,7 @@ abstract class Audit implements AuditInterface
     protected DataBag $dataBag;
     protected Policy $policy;
     protected ProgressBar $progressBar;
+    protected bool $deprecated = false;
 
     final public function __construct(
       ContainerInterface $container,
@@ -81,6 +81,9 @@ abstract class Audit implements AuditInterface
      */
     final public function execute(Policy $policy, $remediate = false)
     {
+        if ($this->deprecated) {
+          $this->logger->warning(sprintf("Policy '%s' is using '%s' which is a deprecated class. This may fail in the future.", $policy->name, get_class($this)));
+        }
         $this->policy = $policy;
         $response = new AuditResponse($policy);
         $this->logger->info('Auditing '.$policy->name);
@@ -101,11 +104,6 @@ abstract class Audit implements AuditInterface
 
             // Run the audit over the policy.
             $outcome = $this->audit(new Sandbox($this));
-            // If the audit wasn't successful and remediation is allowed, then
-            // attempt to resolve the issue. TODO: Purge Cache
-            // if (($this instanceof RemediableInterface) && !$outcome && $remediate) {
-            //     $outcome = $this->remediate(new Sandbox($this));
-            // }
         } catch (DependencyException $e) {
             $outcome = AuditInterface::ERROR;
             $outcome = $e->getDependency()->getFailBehaviour();
@@ -153,26 +151,27 @@ abstract class Audit implements AuditInterface
     /**
      * Evaluate an expression using the Symfony ExpressionLanguage engine.
      */
-    public function evaluate(string $expression, $language = 'expression_language')
+    public function evaluate(string $expression, $language = 'expression_language', array $contexts = [])
     {
+        $contexts = array_merge($contexts, $this->getContexts());
         switch ($language) {
           case 'twig':
-            return $this->evaluateTwigSyntax($expression);
+            return $this->evaluateTwigSyntax($expression, $contexts);
           case 'expression_language':
           default:
-            return $this->expressionLanguage->evaluate($expression, $this->getContexts());
+            return $this->expressionLanguage->evaluate($expression, $contexts);
         }
     }
 
     /**
      * Evaluate a twig expression.
      */
-    private function evaluateTwigSyntax(string $expression)
+    private function evaluateTwigSyntax(string $expression, array $contexts = [])
     {
         $code = '{{ ('.$expression.')|json_encode()|raw }}';
         $twig = $this->container->get('Twig\Environment');
         $template = $twig->createTemplate($code);
-        $output = $twig->render($template, $this->getContexts());
+        $output = $twig->render($template, $contexts);
         return json_decode($output, true);
     }
 
@@ -221,6 +220,8 @@ abstract class Audit implements AuditInterface
         foreach ($reflection->getConstants() as $key => $value) {
           $contexts[$key] = $value;
         }
+
+        $context['audit'] = $this;
 
         return $contexts;
     }
@@ -316,5 +317,19 @@ abstract class Audit implements AuditInterface
         $this->definition->setArguments($args);
 
         return $this;
+    }
+
+    /**
+     * Set audit class as deprecated and shouldn't be used anymore.
+     */
+    protected function setDeprecated(bool $deprecated = true):AuditInterface
+    {
+      $this->deprecated = $deprecated;
+      return $this;
+    }
+
+    public function isDeprecated():bool
+    {
+      return $this->deprecated;
     }
 }

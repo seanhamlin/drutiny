@@ -4,13 +4,12 @@ namespace Drutiny\Plugin\Drupal8\Audit;
 
 use Drutiny\Audit;
 use Drutiny\Sandbox\Sandbox;
-use Drutiny\Audit\RemediableInterface;
 use Drutiny\Audit\AbstractComparison;
 
 /**
  * Check a configuration is set correctly.
  */
-class ConfigCheck extends AbstractComparison implements RemediableInterface
+class ConfigCheck extends AbstractComparison
 {
 
 
@@ -36,6 +35,7 @@ class ConfigCheck extends AbstractComparison implements RemediableInterface
             static::PARAMETER_OPTIONAL,
             'The type of comparison to conduct. Defaults to equals. See Drutiny\Audit\AbstractComparison',
         );
+        $this->setDeprecated();
     }
 
   /**
@@ -56,17 +56,5 @@ class ConfigCheck extends AbstractComparison implements RemediableInterface
         $this->set('reading', $reading);
 
         return $this->compare($reading, $value, $sandbox);
-    }
-
-  /**
-   * @inheritDoc
-   */
-    public function remediate(Sandbox $sandbox)
-    {
-        $collection = $this->getParameter('collection');
-        $key = $this->getParameter('key');
-        $value = $this->getParameter('value');
-        $sandbox->drush()->configSet($collection, $key, $value);
-        return $this->audit($sandbox);
     }
 }

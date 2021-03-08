@@ -4,13 +4,12 @@ namespace Drutiny\Audit\Drupal;
 
 use Drutiny\Audit;
 use Drutiny\Sandbox\Sandbox;
-use Drutiny\Audit\RemediableInterface;
 
 /**
  * Generic module is enabled check.
  *
  */
-class ModuleEnabled extends Audit implements RemediableInterface
+class ModuleEnabled extends Audit
 {
 
     public function configure()
@@ -20,6 +19,7 @@ class ModuleEnabled extends Audit implements RemediableInterface
                static::PARAMETER_OPTIONAL,
                'The module to check is enabled.',
            );
+           $this->setDeprecated();
     }
 
 
@@ -39,12 +39,5 @@ class ModuleEnabled extends Audit implements RemediableInterface
         $status = strtolower($info[$module]['status']);
 
         return ($status == 'enabled');
-    }
-
-    public function remediate(Sandbox $sandbox)
-    {
-        $module = $this->getParameter('module');
-        $sandbox->drush()->en($module, '-y');
-        return $this->audit($sandbox);
     }
 }

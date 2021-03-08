@@ -9,11 +9,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 /**
  *
  */
-class AuditListCommand extends Command
+class AuditListCommand extends DrutinyBaseCommand
 {
     protected $policyFactory;
 
@@ -39,6 +40,8 @@ class AuditListCommand extends Command
    */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->getTargetFactory()->create('@none');
+
         $finder = new Finder();
         $finder->directories()
         ->in(DRUTINY_LIB)
@@ -71,7 +74,16 @@ class AuditListCommand extends Command
 
         $stats = [];
         foreach ($audits as $audit) {
-          $stats[] = [$audit, count(array_filter($policy_list, function ($policy) use ($audit) {
+          try {
+            $instance = $this->getContainer()->get($audit);
+          }
+          catch (ServiceNotFoundException $e) {
+            $this->getLogger()->error($e->getMessage());
+            continue;
+          }
+
+          $deprecated = $instance->isDeprecated() ? ' <fg=yellow>(deprecated)</>' : '';
+          $stats[] = [$audit.$deprecated, count(array_filter($policy_list, function ($policy) use ($audit) {
             return $audit == $policy['class'];
           }))];
         }

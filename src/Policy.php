@@ -93,7 +93,6 @@ class Policy implements ExportableInterface
         if (isset($new_properties['class'])) {
             try {
               $reflect = new \ReflectionClass($policyData['class']);
-              $this->remediable = $reflect->implementsInterface('\Drutiny\Audit\RemediableInterface');
             }
             catch (\ReflectionException $e) {
               throw new UnavailablePolicyException("Policy {$data['name']} is not available. Class {$policyData['class']} does not exist.");

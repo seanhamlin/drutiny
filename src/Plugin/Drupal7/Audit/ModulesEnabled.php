@@ -4,7 +4,6 @@ namespace Drutiny\Plugin\Drupal7\Audit;
 
 use Drutiny\Audit;
 use Drutiny\Sandbox\Sandbox;
-use Drutiny\Audit\RemediableInterface;
 use Drutiny\Annotation\Param;
 
 /**
@@ -15,8 +14,12 @@ use Drutiny\Annotation\Param;
  *  type = "array",
  * )
  */
-class ModulesEnabled extends Audit implements RemediableInterface {
+class ModulesEnabled extends Audit {
 
+  public function configure() {
+    $this->setDeprecated();
+  }
+  
   /**
    * @inheritdoc
    */
@@ -47,15 +50,6 @@ class ModulesEnabled extends Audit implements RemediableInterface {
     }
 
     return TRUE;
-  }
-
-  /**
-   * @inheritdoc
-   */
-  public function remediate(Sandbox $sandbox) {
-    $modules = $sandbox->getParameter('modules');
-    $sandbox->drush()->en(implode(' ', $modules), '-y');
-    return $this->audit($sandbox);
   }
 
 }

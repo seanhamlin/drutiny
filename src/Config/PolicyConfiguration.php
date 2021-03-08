@@ -64,6 +64,7 @@ class PolicyConfiguration implements ConfigurationInterface
             ->scalarNode('remediation')
               ->info('Content to communicate how to remediate a policy failure.')
               ->defaultValue('')
+              ->setDeprecated('drutiny/drutiny', '3.0', 'Remediations are no longer supported.')
               ->end()
             ->scalarNode('failure')
               ->info('Content to communicate a policy failure.')

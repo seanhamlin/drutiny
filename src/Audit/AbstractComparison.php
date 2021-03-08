@@ -11,6 +11,11 @@ use Drutiny\Sandbox\Sandbox;
 abstract class AbstractComparison extends Audit
 {
 
+    public function configure()
+    {
+      $this->setDeprecated();
+    }
+
     protected function compare($reading, $value, Sandbox $sandbox)
     {
         $comp_type = $this->getParameter('comp_type', '==');
