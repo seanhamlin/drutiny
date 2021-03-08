@@ -8,7 +8,7 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 /**
  * Target for parsing Drush aliases.
  */
-class DrushTarget extends Target implements TargetInterface
+class DrushTarget extends Target implements TargetInterface, TargetSourceInterface
 {
   /**
    * {@inheritdoc}
@@ -93,5 +93,29 @@ class DrushTarget extends Target implements TargetInterface
       parent::setUri($uri);
       // Rebuild the drush attributes.
       return $this->buildAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAvailableTargets():array
+    {
+      $aliases = $this['service.local']->run('drush site-alias --format=json', function ($output) {
+        return json_decode($output, true);
+      });
+      $valid = array_filter(array_keys($aliases), function ($a) {
+        return strpos($a, '.') !== FALSE;
+      });
+
+      $targets = [];
+      foreach ($valid as $name) {
+        $alias = $aliases[$name];
+        $targets[] = [
+          'id' => $name,
+          'uri' => $alias['uri'] ?? '',
+          'name' => $name
+        ];
+      }
+      return $targets;
     }
 }

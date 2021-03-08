@@ -2,9 +2,6 @@
 
 namespace Drutiny\Target;
 
-use Drutiny\Annotation\Metadata;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-
 /**
  * Definition of a Target.
  */
