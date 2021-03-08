@@ -1,0 +1,15 @@
+title: Always pass dependant test policy
+class: Drutiny\Audit\AbstractAnalysis
+name: Test:PassDependant
+tags:
+  - test
+description: |
+  This policy should always pass. Twee godard poutine knausgaard, street art
+  keytar readymade unicorn wayfarers vape mumblecore blue bottle. Portland
+  pitchfork air plant kale chips, craft beer meditation tumeric seitan umami
+  vexillologist cred coloring book taxidermy actually.
+
+success: policy succeeded
+failure: policy failed. This means there is a problem with the Drutiny framework.
+depends:
+  - Test:PassDependant

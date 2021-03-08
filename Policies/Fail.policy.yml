@@ -1,0 +1,17 @@
+title: Always fail test policy
+class: Drutiny\Audit\AbstractAnalysis
+name: Test:Fail
+tags:
+  - test
+description: |
+  This policy should always fail. Twee godard poutine knausgaard, street art
+  keytar readymade unicorn wayfarers vape mumblecore blue bottle. Portland
+  pitchfork air plant kale chips, craft beer meditation tumeric seitan umami
+  vexillologist cred coloring book taxidermy actually.
+
+success: policy succeeded. This means there is a problem with the Drutiny framework.
+failure: policy failed.
+remediation: Please run with remediation to resolve.
+severity: critical
+parameters:
+  expression: FAIL

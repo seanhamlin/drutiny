@@ -1,0 +1,16 @@
+title: Not applicable test policy
+class: Drutiny\Audit\AbstractAnalysis
+name: Test:NA
+tags:
+  - test
+description: |
+  This policy should always be not applicable. Twee godard poutine knausgaard,
+  keytar readymade unicorn wayfarers vape mumblecore blue bottle. Portland
+  pitchfork air plant kale chips, craft beer meditation tumeric seitan umami
+  vexillologist cred coloring book taxidermy actually.
+
+success: policy succeeded. This means there is a problem with the Drutiny framework.
+failure: policy failed. This means there is a problem with the Drutiny framework.
+severity: high
+parameters:
+  expression: NOT_APPLICABLE

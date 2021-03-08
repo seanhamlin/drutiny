@@ -1,0 +1,16 @@
+title: Always notice test policy
+class: Drutiny\Audit\AbstractAnalysis
+name: Test:Notice
+tags:
+  - test
+description: |
+  This policy should always be a notice. Twee godard poutine knausgaard, street
+  keytar readymade unicorn wayfarers vape mumblecore blue bottle. Portland
+  pitchfork air plant kale chips, craft beer meditation tumeric seitan umami
+  vexillologist cred coloring book taxidermy actually.
+
+success: This is success text. It is used as the display of information.
+failure: policy failed. This means there is a problem with the Drutiny framework.
+type: data
+parameters:
+  expression: true

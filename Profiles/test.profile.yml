@@ -1,8 +1,6 @@
 title: Test Profile
 policies:
   Test:Pass:
-    parameters:
-      custom_1: foo
     severity: critical
   Test:Fail:
     severity: high
