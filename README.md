@@ -1,26 +1,20 @@
 # Drutiny - automated site auditing
 
-<img src="https://github.com/drutiny/drutiny/raw/2.3.x/assets/logo.png" alt="Drutiny logo" align="right"/>
+<img src="https://github.com/drutiny/drutiny/raw/3.0.x/assets/logo.png" alt="Drutiny logo" align="right"/>
 
-[![Build Status](https://travis-ci.org/drutiny/drutiny.svg?branch=2.3.x)](https://travis-ci.org/drutiny/drutiny)
+[![Build Status](https://travis-ci.org/drutiny/drutiny.svg?branch=3.0.x)](https://travis-ci.org/drutiny/drutiny)
 [![Latest Stable Version](https://poser.pugx.org/drutiny/drutiny/v/stable)](https://packagist.org/drutiny/drutiny)
 [![Total Downloads](https://poser.pugx.org/drutiny/drutiny/downloads)](https://packagist.org/drutiny/drutiny)
 [![Latest Unstable Version](https://poser.pugx.org/drutiny/drutiny/v/unstable)](https://packagist.org/drutiny/drutiny)
 [![License](https://poser.pugx.org/drutiny/drutiny/license)](https://packagist.org/drutiny/drutiny)
 
-A generic Drupal site auditing and optional remediation tool. _Fun Fact:_ The name is a [portmanteau](https://en.wikipedia.org/wiki/Portmanteau) of "Drupal" and "scrutiny."
+A generic Drupal site auditing and optional remediation tool.
 
 
 ## Installation
 
 
-Drutiny can be built as a standalone tool.
-
-```
-composer create-project --no-interaction --prefer-source -s dev drutiny/project-dev drutiny-dev
-```
-
-Alternately, You can install Drutiny into your project with [composer](https://getcomposer.org).
+You can install Drutiny into your project with [composer](https://getcomposer.org).
 Drutiny is a require-dev type dependency.
 
 ```
@@ -88,13 +82,6 @@ Some policies have parameters you can specify which can be passed in at call tim
 
 Audits are self-contained classes that are simple to read and understand. Policies are simple YAML files that determine how to use Audit classes. Therefore, Drutiny can be extended very easily to audit for your own unique requirements. Pull requests are welcome as well, please see the [contributing guide](https://drutiny.github.io/2.3.x/CONTRIBUTING/).
 
-### Remediation
-Some checks have redemptive capability. Passing the `--remediate` flag into the call with "auto-heal" the site if the check fails on first pass.
-
-```
-./vendor/bin/drutiny policy:audit -p value=600 --remediate Drupal-8:PageCacheExpiry @drupalvm.dev
-```
-
 ### Running a profile of checks
 
 A site audit is running a collection of checks that make up a profile. This allows you to audit against a specific standard, policy or best practice. Drutiny comes with some base profiles which you can find using `profile:list`. You can run a profile with `profile:run` in a simlar format to `policy:audit`.
@@ -104,28 +91,6 @@ A site audit is running a collection of checks that make up a profile. This allo
 ```
 
 Parameters can not be passed in at runtime for profiles but are instead predefined by the profile itself.
-
-### Creating your own profiles
-The `profile:generate` wizard will help you to produce a profile. stored in the `profiles` directory.
-
-### Customizing policies in profiles
-Profiles allow you to define parameters to fine tune policies within. You can do this by specifying parameters listed in `policy:info` in the profile file:
-
-```yaml
-title: 10s Page Cache Expiry Profile
-policies:
-    'Drupal-8:PageCacheExpiry':
-      parameters:
-        value: 10
-```
-
-### Reporting
-
-By default, profile runs report to the console but reports can also be exported in html and json formats.
-
-```
-./vendor/bin/drutiny profile:run --remediate --format=html --report-filename=drupalvm-dev.html d8 drush:@drupalvm.dev
-```
 
 
 ## Getting help
@@ -141,7 +106,7 @@ In particular, if you use the `-vvv` argument, then you will see all the drush c
 
 ## Documentation
 
-You can find more documentation in the [docs](https://drutiny.github.io/) folder.
+You can find more documentation in the [docs](https://drutiny.github.io/drutiny) folder.
 
 
 # Credits
