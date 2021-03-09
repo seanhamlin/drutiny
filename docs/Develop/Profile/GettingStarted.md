@@ -18,18 +18,18 @@ Reports can also be rendered into HTML or JSON and saved to file.
 ./vendor/bin/drutiny profile:run <profile_name> <target> --format=html -o <filename>
 ```
 
-## Creating a Profile
+# Creating a Profile
 Profiles are YAML files with a file extension of `.profile.yml`. These can be placed anywhere but recommended to store in a directory called `Profile`.
 
-## Fields
-### title (required)
+# Fields
+## title (required)
 The title field gives semantic meaning to the collection of policies.
 
 ```yaml
 title: My custom audit
 ```
 
-### policies (required)
+## policies (required)
 A list of policies that make up the profile.
 
 ```yaml
@@ -54,7 +54,7 @@ policies:
 **Note:** This is a change from the 2.0.x profile format. Older profiles that
 provided default parameters will error.
 
-### include
+## include
 The include directive allows profiles to be build on top of collections or other
 profiles. Each include name should be the machine name of another available profile.
 
@@ -64,7 +64,7 @@ include:
   - d8
 ```
 
-### excluded_policies
+## excluded_policies
 This directive allows a profile to exclude policies that were implicitly included
 in an included profile defined in the `include` directive.
 
@@ -74,7 +74,7 @@ excluded_policies:
   - Drupal-7:CSSAggregation
 ```
 
-### format
+## format
 
 The `format` declaration allows a profile to specify options specific to the
 export format of the report (console, HTML or JSON). Based on the format,
@@ -94,7 +94,7 @@ format:
           results.....
 ```
 
-### format.html.template
+## format.html.template
 
 The template to use to theme an HTML report. Defaults to `page` which is the option
 provided by default. To add your own template you need to register a template
@@ -121,7 +121,7 @@ Drutiny will look inside `my_templates_dir` among other registered template dire
 for a template called `my-page.html.twig`. Note that multiple template directories
 can be registered.
 
-### format.html.content
+## format.html.content
 
 Specify the content displayed in an
 HTML report and the order that it displays in. By default, Drutiny will load in
@@ -140,25 +140,25 @@ format:
           There are also a variety of variables available to dynamically render
           results.
 
-          ### Summary
+          ## Summary
           {{{ summary_table }}}
 
           {{ #failures }}
-            ### Issues
+            ## Issues
             {{# output_failure }}
               {{{.}}}
             {{/ output_failure }}
           {{ /failures }}
 
           {{ #warnings }}
-            ### Warnings
+            ## Warnings
             {{# output_warning }}
               {{{.}}}
             {{/ output_warning }}
           {{ /warnings }}
 ```
 
-#### Content Variables
+### Content Variables
 
 These are the variables available to the `format.html.content` template.
 
