@@ -9,7 +9,10 @@ target (Drush provides an empty target called "@none.").
 ```
 drutiny profile:run test @none --format=html
 ```
-The above command will produce an HTML report of the test profile. *Note: the above command depends on Drush being installed globally.*
+The above command will produce an HTML report of the test profile.
+*Note: the above command depends on Drush being installed globally.*
+
+For more information on usage see [Profile Usage](Usage/Profile.md)
 
 ## Installation
 
