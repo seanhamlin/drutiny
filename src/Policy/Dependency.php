@@ -125,8 +125,10 @@ class Dependency
           $return = $audit->evaluate($this->expression, $this->syntax, [
             'dependency' => $this
           ]);
-          if ($return == 1) {
-            return true;
+          switch (true) {
+              case $return === AuditInterface::PASS:
+              case $return === AuditInterface::SUCCESS:
+                return true;
           }
         } catch (\Exception $e) {
             $audit->getLogger()->warning($this->syntax . ': ' . $e->getMessage());
