@@ -100,7 +100,7 @@ class DrushTarget extends Target implements TargetInterface, TargetSourceInterfa
      */
     public function getAvailableTargets():array
     {
-      $aliases = $this['service.local']->run('drush site-alias --format=json', function ($output) {
+      $aliases = $this['service.local']->run('drush site:alias --format=json', function ($output) {
         return json_decode($output, true);
       });
       $valid = array_filter(array_keys($aliases), function ($a) {
