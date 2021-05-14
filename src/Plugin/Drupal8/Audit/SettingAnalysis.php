@@ -10,13 +10,6 @@ use Drutiny\Audit\AbstractAnalysis;
  */
 class SettingAnalysis extends AbstractAnalysis
 {
-
-
-    public function configure()
-    {
-        parent::configure();
-    }
-
   /**
    * @inheritDoc
    */
