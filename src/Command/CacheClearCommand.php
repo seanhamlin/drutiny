@@ -20,8 +20,8 @@ class CacheClearCommand extends Command {
   protected function configure() {
     $this
       ->setName('cache:clear')
-      ->setDescription('Clear the Drutiny cache')
-      ;
+      ->setAliases(['cc'])
+      ->setDescription('Clear the Drutiny cache');
   }
 
   /**

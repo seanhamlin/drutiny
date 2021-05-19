@@ -9,28 +9,43 @@ $timezone = 'UTC';
 
 // Set the timezone to the local OS if supported.
 if (file_exists('/etc/localtime')) {
-  $systemZoneName = readlink('/etc/localtime');
-  if (strpos($systemZoneName, 'zoneinfo') !== FALSE) {
-    $timezone = substr($systemZoneName, strpos($systemZoneName, 'zoneinfo') + 9);
-  }
+    $systemZoneName = readlink('/etc/localtime');
+    if (strpos($systemZoneName, 'zoneinfo') !== FALSE) {
+        $timezone = substr($systemZoneName, strpos($systemZoneName, 'zoneinfo') + 9);
+    }
 }
 
 date_default_timezone_set($timezone);
 
-const DRUTINY_LIB = '.';
+// We use PWD if available because getcwd() resolves symlinks, which  could take
+// us outside of the Drupal root, making it impossible to find. In addition,
+// is_dir() is used as the provided path may not be recognizable by PHP. For
+// instance, Cygwin adds a '/cygdrive' prefix to the path which is a virtual
+// directory.
+$cwd = isset($_SERVER['PWD']) && is_dir($_SERVER['PWD']) ? $_SERVER['PWD'] : getcwd();
 
-/**
- * @var ClassLoader $loader
- */
-$loader = require 'vendor/autoload.php';
+/** @var \Composer\Autoload\ClassLoader $loader */
+$loader = false;
+if (file_exists($autoloadFile = __DIR__ . '/vendor/autoload.php')
+  || file_exists($autoloadFile = __DIR__ . '/../autoload.php')
+  || file_exists($autoloadFile = __DIR__ . '/../../autoload.php')
+  || file_exists($autoloadFile = __DIR__ . '/../../../autoload.php')
+) {
+    $loader = include_once($autoloadFile);
+} else {
+    throw new \Exception("Could not locate autoload.php. cwd is $cwd; __DIR__ is " . __DIR__);
+}
 AnnotationRegistry::registerLoader([$loader, 'loadClass']);
 
+const DRUTINY_LIB = __DIR__ . '/../';
 $version_filename = dirname(__DIR__) . '/VERSION';
+// @todo Replace this with a constant.
 if (file_exists($version_filename)) {
-  $version = file_get_contents($version_filename);
+    $version = file_get_contents($version_filename);
 }
 else {
-  $version = exec(sprintf('git -C %s branch', dirname(__DIR__))) . '-dev';
+    // @todo Remove this!
+    $version = exec(sprintf('git -C %s branch', dirname(__DIR__))) . '-dev';
 }
 
 $application = new Application('Drutiny', $version);

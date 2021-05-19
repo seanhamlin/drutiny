@@ -52,7 +52,7 @@ class Registry {
 
     $config = [];
     foreach ($finder as $file) {
-      $filepath = $file->getRelativePathname();
+      $filepath = $filepath = $file->getPathname();
       $conf = Yaml::parseFile($filepath);
 
       // Templates are in filepaths which need to be translated into absolute filepaths.
