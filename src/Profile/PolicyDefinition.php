@@ -2,6 +2,7 @@
 
 namespace Drutiny\Profile;
 
+use Drutiny\Container;
 use Drutiny\Policy;
 use Drutiny\PolicySource\UnavailablePolicyException;
 
@@ -57,6 +58,7 @@ class PolicyDefinition {
       $policy = Policy::load($name);
     }
     catch (UnavailablePolicyException $e) {
+      Container::getLogger()->warning($e->getMessage());
       return FALSE;
     }
 
