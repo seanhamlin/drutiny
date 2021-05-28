@@ -8,8 +8,17 @@ use Drutiny\Annotation\Param;
 
 /**
  * Check the version of Drupal project in a site.
- *
- *
+ * @Param(
+ *  name = "module",
+ *  description = "The module to version information for",
+ *  type = "string"
+ * )
+ * @Param(
+ *  name = "version",
+ *  description = "The static version to check against.",
+ *  type = "string"
+ * )
+ * )
  */
 class SolrVersion extends Audit
 {
@@ -36,8 +45,6 @@ class SolrVersion extends Audit
         // Version of SOLR we need to find if exists.
         $version_searched = $sandbox->getParameter('version');
 
-        echo 'searching: ' . $version_searched . PHP_EOL;
-
         $info = $sandbox->drush(['format' => 'json'])->pmList();
         $module_version = $info[$module]['version'];
 
@@ -48,12 +55,10 @@ class SolrVersion extends Audit
 
         $solr_found = FALSE;
         if (!empty($solr34_found)) {
-            echo '2.x version found of acquia search module. SOLR version in use: 3 or 4';
             if ($version_searched == '3' || $version_searched == '4') {
                 $solr_found = TRUE;
             }
         } elseif (!empty($solr7_found)) {
-            echo '3.x version found of acquia search module. SOLR version: 7';
             if ($version_searched = '7') {
                 $solr_found = TRUE;
             }
