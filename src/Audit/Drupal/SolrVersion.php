@@ -45,6 +45,7 @@ class SolrVersion extends Audit
         // Version of SOLR we need to find if exists.
         $version_searched = $sandbox->getParameter('version');
 
+
         $info = $sandbox->drush(['format' => 'json'])->pmList();
         $module_version = $info[$module]['version'];
 
@@ -65,7 +66,16 @@ class SolrVersion extends Audit
         }
 
         $sandbox->logger()->info("($version_searched, $solr_found)");
+        if ($solr_found) {
+            if ($info[$module]['status'] == 'Enabled') {
+                return Audit::FAIL;
+            } else {
+                // If not enabled we'll assume Disabled, even for empty or different in status field.
+                return Audit::WARNING;
+            }
+        }
+        // No acquia_search found, which means customer is not using SOLR.
+        return Audit::PASS;
 
-        return $solr_found;
     }
 }
