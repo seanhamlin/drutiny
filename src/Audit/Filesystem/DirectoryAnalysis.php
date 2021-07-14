@@ -31,7 +31,7 @@ class DirectoryAnalysis extends AbstractAnalysis
      */
     public function gather(Sandbox $sandbox)
     {
-        $directory = $this->getParameter('directory');
+        $directory = $this->interpolate($this->getParameter('directory'));
         $unit = $this->getParameter('unit');
 
         $cmd = "du -sLB$unit $directory && df -B$unit $directory && df --inodes $directory";
